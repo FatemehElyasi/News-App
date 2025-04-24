@@ -1,7 +1,5 @@
 package ir.fatemelyasi.compose.screens
 
-import Message
-import android.R.id.message
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,13 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import ir.fatemelyasi.compose.data.Message
 import ir.fatemelyasi.compose.ui.theme.ComposeTheme
 import ir.fatemelyasi.compose.utils.MyScreens
+import ir.fatemelyasi.compose.R
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,30 +30,51 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = MyScreens.FirstScreen.route) {
         composable(
-            route = MyScreens.SecondScreen.route
+            route = MyScreens.FirstScreen.route
         ) {
-            SecondScreen(navController)
+            FirstScreen(
+                navigateToSecondScreen = {
+                    navController.navigate(MyScreens.SecondScreen.route)
+                },
+                message = ArrayList(messages),
+                navigateToArticleScreen = {
+                    navController.navigate(MyScreens.ArticleActivity.route)
+                }
+            )
         }
 
+        composable(
+            route = MyScreens.SecondScreen.route
+        ) {
+            SecondScreen(
+                popUpToFirstScreen = {
+                    navController.popBackStack()
+                }, text = Message(
+                    title = "Make a Successful Instagram ",
+                    date = "October,4,2024",
+                    imageResId = R.drawable.banner
+                )
+            )
+        }
 
+        composable(route = MyScreens.ArticleActivity.route) {
+            ArticleActivity(
+                navigateToSecondScreen = {
+                    navController.navigate(MyScreens.SecondScreen.route)
+                },
+                popUpToFirstScreen = {
+                    navController.popBackStack()
+                }
 
-
-    composable(
-        route = MyScreens.SecondScreen.route
-    ) {
-        SecondScreen(navController)
+            )
+        }
     }
-    composable(route = MyScreens.ArticleActivity.route) {
-        ArticleActivity(navController)
-    }
-
-
-}
 }
 
 

@@ -3,7 +3,7 @@ package ir.fatemelyasi.compose.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val Black = Color(0xFF000000)
-val Gray = Color(0xFFE7E7E7)
+val Gray = Color(0xFFD9D9D9)
 val DarkGray = Color(0xFF6C757D)
 
 val White = Color(0xFFFFFFFF)

@@ -14,33 +14,39 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import ir.fatemelyasi.compose.utils.MyScreens
+import kotlin.Unit
 
 @Composable
 fun ArticleActivity(
-    navController: NavHostController,
+    navigateToSecondScreen: () -> Unit,
+    popUpToFirstScreen: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(20.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
-
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "back",
             modifier = Modifier
-                .padding(start = 20.dp, top = 40.dp)
+                .padding(
+                    top = 40.dp
+                )
                 .clickable {
-                    navController.popBackStack(MyScreens.FirstScreen.route, false)
-                }
-        )
+                    popUpToFirstScreen()
+                })
         Spacer(modifier = Modifier.height(10.dp))
-        MessageCard(messages[1], )
-        MessageCard(messages[2] )
-        MessageCard(messages[3] )
+
+        messages.forEach { message ->
+            ArticleItems(
+                navigateToSecondScreen = {
+                    navigateToSecondScreen
+                }, text = message
+            )
+
+        }
     }
 
 }

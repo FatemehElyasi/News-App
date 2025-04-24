@@ -1,79 +1,108 @@
 package ir.fatemelyasi.compose.screens
 
-import Message
-import android.R.id.message
+import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.compose.ui.unit.sp
+import ir.fatemelyasi.compose.data.Message
 import ir.fatemelyasi.compose.R
+import ir.fatemelyasi.compose.ui.theme.Black
 import ir.fatemelyasi.compose.ui.theme.ComposeTheme
-import ir.fatemelyasi.compose.utils.MyScreens
+import ir.fatemelyasi.compose.ui.theme.Gray
 
 @Composable
 fun SecondScreen(
-    navController: NavHostController,
-) {
+    popUpToFirstScreen: () -> Unit,
+    text: Message
 
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(all = 20.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
-
-        Spacer(modifier = Modifier.height(10.dp))
-
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = "back",
             modifier = Modifier
-                .padding(start = 20.dp, top = 40.dp)
+                .padding(
+                    top = 40.dp,
+                    bottom = 20.dp
+                )
                 .clickable {
-                    navController.popBackStack(MyScreens.FirstScreen.route, false)
+                    popUpToFirstScreen()
                 }
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         Image(
-            painter = painterResource(R.drawable.banner),
-            contentDescription = null,
             modifier = Modifier
-                .padding(20.dp)
-                .height(200.dp)
                 .width(500.dp)
-                .clip(RoundedCornerShape(16.dp)) // <- rounded corners here
-                .clip(RectangleShape)
-                .border(0.5.dp, MaterialTheme.colorScheme.primary, RectangleShape),
-            contentScale = ContentScale.Crop
+                .clip(RoundedCornerShape(8.dp))
+                .align(Alignment.CenterHorizontally),
+            painter = painterResource(text.imageResId),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth
+
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(
+                    top = 10.dp,
+                    bottom = 10.dp
+                )
+                .wrapContentSize(align = Alignment.TopStart),
+            text = text.date,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            modifier = Modifier
+                .padding(
+                    bottom = 10.dp
+                ),
+            text = text.title,
+            color = Black,
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
         )
 
 
-        MessageCardBanner(messages[0], navController)
 
         Text(
             text = "Everyone wants to make the next great mobile app.\n" +
@@ -83,22 +112,11 @@ fun SecondScreen(
                     "\n" +
                     "So that's when the thought hit you, I can just do learn to do this myself.",
             modifier = Modifier
-                .padding(all = 4.dp)
-                .padding(start = 20.dp)
-                .padding(end = 20.dp)
+                .padding(top = 8.dp)
 
         )
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview2() {
-    ComposeTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            //SecondScreen()
-        }
-    }
-}
 
+}
 
