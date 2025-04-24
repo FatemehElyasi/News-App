@@ -1,9 +1,19 @@
 package ir.fatemelyasi.compose.utils
 
-sealed class MyScreens(val route: String) {
+import kotlinx.serialization.Serializable
 
-    object FirstScreen : MyScreens("FirstScreen")
-    object SecondScreen : MyScreens("SecondScreen")
-    object ArticleActivity : MyScreens("ArticleActivity")
+@Serializable
+sealed class MyScreens() {
+    @Serializable
+    object DashboardScreen : MyScreens()
 
+    @Serializable
+    data class ArticleDetailScreen(
+        val title: String = "",
+        val date: String = "",
+        val imageResId: Int = 0,
+    ) : MyScreens()
+
+    @Serializable
+    object AllArticlesScreen : MyScreens()
 }

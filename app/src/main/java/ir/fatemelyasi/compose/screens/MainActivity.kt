@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import ir.fatemelyasi.compose.data.Message
+import androidx.navigation.toRoute
+import ir.fatemelyasi.compose.data.MessageViewEntity
 import ir.fatemelyasi.compose.ui.theme.ComposeTheme
 import ir.fatemelyasi.compose.utils.MyScreens
-import ir.fatemelyasi.compose.R
 
 
 class MainActivity : ComponentActivity() {
@@ -34,44 +34,52 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = MyScreens.FirstScreen.route) {
-        composable(
-            route = MyScreens.FirstScreen.route
-        ) {
-            FirstScreen(
-                navigateToSecondScreen = {
-                    navController.navigate(MyScreens.SecondScreen.route)
+    NavHost(
+        navController = navController,
+        startDestination = MyScreens.DashboardScreen
+    ) {
+        composable<MyScreens.DashboardScreen> {
+            DashboardScreen(
+                navigateToSecondScreen = { data ->
+                    navController.navigate(
+                        MyScreens.ArticleDetailScreen(
+                            title = data.title,
+                            date = data.date,
+                            imageResId = data.imageResId
+                        )
+                    )
                 },
-                message = ArrayList(messages),
+                messageViewEntity = ArrayList(messageViewEntities),
                 navigateToArticleScreen = {
-                    navController.navigate(MyScreens.ArticleActivity.route)
+                    navController.navigate(MyScreens.AllArticlesScreen)
                 }
             )
         }
 
-        composable(
-            route = MyScreens.SecondScreen.route
-        ) {
-            SecondScreen(
-                popUpToFirstScreen = {
+        composable<MyScreens.ArticleDetailScreen> { backStackEntry ->
+            val dataModel: MyScreens.ArticleDetailScreen = backStackEntry.toRoute()
+            val messageViewEntity = MessageViewEntity(
+                title = dataModel.title,
+                date = dataModel.date,
+                imageResId = dataModel.imageResId,
+            )
+            ArticleDetailScreen(
+                popBackStack = {
                     navController.popBackStack()
-                }, text = Message(
-                    title = "Make a Successful Instagram ",
-                    date = "October,4,2024",
-                    imageResId = R.drawable.banner
-                )
+                },
+                text = messageViewEntity
             )
         }
 
-        composable(route = MyScreens.ArticleActivity.route) {
-            ArticleActivity(
+        composable<MyScreens.AllArticlesScreen> {
+            AllArticlesScreen(
                 navigateToSecondScreen = {
-                    navController.navigate(MyScreens.SecondScreen.route)
+                    navController.navigate(MyScreens.ArticleDetailScreen())
                 },
                 popUpToFirstScreen = {
                     navController.popBackStack()
-                }
-
+                },
+                messageViewEntities = messageViewEntities,
             )
         }
     }

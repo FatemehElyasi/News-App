@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -43,28 +46,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.compose.R
-import ir.fatemelyasi.compose.data.Message
+import ir.fatemelyasi.compose.data.MessageViewEntity
 import ir.fatemelyasi.compose.ui.theme.Black
 import ir.fatemelyasi.compose.ui.theme.Gray
 import ir.fatemelyasi.compose.ui.theme.White
 
-val messages = listOf(
-    Message(
+val messageViewEntities = listOf(
+    MessageViewEntity(
         title = "How To Get Started as a mobile app designer and get your first client",
         date = "October,4,2024",
         imageResId = R.drawable.banner
     ),
-    Message(
+    MessageViewEntity(
         title = "Make a Successful Instagram ",
         date = "October,4,2024",
         imageResId = R.drawable.bannerbody1
     ),
-    Message(
+    MessageViewEntity(
         title = "Get Started in 3D Animation",
         date = "October,4,2024",
         imageResId = R.drawable.bannerbody2
     ),
-    Message(
+    MessageViewEntity(
         title = "Get Started in 3D Animation",
         date = "October,4,2024",
         imageResId = R.drawable.banner
@@ -72,15 +75,15 @@ val messages = listOf(
 )
 
 @Composable
-internal fun FirstScreen(
-    navigateToSecondScreen: () -> Unit,
+internal fun DashboardScreen(
+    navigateToSecondScreen: (MessageViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
-    message: ArrayList<Message>
+    messageViewEntity: ArrayList<MessageViewEntity>
 ) {
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = MaterialTheme.colorScheme.background,
     ) {
         var query by remember {
             mutableStateOf("")
@@ -88,6 +91,7 @@ internal fun FirstScreen(
 
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(20.dp),
             verticalArrangement = Arrangement.Center,
@@ -131,16 +135,30 @@ internal fun FirstScreen(
                 }
             )
 
+            Text(
+                text = "Today's Articles",
+                modifier = Modifier
+                    .padding(
+                        bottom = 16.dp
+                    )
+                    .wrapContentSize(align = Alignment.TopStart),
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    color = Black,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+
             CardBanner(
-                text = messages[0],
-                navigateToSecondScreen = navigateToSecondScreen
+                text = messageViewEntities[0],
+                navigateToSecondScreen = { navigateToSecondScreen(messageViewEntities[0]) }
             )
 
             HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .height(1.dp)
-                    .background(MaterialTheme.colorScheme.primary)
+                    .background(MaterialTheme.colorScheme.primary),
+                thickness = 1.dp
             )
 
             Column(
@@ -150,7 +168,7 @@ internal fun FirstScreen(
                 MoreArticle(
                     navigateToArticleScreen = navigateToArticleScreen,
                     navigateToSecondScreen = navigateToSecondScreen,
-                    text = message[0]
+                    items = messageViewEntity,
                 )
             }
         }
@@ -209,43 +227,30 @@ fun SearchRow(
 
 @Composable
 fun CardBanner(
-    text: Message,
+    text: MessageViewEntity,
     navigateToSecondScreen: () -> Unit
 ) {
     Column(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(
                 top = 8.dp,
                 bottom = 8.dp,
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start
-    ) {
-        Text(
-            text = "Today's Articles",
-            modifier = Modifier
-                .padding(
-                    bottom = 16.dp
-                )
-
-                .wrapContentSize(align = Alignment.TopStart)
-                .clickable {
-                    navigateToSecondScreen()
-                },
-            style = TextStyle(
-                fontSize = 20.sp,
-                color = Black,
-                fontWeight = FontWeight.Bold
             )
-        )
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { navigateToSecondScreen() },
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start,
+    ) {
         Image(
             modifier = Modifier
-                .width(500.dp)
+                .fillMaxWidth()
+                .aspectRatio(1f)
                 .clip(RoundedCornerShape(8.dp))
                 .align(Alignment.CenterHorizontally),
             painter = painterResource(text.imageResId),
             contentDescription = null,
-            contentScale = ContentScale.FillWidth
+            contentScale = ContentScale.Crop
 
         )
         Button(
@@ -256,9 +261,7 @@ fun CardBanner(
                 )
                 .padding(vertical = 8.dp)
                 .wrapContentSize(align = Alignment.TopStart),
-            onClick = {
-                navigateToSecondScreen()
-            },
+            onClick = { },
             shape = (RoundedCornerShape(8.dp)),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Gray,
@@ -276,16 +279,10 @@ fun CardBanner(
         }
 
         Column(
-
-            modifier = Modifier
-                .clickable {
-                    navigateToSecondScreen()
-                },
+            modifier = Modifier,
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.Start,
-
-            )
-        {
+        ) {
             Text(
                 text = text.title,
                 color = Black,
@@ -305,16 +302,19 @@ fun CardBanner(
 @Composable
 fun MoreArticle(
     navigateToArticleScreen: () -> Unit,
-    navigateToSecondScreen: () -> Unit,
-    text: Message,
+    navigateToSecondScreen: (MessageViewEntity) -> Unit,
+    items: List<MessageViewEntity>,
 ) {
     Column(
+        modifier = Modifier
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start
     ) {
 
         Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     bottom = 8.dp
                 )
@@ -339,21 +339,19 @@ fun MoreArticle(
                 text = " See All",
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
-                    .clickable {
-                        navigateToArticleScreen()
-                    },
+                    .clickable { navigateToArticleScreen() },
                 style = MaterialTheme.typography.bodySmall
             )
         }
 
-        messages.forEach { message ->
+        items.forEach { item ->
             ArticleItems(
                 navigateToSecondScreen = {
-                    navigateToSecondScreen()
-                }, text = message
+                    navigateToSecondScreen(item)
+                },
+                messageItem = item
             )
         }
-
     }
 }
 
@@ -361,11 +359,11 @@ fun MoreArticle(
 @Composable
 fun ArticleItems(
     navigateToSecondScreen: () -> Unit,
-    text: Message,
-
-    ) {
+    messageItem: MessageViewEntity,
+) {
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clickable {
                 navigateToSecondScreen()
@@ -377,7 +375,7 @@ fun ArticleItems(
     )
     {
         Image(
-            painter = painterResource(text.imageResId),
+            painter = painterResource(messageItem.imageResId),
             contentDescription = null,
             modifier = Modifier
                 .width(100.dp)
@@ -391,7 +389,7 @@ fun ArticleItems(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = text.title,
+                text = messageItem.title,
                 color = Black,
                 style = TextStyle(
                     fontSize = 14.sp,
@@ -401,7 +399,7 @@ fun ArticleItems(
             )
 
             Text(
-                text = text.date,
+                text = messageItem.date,
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),
