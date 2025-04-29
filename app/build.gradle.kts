@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -51,4 +53,11 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
+    //retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    //RXJava
+    implementation (libs.rxjava)
+    implementation (libs.adapter.rxjava3)
+    implementation (libs.adapter.rxjava2)
 }

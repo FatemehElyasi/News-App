@@ -1,5 +1,10 @@
 [versions]
+adapterRxjava2 = "2.9.0"
+adapterRxjava3 = "2.9.0"
+adapterRxjava3Version = "2.9.0"
 agp = "8.9.1"
+converterGson = "latest.version"
+converterGsonVersion = "2.9.0"
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
 lifecycleRuntimeKtx = "2.6.1"
@@ -8,8 +13,12 @@ composeBom = "2024.09.00"
 navigationCompose = "2.8.9"
 kotlinSerializationJsonVersion = "1.8.0"
 kotlinSerializablePlugin = "2.1.0"
+retrofit = "2.9.0"
+rxjava = "3.1.6"
 
 [libraries]
+adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "adapterRxjava2" }
+adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "adapterRxjava3Version" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -19,7 +28,10 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGsonVersion" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJsonVersion" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
