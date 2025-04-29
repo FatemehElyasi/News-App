@@ -30,7 +30,7 @@ fun AllArticlesScreen(
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(20.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,

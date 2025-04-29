@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.screens
 
+import android.R.attr.top
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -47,9 +48,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.compose.R
 import ir.fatemelyasi.compose.data.MessageViewEntity
-import ir.fatemelyasi.compose.ui.theme.Black
-import ir.fatemelyasi.compose.ui.theme.Gray
-import ir.fatemelyasi.compose.ui.theme.White
 
 val messageViewEntities = listOf(
     MessageViewEntity(
@@ -83,7 +81,7 @@ internal fun DashboardScreen(
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = MaterialTheme.colorScheme.background,
+        color = MaterialTheme.colorScheme.surface,
     ) {
         var query by remember {
             mutableStateOf("")
@@ -98,55 +96,43 @@ internal fun DashboardScreen(
         ) {
             Column {
                 Text(
-                    text = "Hi John ,",
-                    color = Black,
                     modifier = Modifier
                         .padding(
                             top = 20.dp,
                         )
                         .wrapContentSize(align = Alignment.TopStart),
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    text = "Hi John ,",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleMedium
+
                 )
                 Text(
-                    text = "Good Morning!",
-                    color = Black,
                     modifier = Modifier
                         .padding(
                             top = 4.dp
                         )
                         .wrapContentSize(align = Alignment.TopStart),
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-
-                    )
-
+                    text = "Good Morning!",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge,
                 )
             }
 
             SearchRow(
                 query = query,
                 onQueryChange = { query = it },
-                onSearchClick = {
-                    println("Search: $query")
-                }
+                onSearchClick = {}
             )
 
             Text(
                 text = "Today's Articles",
                 modifier = Modifier
                     .padding(
-                        bottom = 16.dp
+                        bottom = 10.dp
                     )
                     .wrapContentSize(align = Alignment.TopStart),
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Black,
-                    fontWeight = FontWeight.Bold
-                )
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.titleLarge,
             )
 
             CardBanner(
@@ -157,7 +143,7 @@ internal fun DashboardScreen(
             HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .background(MaterialTheme.colorScheme.primary),
+                    .background(MaterialTheme.colorScheme.outline),
                 thickness = 1.dp
             )
 
@@ -199,7 +185,6 @@ fun SearchRow(
                     end = 4.dp
                 ),
             shape = RoundedCornerShape(10.dp),
-
             placeholder = { Text("Search") },
             singleLine = true
         )
@@ -213,7 +198,8 @@ fun SearchRow(
             shape = RoundedCornerShape(8.dp),
 
             colors = ButtonDefaults.buttonColors(
-                containerColor = Black, contentColor = White
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor =  MaterialTheme.colorScheme.onSecondary
             )
         )
         {
@@ -237,7 +223,7 @@ fun CardBanner(
                 top = 8.dp,
                 bottom = 8.dp,
             )
-            .clip(RoundedCornerShape(4.dp))
+            .clip(RoundedCornerShape(8.dp))
             .clickable { navigateToSecondScreen() },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
@@ -264,14 +250,15 @@ fun CardBanner(
             onClick = { },
             shape = (RoundedCornerShape(8.dp)),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Gray,
-                contentColor = Black
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSurface,
             ),
             contentPadding = PaddingValues(horizontal = 25.dp)
         ) {
             Text(
                 text = "Design",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontWeight = FontWeight.Bold,
                 maxLines = 150
             )
@@ -285,15 +272,13 @@ fun CardBanner(
         ) {
             Text(
                 text = text.title,
-                color = Black,
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.displaySmall
             )
             Text(
                 text = text.date,
-                style = MaterialTheme.typography.bodyMedium
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.titleSmall,
             )
         }
     }
@@ -320,14 +305,12 @@ fun MoreArticle(
                 )
         ) {
             Text(
-                text = " More Articles",
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd),
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    color = Black,
-                    fontWeight = FontWeight.Bold
-                ),
+                text = " More Articles",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+
             )
 
             Spacer(
@@ -337,10 +320,11 @@ fun MoreArticle(
 
             Text(
                 text = " See All",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
                     .clickable { navigateToArticleScreen() },
-                style = MaterialTheme.typography.bodySmall
+                style = MaterialTheme.typography.titleSmall
             )
         }
 
@@ -355,7 +339,6 @@ fun MoreArticle(
     }
 }
 
-
 @Composable
 fun ArticleItems(
     navigateToSecondScreen: () -> Unit,
@@ -365,10 +348,10 @@ fun ArticleItems(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
+            .clip(RoundedCornerShape(8.dp))
             .clickable {
                 navigateToSecondScreen()
             },
-
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
 
@@ -390,20 +373,18 @@ fun ArticleItems(
         ) {
             Text(
                 text = messageItem.title,
-                color = Black,
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1
             )
 
             Text(
-                text = messageItem.date,
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),
-                style = MaterialTheme.typography.bodyMedium,
+                text = messageItem.date,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.titleSmall,
                 maxLines = 1
             )
         }

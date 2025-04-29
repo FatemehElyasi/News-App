@@ -39,7 +39,7 @@ fun ArticleDetailScreen(
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .padding(all = 20.dp)
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -73,7 +73,8 @@ fun ArticleDetailScreen(
                 )
                 .wrapContentSize(align = Alignment.TopStart),
             text = text.date,
-            style = MaterialTheme.typography.bodyMedium
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleSmall,
         )
         Text(
             modifier = Modifier
@@ -81,11 +82,8 @@ fun ArticleDetailScreen(
                     bottom = 10.dp
                 ),
             text = text.title,
-            color = Black,
-            style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.displaySmall
         )
 
 
@@ -98,7 +96,9 @@ fun ArticleDetailScreen(
                     "\n" +
                     "So that's when the thought hit you, I can just do learn to do this myself.",
             modifier = Modifier
-                .padding(top = 8.dp)
+                .padding(top = 8.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleSmall
 
         )
     }
