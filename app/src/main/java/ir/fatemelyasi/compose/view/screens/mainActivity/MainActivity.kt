@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.screens
+package ir.fatemelyasi.compose.view.screens.mainActivity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,9 +12,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import ir.fatemelyasi.compose.data.MessageViewEntity
-import ir.fatemelyasi.compose.ui.theme.ComposeTheme
-import ir.fatemelyasi.compose.utils.MyScreens
+import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.view.screens.SecondActivity.ArticleDetailScreen
+import ir.fatemelyasi.compose.view.screens.allArticleActivity.AllArticlesScreen
+import ir.fatemelyasi.compose.view.screens.DashboardActivity.DashboardScreen
+import ir.fatemelyasi.compose.view.screens.DashboardActivity.messageViewEntities
+import ir.fatemelyasi.compose.view.ui.theme.ComposeTheme
+import ir.fatemelyasi.compose.view.utils.MyScreens
 
 
 class MainActivity : ComponentActivity() {
@@ -44,8 +48,8 @@ fun Navigation() {
                     navController.navigate(
                         MyScreens.ArticleDetailScreen(
                             title = data.title,
-                            date = data.date,
-                            imageResId = data.imageResId
+                            date = data.publishedAt,
+                            imageResId = data.urlToImage
                         )
                     )
                 },
@@ -58,10 +62,10 @@ fun Navigation() {
 
         composable<MyScreens.ArticleDetailScreen> { backStackEntry ->
             val dataModel: MyScreens.ArticleDetailScreen = backStackEntry.toRoute()
-            val messageViewEntity = MessageViewEntity(
+            val messageViewEntity = ArticleViewEntity(
                 title = dataModel.title,
-                date = dataModel.date,
-                imageResId = dataModel.imageResId,
+                publishedAt = dataModel.date,
+                urlToImage = dataModel.imageResId,
             )
             ArticleDetailScreen(
                 popBackStack = {

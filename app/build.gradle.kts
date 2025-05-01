@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serializable)
+    alias(libs.plugins.kspPlugin)
 }
 
 android {
@@ -54,10 +55,18 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
     //retrofit
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     //RXJava
-    implementation (libs.rxjava)
-    implementation (libs.adapter.rxjava3)
-    implementation (libs.adapter.rxjava2)
+    implementation(libs.rxjava)
+    implementation(libs.adapter.rxjava3)
+    implementation(libs.rxandroid)
+    //coil
+    implementation(libs.coil.compose)
+    //Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.viewmodel)
+    implementation(libs.koinAnnotation)
 }

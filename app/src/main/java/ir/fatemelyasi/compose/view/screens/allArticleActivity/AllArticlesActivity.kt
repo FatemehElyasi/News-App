@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.screens
+package ir.fatemelyasi.compose.view.screens.allArticleActivity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,14 +16,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ir.fatemelyasi.compose.data.MessageViewEntity
+import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.view.screens.DashboardActivity.ArticleItems
 import kotlin.Unit
 
 @Composable
 fun AllArticlesScreen(
     navigateToSecondScreen: () -> Unit,
     popUpToFirstScreen: () -> Unit,
-    messageViewEntities: List<MessageViewEntity>,
+    messageViewEntities: List<ArticleViewEntity>,
 ) {
     Column(
         modifier = Modifier

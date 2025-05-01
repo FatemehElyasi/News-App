@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.ui.theme
+package ir.fatemelyasi.compose.view.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.ui.theme
+package ir.fatemelyasi.compose.view.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

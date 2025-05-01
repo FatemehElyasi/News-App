@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.utils
+package ir.fatemelyasi.compose.view.utils
 
 import kotlinx.serialization.Serializable
 
@@ -11,7 +11,8 @@ sealed class MyScreens() {
     data class ArticleDetailScreen(
         val title: String = "",
         val date: String = "",
-        val imageResId: Int = 0,
+        val imageResId: String =" ",
+        val description: String = "",
     ) : MyScreens()
 
     @Serializable

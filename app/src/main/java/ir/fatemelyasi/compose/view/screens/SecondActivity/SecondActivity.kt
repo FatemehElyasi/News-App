@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.screens
+package ir.fatemelyasi.compose.view.screens.SecondActivity
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,17 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import ir.fatemelyasi.compose.data.MessageViewEntity
-import ir.fatemelyasi.compose.ui.theme.Black
+import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
 
 @Composable
 fun ArticleDetailScreen(
     popBackStack: () -> Unit,
-    text: MessageViewEntity
+    text: ArticleViewEntity
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +55,7 @@ fun ArticleDetailScreen(
                 .width(500.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .align(Alignment.CenterHorizontally),
-            painter = painterResource(text.imageResId),
+            painter = painterResource(text.urlToImage),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
 
@@ -72,7 +68,7 @@ fun ArticleDetailScreen(
                     bottom = 10.dp
                 )
                 .wrapContentSize(align = Alignment.TopStart),
-            text = text.date,
+            text = text.publishedAt,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.titleSmall,
         )
