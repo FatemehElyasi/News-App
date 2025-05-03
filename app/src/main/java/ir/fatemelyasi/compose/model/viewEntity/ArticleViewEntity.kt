@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.model.ViewEntity
+package ir.fatemelyasi.compose.model.viewEntity
 
 import kotlinx.serialization.Serializable
 

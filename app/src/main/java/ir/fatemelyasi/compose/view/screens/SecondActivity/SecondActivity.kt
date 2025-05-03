@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 
 @Composable
 fun ArticleDetailScreen(

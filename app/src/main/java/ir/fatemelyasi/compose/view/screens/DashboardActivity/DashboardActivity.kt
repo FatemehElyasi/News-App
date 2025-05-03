@@ -45,7 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 
 
 val messageViewEntities = listOf(

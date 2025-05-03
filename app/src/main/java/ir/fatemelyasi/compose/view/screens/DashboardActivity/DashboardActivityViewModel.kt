@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 
 class DashboardActivityViewModel(

@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.view.screens.SecondActivity.ArticleDetailScreen
 import ir.fatemelyasi.compose.view.screens.allArticleActivity.AllArticlesScreen
 import ir.fatemelyasi.compose.view.screens.DashboardActivity.DashboardScreen

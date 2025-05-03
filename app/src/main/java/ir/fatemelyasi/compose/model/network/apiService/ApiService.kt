@@ -1,9 +1,7 @@
 package ir.fatemelyasi.compose.model.network.apiService
 
-import io.reactivex.rxjava3.core.Observable
-import ir.fatemelyasi.compose.model.network.responseModel.ArticleResponseModel
+import io.reactivex.rxjava3.core.Single
 import ir.fatemelyasi.compose.model.network.responseModel.NewsResponseModel
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,7 +13,7 @@ public interface ApiService {
     public fun getNews(
         @Query("q") query: String = QUERY,
         @Query("apiKey") apiKey: String = API_KEY
-    ): Observable<NewsResponseModel>
+    ): Single<NewsResponseModel>
 }
 
 

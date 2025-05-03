@@ -1,7 +1,7 @@
 package ir.fatemelyasi.compose.model.dataSources.remote
 
-import io.reactivex.rxjava3.core.Observable
 import ir.fatemelyasi.compose.model.network.responseModel.NewsResponseModel
+import io.reactivex.rxjava3.core.Single
 
 interface NewsRemoteDataSource {
-    fun getNewsInformation(): Observable<NewsResponseModel>}
+    fun getNewsInformation(): Single<NewsResponseModel>}

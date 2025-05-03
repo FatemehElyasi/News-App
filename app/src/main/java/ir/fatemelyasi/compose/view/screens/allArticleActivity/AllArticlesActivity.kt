@@ -16,7 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ir.fatemelyasi.compose.model.ViewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.view.screens.DashboardActivity.ArticleItems
 import kotlin.Unit
 
