@@ -3,6 +3,7 @@ package ir.fatemelyasi.compose.view.screens.DashboardActivity
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -19,8 +20,8 @@ class DashboardActivityViewModel(
     private val disposables = CompositeDisposable()
 
     //get list of news
-    fun getNews(): Observable<List<ArticleViewEntity>> {
-        return newsRepository.getNews()
+    fun getNews(): Single<List<ArticleViewEntity>> {
+        return newsRepository.getNewsFromServer()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.annotationProcessor
 import org.gradle.kotlin.dsl.implementation
 
 plugins {
@@ -66,7 +67,12 @@ dependencies {
     //Koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.viewmodel)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
     implementation(libs.koinAnnotation)
+    //Room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.rxjava3)
+
 }

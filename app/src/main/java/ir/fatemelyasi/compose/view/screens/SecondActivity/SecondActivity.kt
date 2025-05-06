@@ -1,6 +1,5 @@
 package ir.fatemelyasi.compose.view.screens.SecondActivity
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -21,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 
 @Composable
@@ -50,12 +49,13 @@ fun ArticleDetailScreen(
                 }
         )
 
-        Image(
+        AsyncImage(
+            model = text.urlToImage,
             modifier = Modifier
                 .width(500.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .align(Alignment.CenterHorizontally),
-            painter = painterResource(text.urlToImage),
+            //painter = painterResource(text.urlToImage),
             contentDescription = null,
             contentScale = ContentScale.FillWidth
 
@@ -68,7 +68,7 @@ fun ArticleDetailScreen(
                     bottom = 10.dp
                 )
                 .wrapContentSize(align = Alignment.TopStart),
-            text = text.publishedAt,
+            text = text.publishedAt.toString(),
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.titleSmall,
         )
@@ -77,7 +77,7 @@ fun ArticleDetailScreen(
                 .padding(
                     bottom = 10.dp
                 ),
-            text = text.title,
+            text = text.title.toString(),
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.displaySmall
         )

@@ -1,31 +1,34 @@
 package ir.fatemelyasi.compose.model.repository
 
+import android.content.Context
+import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSource
+import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSourceImpl
 import ir.fatemelyasi.compose.model.dataSources.remote.NewsRemoteDataSource
 import ir.fatemelyasi.compose.model.dataSources.remote.NewsRemoteDataSourceImpl
+import ir.fatemelyasi.compose.model.local.LocalManager
 import ir.fatemelyasi.compose.model.network.NetworkManager
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepositoryImpl
 
-class RepositoryManager {
+class  RepositoryManager(context:Context) {
 
-    // Singleton for NewsRemoteDataSource
     private val remoteDataSource: NewsRemoteDataSource by lazy {
         NewsRemoteDataSourceImpl(NetworkManager().getApiService()!!)
     }
-/*
-    // Optional: LocalDataSource, if you are using it
+
     private val localDataSource: NewsLocalDataSource by lazy {
-        NewsLocalDataSourceIMP(LocalDatabase.getInstance().newsDao())
+        val dao = LocalManager.getNewsDao(context.applicationContext)
+        NewsLocalDataSourceImpl(dao)
     }
 
- */
-
-    // Singleton for NewsRepository
     val newsRepository: NewsRepository by lazy {
-        NewsRepositoryImpl(remoteDataSource) // If you are using localDataSource, you can also pass it
+        NewsRepositoryImpl(remoteDataSource, localDataSource)
     }
+
 
 }
+
+
 
 
 

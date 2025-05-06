@@ -47,9 +47,9 @@ fun Navigation() {
                 navigateToSecondScreen = { data ->
                     navController.navigate(
                         MyScreens.ArticleDetailScreen(
-                            title = data.title,
-                            date = data.publishedAt,
-                            imageResId = data.urlToImage
+                            title = data.title.toString(),
+                            date = data.publishedAt.toString(),
+                            imageResId = data.urlToImage.toString()
                         )
                     )
                 },
@@ -65,7 +65,8 @@ fun Navigation() {
             val messageViewEntity = ArticleViewEntity(
                 title = dataModel.title,
                 publishedAt = dataModel.date,
-                urlToImage = dataModel.imageResId,
+                urlToImage = dataModel.imageResId.toString(),
+                description = dataModel.description.toString()
             )
             ArticleDetailScreen(
                 popBackStack = {
