@@ -5,9 +5,9 @@ import ir.fatemelyasi.compose.model.local.NewsEntity
 
 interface NewsLocalDataSource {
 
-    fun insertNews(newsEntityModel: NewsEntity)
+    fun saveNewsToDb(newsEntityModel: List<NewsEntity>)
 
-    fun deleteNews(newsEntityModel: NewsEntity)
+    fun deleteNews(newsEntityModel: List<NewsEntity>)
 
     fun getAllNews(): Observable<List<NewsEntity>>
 

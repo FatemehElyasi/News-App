@@ -8,11 +8,11 @@ class NewsLocalDataSourceImpl(
     private val newsDao: NewsDao
 ) : NewsLocalDataSource {
 
-    override fun insertNews(newsEntityModel: NewsEntity) {
-       newsDao.insertAllNews(newsEntityModel)
+    override fun saveNewsToDb(newsEntityModel: List<NewsEntity>) {
+       newsDao.saveNewsToDb(newsEntityModel)
     }
 
-    override fun deleteNews(newsEntityModel: NewsEntity) {
+    override fun deleteNews(newsEntityModel: List<NewsEntity>) {
        newsDao.deleteNews(newsEntityModel)
     }
 

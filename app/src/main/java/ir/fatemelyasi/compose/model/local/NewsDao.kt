@@ -9,15 +9,17 @@ import androidx.room.Query
 import androidx.room.Update
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 
 @Dao
 interface NewsDao {
 
+
     @Insert( onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllNews(vararg newsEntity: NewsEntity)
+    fun saveNewsToDb(newsEntity: List<NewsEntity>)
 
     @Delete
-    fun deleteNews( newsEntity: NewsEntity)
+    fun deleteNews( newsEntity:  List<NewsEntity>)
 
     //Observable for getting live data
     @Query(" SELECT * FROM NEWS_TABLE ")
