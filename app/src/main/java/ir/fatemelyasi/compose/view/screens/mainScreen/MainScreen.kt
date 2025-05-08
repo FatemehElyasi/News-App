@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.view.screens.mainActivity
+package ir.fatemelyasi.compose.view.screens.mainScreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,10 +13,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.compose.view.screens.SecondActivity.ArticleDetailScreen
-import ir.fatemelyasi.compose.view.screens.allArticleActivity.AllArticlesScreen
-import ir.fatemelyasi.compose.view.screens.DashboardActivity.DashboardScreen
-import ir.fatemelyasi.compose.view.screens.DashboardActivity.messageViewEntities
+import ir.fatemelyasi.compose.view.screens.articleDetailScreen.ArticleDetailScreen
+import ir.fatemelyasi.compose.view.screens.allArticleScreen.AllArticlesScreen
+import ir.fatemelyasi.compose.view.screens.dashboardScreen.DashboardScreen
 import ir.fatemelyasi.compose.view.ui.theme.ComposeTheme
 import ir.fatemelyasi.compose.view.utils.MyScreens
 
@@ -53,7 +52,7 @@ fun Navigation() {
                         )
                     )
                 },
-                messageViewEntity = ArrayList(messageViewEntities),
+                //messageViewEntity = ArrayList(messageViewEntities),
                 navigateToArticleScreen = {
                     navController.navigate(MyScreens.AllArticlesScreen)
                 }
@@ -84,8 +83,8 @@ fun Navigation() {
                 popUpToFirstScreen = {
                     navController.popBackStack()
                 },
-                messageViewEntities = messageViewEntities,
-            )
+
+                )
         }
     }
 }

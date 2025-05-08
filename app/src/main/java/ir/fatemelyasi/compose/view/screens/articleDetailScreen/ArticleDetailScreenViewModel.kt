@@ -1,0 +1,24 @@
+package ir.fatemelyasi.compose.view.screens.articleDetailScreen
+
+import androidx.lifecycle.ViewModel
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
+
+class ArticleDetailScreenViewModel(
+    private val newsRepository: NewsRepository,
+) : ViewModel() {
+
+    private val disposables = CompositeDisposable()
+
+    private val _articleSubject = BehaviorSubject.create<ArticleViewEntity>()
+    val articleObservable: Observable<ArticleViewEntity> = _articleSubject.hide()
+
+    fun setArticle(article: ArticleViewEntity) {
+        _articleSubject.onNext(article)
+
+    }
+
+}

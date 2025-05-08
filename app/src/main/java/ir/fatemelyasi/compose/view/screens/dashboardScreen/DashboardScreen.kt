@@ -1,4 +1,4 @@
-package ir.fatemelyasi.compose.view.screens.DashboardActivity
+package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,46 +48,18 @@ import coil.compose.AsyncImage
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 
 
-val messageViewEntities = listOf(
-    ArticleViewEntity(
-        title = "How To Get Started as a mobile app designer and get your first client",
-        publishedAt = "October,4,2024",
-        urlToImage = "R.drawable.banner",
-        description = "Everyone wants to make the next great mobile app."
-    ),
-    ArticleViewEntity(
-        title = "Make a Successful Instagram ",
-        publishedAt = "October,4,2024",
-        urlToImage = "R.drawable.bannerbody1",
-        description = "Everyone wants to make the next great mobile app."
-    ),
-    ArticleViewEntity(
-        title = "Get Started in 3D Animation",
-        publishedAt = "October,4,2024",
-        urlToImage = "R.drawable.bannerbody2",
-        description = "Everyone wants to make the next great mobile app."
-    ),
-    ArticleViewEntity(
-        title = "Get Started in 3D Animation",
-        publishedAt = "October,4,2024",
-        urlToImage = "R.drawable.banner",
-        description = "Everyone wants to make the next great mobile app."
-    )
-)
-
-
 @Composable
 internal fun DashboardScreen(
-    viewModel: DashboardActivityViewModel = viewModel(),
+    viewModel: DashboardScreenViewModel = viewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
-    messageViewEntity: ArrayList<ArticleViewEntity>
 ) {
-    val newsList = remember { mutableStateListOf<ArticleViewEntity>() }
+    val newsListState = remember { mutableStateListOf<ArticleViewEntity>() }
 
     DisposableEffect(Unit) {
-        val disposable = viewModel.newsSubject.subscribe { list ->
-            newsList.addAll(list)
+        val disposable = viewModel.newsList.subscribe{ list ->
+            newsListState.clear()
+            newsListState.addAll(list)
         }
 
         onDispose {
@@ -134,7 +106,12 @@ internal fun DashboardScreen(
                 )
             }
 
-            SearchRow(query = query, onQueryChange = { query = it }, onSearchClick = {})
+            SearchRow(query = query,
+                onQueryChange = { query = it },
+                onSearchClick = {
+                    viewModel.searchNews(query)
+                }
+            )
 
             Text(
                 text = "Today's Articles",
@@ -147,9 +124,12 @@ internal fun DashboardScreen(
                 style = MaterialTheme.typography.titleLarge,
             )
 
-            CardBanner(
-                articleViewEntity = messageViewEntities[0],
-                navigateToSecondScreen = { navigateToSecondScreen(messageViewEntities[0]) })
+            if (newsListState.isNotEmpty()) {
+                CardBanner(
+                    articleViewEntity = newsListState[0],
+                    navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) }
+                )
+            }
 
             HorizontalDivider(
                 modifier = Modifier
@@ -163,7 +143,7 @@ internal fun DashboardScreen(
                 MoreArticle(
                     navigateToArticleScreen = navigateToArticleScreen,
                     navigateToSecondScreen = navigateToSecondScreen,
-                    items = messageViewEntity,
+                    items =  newsListState,
                 )
             }
         }
@@ -172,7 +152,9 @@ internal fun DashboardScreen(
 
 @Composable
 fun SearchRow(
-    query: String, onQueryChange: (String) -> Unit, onSearchClick: () -> Unit
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -195,9 +177,6 @@ fun SearchRow(
             placeholder = { Text("Search") },
             singleLine = true
         )
-
-
-
         Button(
             modifier = Modifier.size(55.dp),
             onClick = onSearchClick,

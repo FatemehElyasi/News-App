@@ -1,36 +1,36 @@
-package ir.fatemelyasi.compose.view.screens.DashboardActivity
+package ir.fatemelyasi.compose.view.screens.allArticleScreen
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 
-class DashboardActivityViewModel(
+class AllArticleScreenViewModel(
     private val newsRepository: NewsRepository,
-    ) : ViewModel() {
-
-
-    val newsSubject: BehaviorSubject<List<ArticleViewEntity>> = BehaviorSubject.create()
+) : ViewModel() {
 
     private val disposables = CompositeDisposable()
 
-    //get list of news
-    fun getNews(): Single<List<ArticleViewEntity>> {
-        return newsRepository.getNewsFromServer()
+    private val _articles = BehaviorSubject.create<List<ArticleViewEntity>>()
+    val articles: Observable<List<ArticleViewEntity>> = _articles.hide()
+
+    private fun fetchArticles() {
+        val disposable = newsRepository.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { _articles.onNext(it) },
+                { it.printStackTrace() }
+            )
+        disposables.add(disposable)
     }
 
-    //getBanners Item
-    /*
-    fun getBannersItem(): Observable<List<ArticleViewEntity>> {
-        return newsRepository.getBanners()
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
-     */
-
 }
