@@ -14,32 +14,28 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.view.screens.dashboardScreen.ArticleItems
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AllArticlesScreen(
-    viewModel: AllArticleScreenViewModel = viewModel(),
-    navigateToSecondScreen: () -> Unit,
+    viewModel: AllArticleScreenViewModel = koinViewModel(),
+    navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     popUpToFirstScreen: () -> Unit,
 ) {
-
     val articles = remember { mutableStateListOf<ArticleViewEntity>() }
 
-    DisposableEffect(Unit) {
-        val disposable = viewModel.articles.subscribe {
+    LaunchedEffect(Unit) {
+        viewModel.articles.subscribe {
             articles.clear()
             articles.addAll(it)
-        }
-        onDispose {
-            disposable.dispose()
-        }
+        }.also { viewModel::addDisposable }
     }
 
     Column(
@@ -63,7 +59,7 @@ fun AllArticlesScreen(
 
         articles.forEach { article ->
             ArticleItems(
-                navigateToSecondScreen = { navigateToSecondScreen() },
+                navigateToSecondScreen = { navigateToSecondScreen(article) },
                 messageItem = article
             )
         }

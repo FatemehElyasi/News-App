@@ -3,11 +3,13 @@ package ir.fatemelyasi.compose.model.repository.newsRepository
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSource
-import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.model.dataSources.remote.NewsRemoteDataSource
+import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.view.utils.mappers.toEntity
 import ir.fatemelyasi.compose.view.utils.mappers.toView
 
+
+@org.koin.core.annotation.Single
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
     private val newsLocalDataSource: NewsLocalDataSource

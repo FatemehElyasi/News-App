@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
+import android.R.attr.maxLines
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -31,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,26 +47,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.internal.util.NotificationLite.disposable
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
+import ir.fatemelyasi.compose.view.screens.articleDetailScreen.ArticleDetailScreenViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 internal fun DashboardScreen(
-    viewModel: DashboardScreenViewModel = viewModel(),
+    viewModel: DashboardScreenViewModel = koinViewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
 ) {
     val newsListState = remember { mutableStateListOf<ArticleViewEntity>() }
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    DisposableEffect(Unit) {
-        val disposable = viewModel.newsList.subscribe{ list ->
+    LaunchedEffect(Unit) {
+        viewModel.newsList.subscribe { list ->
             newsListState.clear()
             newsListState.addAll(list)
-        }
+        }.also(viewModel::addDisposable)
 
-        onDispose {
-            disposable.dispose()
-        }
+        viewModel.loading.subscribe {
+            isLoading = it
+        }.also(viewModel::addDisposable)
+
+        viewModel.error.subscribe {
+            errorMessage = it.message
+        }.also(viewModel::addDisposable)
+
+        viewModel.fetchNews()
     }
 
     Surface(
@@ -336,7 +350,7 @@ fun ArticleItems(
 
     ) {
         AsyncImage(
-            model = (messageItem.urlToImage.toString()),
+            model = (messageItem.urlToImage),
             contentDescription = null,
             modifier = Modifier
                 .width(100.dp)
@@ -349,7 +363,7 @@ fun ArticleItems(
             verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = messageItem.title.toString(),
+                text = messageItem.title ?: "",
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1
@@ -359,7 +373,7 @@ fun ArticleItems(
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),
-                text = messageItem.publishedAt.toString(),
+                text = messageItem.publishedAt ?: "",
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 1

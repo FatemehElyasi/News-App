@@ -4,10 +4,13 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
+import org.koin.android.annotation.KoinViewModel
+import org.koin.java.KoinJavaComponent.inject
 
 class AllArticleScreenViewModel(
     private val newsRepository: NewsRepository,
@@ -17,6 +20,10 @@ class AllArticleScreenViewModel(
 
     private val _articles = BehaviorSubject.create<List<ArticleViewEntity>>()
     val articles: Observable<List<ArticleViewEntity>> = _articles.hide()
+
+    init {
+        fetchArticles()
+    }
 
     private fun fetchArticles() {
         val disposable = newsRepository.getNews()
@@ -29,8 +36,13 @@ class AllArticleScreenViewModel(
         disposables.add(disposable)
     }
 
+    fun addDisposable(disposable: Disposable) {
+        disposables.add(disposable)
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
     }
+
 }

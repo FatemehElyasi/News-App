@@ -27,10 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ArticleDetailScreen(
-    viewModel: ArticleDetailScreenViewModel = viewModel(),
+    viewModel: ArticleDetailScreenViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     text: ArticleViewEntity
 ) {
@@ -41,15 +42,14 @@ fun ArticleDetailScreen(
 
     val articleState = remember { mutableStateOf<ArticleViewEntity?>(null) }
 
-    DisposableEffect(Unit) {
-        val disposable = viewModel.articleObservable.subscribe {
-            articleState.value = it
-        }
-
-        onDispose {
-            disposable.dispose()
-        }
+    LaunchedEffect(Unit) {
+        viewModel.articleObservable
+            .subscribe { article ->
+                articleState.value = article
+            }.also { viewModel.addDisposable(it) }
     }
+
+
     articleState.value?.let { article ->
         Column(
             modifier = Modifier
@@ -79,14 +79,14 @@ fun ArticleDetailScreen(
             Text(
                 modifier = Modifier
                     .padding(top = 10.dp, bottom = 10.dp),
-                text = article.publishedAt.toString(),
+                text = article.publishedAt.orEmpty(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.titleSmall,
             )
 
             Text(
                 modifier = Modifier.padding(bottom = 10.dp),
-                text = article.title.toString(),
+                text = article.title.orEmpty(),
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.displaySmall
             )

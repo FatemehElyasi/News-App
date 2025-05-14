@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koinAnnotation)
+    ksp("io.insert-koin:koin-ksp-compiler:1.3.0")
+
     //Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)

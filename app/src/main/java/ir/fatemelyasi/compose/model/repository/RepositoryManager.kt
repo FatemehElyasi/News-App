@@ -5,12 +5,10 @@ import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSource
 import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSourceImpl
 import ir.fatemelyasi.compose.model.dataSources.remote.NewsRemoteDataSource
 import ir.fatemelyasi.compose.model.dataSources.remote.NewsRemoteDataSourceImpl
-import ir.fatemelyasi.compose.model.local.LocalManager
-import ir.fatemelyasi.compose.model.network.NetworkManager
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepositoryImpl
-
-class  RepositoryManager(context:Context) {
+/*
+class RepositoryManager(context: Context) {
 
     private val remoteDataSource: NewsRemoteDataSource by lazy {
         NewsRemoteDataSourceImpl(NetworkManager().getApiService()!!)
@@ -24,11 +22,8 @@ class  RepositoryManager(context:Context) {
     val newsRepository: NewsRepository by lazy {
         NewsRepositoryImpl(remoteDataSource, localDataSource)
     }
-
-
 }
-
-
+ */
 
 
 

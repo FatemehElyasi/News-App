@@ -3,7 +3,9 @@ package ir.fatemelyasi.compose.model.dataSources.local
 import io.reactivex.rxjava3.core.Observable
 import ir.fatemelyasi.compose.model.local.NewsDao
 import ir.fatemelyasi.compose.model.local.NewsEntity
+import org.koin.core.annotation.Single
 
+@Single
 class NewsLocalDataSourceImpl(
     private val newsDao: NewsDao
 ) : NewsLocalDataSource {

@@ -5,12 +5,15 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
+import org.koin.android.annotation.KoinViewModel
 
+@KoinViewModel
 class DashboardScreenViewModel(
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
@@ -60,6 +63,9 @@ class DashboardScreenViewModel(
         disposables.add(disposable)
     }
 
+    fun addDisposable(disposable: Disposable) {
+        disposables.add(disposable)
+    }
 
     override fun onCleared() {
         super.onCleared()

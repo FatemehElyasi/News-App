@@ -11,7 +11,7 @@ sealed class MyScreens() {
     data class ArticleDetailScreen(
         val title: String = "",
         val date: String = "",
-        val imageResId: String =" ",
+        val imageResId: String = " ",
         val description: String = "",
     ) : MyScreens()
 

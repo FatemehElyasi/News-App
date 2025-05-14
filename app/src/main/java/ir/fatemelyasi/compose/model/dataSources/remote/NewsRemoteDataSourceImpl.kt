@@ -4,7 +4,7 @@ import io.reactivex.rxjava3.core.Single
 import ir.fatemelyasi.compose.model.network.apiService.ApiService
 import ir.fatemelyasi.compose.model.network.responseModel.NewsResponseModel
 
-
+@org.koin.core.annotation.Single
 class NewsRemoteDataSourceImpl(
     private val apiService: ApiService
 ) : NewsRemoteDataSource {

@@ -46,9 +46,10 @@ fun Navigation() {
                 navigateToSecondScreen = { data ->
                     navController.navigate(
                         MyScreens.ArticleDetailScreen(
-                            title = data.title.toString(),
-                            date = data.publishedAt.toString(),
-                            imageResId = data.urlToImage.toString()
+                            title = data.title.orEmpty(),
+                            date = data.publishedAt.orEmpty(),
+                            imageResId = data.urlToImage.orEmpty(),
+                            description = data.description.orEmpty()
                         )
                     )
                 },
@@ -61,11 +62,12 @@ fun Navigation() {
 
         composable<MyScreens.ArticleDetailScreen> { backStackEntry ->
             val dataModel: MyScreens.ArticleDetailScreen = backStackEntry.toRoute()
+
             val messageViewEntity = ArticleViewEntity(
                 title = dataModel.title,
                 publishedAt = dataModel.date,
-                urlToImage = dataModel.imageResId.toString(),
-                description = dataModel.description.toString()
+                urlToImage = dataModel.imageResId,
+                description = dataModel.description
             )
             ArticleDetailScreen(
                 popBackStack = {
@@ -74,18 +76,24 @@ fun Navigation() {
                 text = messageViewEntity
             )
         }
-
         composable<MyScreens.AllArticlesScreen> {
             AllArticlesScreen(
-                navigateToSecondScreen = {
-                    navController.navigate(MyScreens.ArticleDetailScreen())
+                navigateToSecondScreen = { article ->
+                    navController.navigate(
+                        MyScreens.ArticleDetailScreen(
+                            title = article.title.orEmpty(),
+                            date = article.publishedAt.orEmpty(),
+                            imageResId = article.urlToImage.orEmpty(),
+                            description = article.description.orEmpty()
+                        )
+                    )
                 },
                 popUpToFirstScreen = {
                     navController.popBackStack()
-                },
-
-                )
+                }
+            )
         }
+
     }
 }
 
