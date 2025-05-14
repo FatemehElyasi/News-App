@@ -1,11 +1,10 @@
 package ir.fatemelyasi.compose.view
 
 import android.app.Application
-import ir.fatemelyasi.compose.model.di.DatabaseModule
+import ir.fatemelyasi.compose.model.di.ApplicationModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
+import org.koin.ksp.generated.module
 
 class MyApp : Application() {
 
@@ -14,9 +13,7 @@ class MyApp : Application() {
 
         startKoin {
             androidContext(this@MyApp)
-            modules(
-
-            )
+            modules(ApplicationModule().module)
         }
     }
 }
