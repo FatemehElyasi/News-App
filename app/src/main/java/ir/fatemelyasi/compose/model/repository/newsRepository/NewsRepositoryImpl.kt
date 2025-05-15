@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.model.repository.newsRepository
 
+import android.util.Log
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import ir.fatemelyasi.compose.model.dataSources.local.NewsLocalDataSource
@@ -20,7 +21,9 @@ class NewsRepositoryImpl(
         return Observable.concatArray(
             getNewsFromDb(),
             getNewsFromServer()
-                .doOnSuccess { saveNewsToDb(it) }
+                .doOnSuccess {
+                    Log.d("NewsRepository", "Fetched from server: ${it.size}")
+                    saveNewsToDb(it) }
                 .toObservable()
         )
     }
@@ -29,9 +32,15 @@ class NewsRepositoryImpl(
     override fun getNewsFromServer(): Single<List<ArticleViewEntity>> {
         return newsRemoteDataSource.getNewsInformation()
             .map { response ->
+                Log.d("API_RESPONSE", "Raw response: $response")
+                Log.d("API_RESPONSE", "Articles count: ${response.articles?.size}")
+
                 response.articles.orEmpty()
                     .filterNotNull()
                     .map { article ->
+
+                        Log.d("ARTICLE_ITEM", "Mapped Article: ${article.title}")
+
                         ArticleViewEntity(
                             title = article.title,
                             publishedAt = article.publishedAt,
@@ -46,11 +55,16 @@ class NewsRepositoryImpl(
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
             .map { newsEntityList ->
-                newsEntityList.map { it.toView() }
+                Log.d("NewsRepository", "DB News Count: ${newsEntityList.size}")
+                newsEntityList.map {
+                    Log.d("NewsRepository", "DB Article: ${it.title}")
+                    it.toView()
+                }
             }
     }
 
-    override  fun saveNewsToDb(news: List<ArticleViewEntity>) {
+    override fun saveNewsToDb(news: List<ArticleViewEntity>) {
+        Log.d("DB_SAVE", "Saving ${news.size} articles to DB")
         val entities = news.map { it.toEntity() }
         newsLocalDataSource.saveNewsToDb(entities)
     }

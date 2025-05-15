@@ -11,6 +11,7 @@ koinCompose = "4.0.4"
 koinComposeViewmodel = "4.0.4"
 koinCore ="4.0.4"
 
+koinKspCompiler = "2.0.0"
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
 lifecycleRuntimeKtx = "2.6.1"
@@ -25,6 +26,8 @@ rxjava = "3.1.6"
 kspPluginVersion = "2.1.0-1.0.29"
 
 roomCompilerVersion = "2.7.0"
+
+koinCompilerVersion = "2.0.0"
 
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "adapterRxjava3Version" }
@@ -43,11 +46,13 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndr
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koinCompose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koinComposeViewmodel" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKspCompiler" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerializationJsonVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 koinAnnotation = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotation" }
+koin-compiler = { group = "androidx.koin", name = "koinCompiler", version.ref = "koinCompilerVersion" }
 
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompilerVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomCompilerVersion" }

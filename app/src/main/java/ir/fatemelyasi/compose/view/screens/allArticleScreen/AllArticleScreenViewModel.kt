@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.view.screens.allArticleScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -12,6 +13,7 @@ import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 import org.koin.android.annotation.KoinViewModel
 import org.koin.java.KoinJavaComponent.inject
 
+@KoinViewModel
 class AllArticleScreenViewModel(
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
@@ -30,8 +32,14 @@ class AllArticleScreenViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { _articles.onNext(it) },
-                { it.printStackTrace() }
+                {
+                    Log.d("AllArticleScreenViewModel", "Articles fetched: ${it.size}")
+                    _articles.onNext(it)
+                },
+                {
+                    Log.e("AllArticleScreenViewModel", "Error fetching articles", it)
+                    it.printStackTrace()
+                }
             )
         disposables.add(disposable)
     }

@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -37,9 +38,16 @@ class DashboardScreenViewModel(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ articles ->
+
+                Log.e("NewsFetch DashboardScreenViewModel", "Articles fetched: $articles")
+
                 _loading.onNext(false)
                 _newsList.onNext(articles)
+
             }, { throwable ->
+
+                Log.e("NewsFetch DashboardScreenViewModel", "Error: ", throwable)
+
                 _loading.onNext(false)
                 _error.onNext(throwable)
             })
