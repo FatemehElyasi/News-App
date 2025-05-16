@@ -1,5 +1,6 @@
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
+import android.R.attr.contentDescription
 import android.R.attr.maxLines
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -69,106 +70,103 @@ internal fun DashboardScreen(
             newsListState.clear()
             newsListState.addAll(list)
         }.also(viewModel::addDisposable)
-
+    }
+    LaunchedEffect(Unit) {
         viewModel.loading.subscribe {
             isLoading = it
         }.also(viewModel::addDisposable)
-
+    }
+    LaunchedEffect(Unit) {
         viewModel.error.subscribe {
             errorMessage = it.message
         }.also(viewModel::addDisposable)
-
+    }
+    LaunchedEffect(Unit) {
         viewModel.fetchNews()
     }
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface,
+Surface(
+modifier = Modifier.fillMaxSize(),
+color = MaterialTheme.colorScheme.surface,
+) {
+    var query by remember {
+        mutableStateOf("")
+    }
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.Center,
     ) {
-        var query by remember {
-            mutableStateOf("")
-        }
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Column {
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            top = 20.dp,
-                        )
-                        .wrapContentSize(align = Alignment.TopStart),
-                    text = "Hi John ,",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleMedium
-
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            top = 4.dp
-                        )
-                        .wrapContentSize(align = Alignment.TopStart),
-                    text = "Good Morning!",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-            }
-
-            SearchRow(query = query,
-                onQueryChange = { query = it },
-                onSearchClick = {
-                    viewModel.searchNews(query)
-                }
-            )
-
+        Column {
             Text(
-                text = "Today's Articles",
                 modifier = Modifier
                     .padding(
-                        bottom = 10.dp
+                        top = 20.dp,
                     )
                     .wrapContentSize(align = Alignment.TopStart),
+                text = "Hi John ,",
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.titleMedium
+
+            )
+            Text(
+                modifier = Modifier
+                    .padding(
+                        top = 4.dp
+                    )
+                    .wrapContentSize(align = Alignment.TopStart),
+                text = "Good Morning!",
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleLarge,
             )
+        }
 
-            if (newsListState.isNotEmpty()) {
-                CardBanner(
-                    articleViewEntity = newsListState[0],
-                    navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) }
+        SearchRow(query = query, onQueryChange = { query = it }, onSearchClick = {
+            viewModel.searchNews(query)
+        })
+
+        Text(
+            text = "Today's Articles",
+            modifier = Modifier
+                .padding(
+                    bottom = 10.dp
                 )
-            }
+                .wrapContentSize(align = Alignment.TopStart),
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.titleLarge,
+        )
 
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .background(MaterialTheme.colorScheme.outline), thickness = 1.dp
+        if (newsListState.isNotEmpty()) {
+            CardBanner(
+                articleViewEntity = newsListState[0],
+                navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+        }
+
+        HorizontalDivider(
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .background(MaterialTheme.colorScheme.outline), thickness = 1.dp
+        )
+
+        Column(
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            MoreArticle(
+                navigateToArticleScreen = navigateToArticleScreen,
+                navigateToSecondScreen = navigateToSecondScreen,
+                items = newsListState,
             )
-
-            Column(
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                MoreArticle(
-                    navigateToArticleScreen = navigateToArticleScreen,
-                    navigateToSecondScreen = navigateToSecondScreen,
-                    items =  newsListState,
-                )
-            }
         }
     }
+}
 }
 
 @Composable
 fun SearchRow(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    onSearchClick: () -> Unit
+    query: String, onQueryChange: (String) -> Unit, onSearchClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -212,7 +210,8 @@ fun SearchRow(
 
 @Composable
 fun CardBanner(
-    articleViewEntity: ArticleViewEntity, navigateToSecondScreen: () -> Unit
+    articleViewEntity: ArticleViewEntity,
+    navigateToSecondScreen: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -227,7 +226,7 @@ fun CardBanner(
         horizontalAlignment = Alignment.Start,
     ) {
         AsyncImage(
-            model = articleViewEntity.urlToImage,
+            model = articleViewEntity.urlToImage ?: "https://media.wired.com/photos/680bc6b2b3938efbc5752612/191:100/w_1280,c_limit/chatgpt-shopping-gear-1355048636%20.jpg",
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)

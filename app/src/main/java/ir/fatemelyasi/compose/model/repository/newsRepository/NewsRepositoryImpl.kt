@@ -18,13 +18,9 @@ class NewsRepositoryImpl(
 ) : NewsRepository {
 
     override fun getNews(): Observable<List<ArticleViewEntity>> {
-        return Observable.concatArray(
+        return Observable.merge(
             getNewsFromDb(),
-            getNewsFromServer()
-                .doOnSuccess {
-                    Log.d("NewsRepository", "Fetched from server: ${it.size}")
-                    saveNewsToDb(it) }
-                .toObservable()
+            getNewsFromServer().doOnSuccess { saveNewsToDb(it) }.toObservable()
         )
     }
 
@@ -34,13 +30,10 @@ class NewsRepositoryImpl(
             .map { response ->
                 Log.d("API_RESPONSE", "Raw response: $response")
                 Log.d("API_RESPONSE", "Articles count: ${response.articles?.size}")
-
                 response.articles.orEmpty()
                     .filterNotNull()
                     .map { article ->
-
                         Log.d("ARTICLE_ITEM", "Mapped Article: ${article.title}")
-
                         ArticleViewEntity(
                             title = article.title,
                             publishedAt = article.publishedAt,
@@ -50,6 +43,7 @@ class NewsRepositoryImpl(
                     }
             }
     }
+
 
     //--------------db
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
