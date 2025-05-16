@@ -7,14 +7,14 @@ import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 fun NewsEntity.toView(): ArticleViewEntity = ArticleViewEntity(
     title = this.title,
     description = this.description,
-    urlToImage = this.urlToImage,
+    urlToImage = this.urlToImage!!,
     publishedAt = this.publishedAt
 )
 
 fun ArticleViewEntity.toEntity(): NewsEntity = NewsEntity(
     id = null,
-    title = this.title ?: "",
+    title = this.title,
     description = this.description ?: "",
-    urlToImage = this.urlToImage ?: "",
+    urlToImage = this.urlToImage ,
     publishedAt = this.publishedAt ?: ""
 )

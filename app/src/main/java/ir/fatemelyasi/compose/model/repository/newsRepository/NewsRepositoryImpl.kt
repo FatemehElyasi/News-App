@@ -32,12 +32,12 @@ class NewsRepositoryImpl(
                 Log.d("API_RESPONSE", "Articles count: ${response.articles?.size}")
                 response.articles.orEmpty()
                     .filterNotNull()
-                    .map { article ->
+                    .filter { !it.urlToImage.isNullOrBlank() && !it.title.isNullOrBlank() }                    .map { article ->
                         Log.d("ARTICLE_ITEM", "Mapped Article: ${article.title}")
                         ArticleViewEntity(
-                            title = article.title,
+                            title = article.title!!,
                             publishedAt = article.publishedAt,
-                            urlToImage = article.urlToImage,
+                            urlToImage = article.urlToImage!!,
                             description = article.description
                         )
                     }
@@ -48,14 +48,17 @@ class NewsRepositoryImpl(
     //--------------db
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
+            .filter { it.isNotEmpty() }
             .map { newsEntityList ->
                 Log.d("NewsRepository", "DB News Count: ${newsEntityList.size}")
                 newsEntityList.map {
                     Log.d("NewsRepository", "DB Article: ${it.title}")
                     it.toView()
                 }
+                    .filter { it.urlToImage.isNotBlank() } // فقط آیتم‌های دارای عکس
             }
     }
+
 
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         Log.d("DB_SAVE", "Saving ${news.size} articles to DB")

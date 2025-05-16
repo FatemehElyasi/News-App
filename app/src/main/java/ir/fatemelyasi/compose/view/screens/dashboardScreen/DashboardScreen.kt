@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -84,89 +86,96 @@ internal fun DashboardScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchNews()
     }
+    if (isLoading) {
+        LoadingIndicator()
+    } else {
 
-Surface(
-modifier = Modifier.fillMaxSize(),
-color = MaterialTheme.colorScheme.surface,
-) {
-    var query by remember {
-        mutableStateOf("")
-    }
-
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.Center,
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.surface,
     ) {
-        Column {
-            Text(
-                modifier = Modifier
-                    .padding(
-                        top = 20.dp,
-                    )
-                    .wrapContentSize(align = Alignment.TopStart),
-                text = "Hi John ,",
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleMedium
-
-            )
-            Text(
-                modifier = Modifier
-                    .padding(
-                        top = 4.dp
-                    )
-                    .wrapContentSize(align = Alignment.TopStart),
-                text = "Good Morning!",
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge,
-            )
+        var query by remember {
+            mutableStateOf("")
         }
-
-        SearchRow(query = query, onQueryChange = { query = it }, onSearchClick = {
-            viewModel.searchNews(query)
-        })
-
-        Text(
-            text = "Today's Articles",
-            modifier = Modifier
-                .padding(
-                    bottom = 10.dp
-                )
-                .wrapContentSize(align = Alignment.TopStart),
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleLarge,
-        )
-
-        if (newsListState.isNotEmpty()) {
-            CardBanner(
-                articleViewEntity = newsListState[0],
-                navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
-        }
-
-        HorizontalDivider(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .background(MaterialTheme.colorScheme.outline), thickness = 1.dp
-        )
 
         Column(
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Center,
         ) {
-            MoreArticle(
-                navigateToArticleScreen = navigateToArticleScreen,
-                navigateToSecondScreen = navigateToSecondScreen,
-                items = newsListState,
-            )
+
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .padding(
+                                top = 20.dp,
+                            )
+                            .wrapContentSize(align = Alignment.TopStart),
+                        text = "Hi John ,",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.titleMedium
+
+                    )
+                    Text(
+                        modifier = Modifier
+                            .padding(
+                                top = 4.dp
+                            )
+                            .wrapContentSize(align = Alignment.TopStart),
+                        text = "Good Morning!",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
+
+                SearchRow(query = query, onQueryChange = { query = it }, onSearchClick = {
+                    viewModel.searchNews(query)
+                })
+
+                Text(
+                    text = "Today's Articles",
+                    modifier = Modifier
+                        .padding(
+                            bottom = 10.dp
+                        )
+                        .wrapContentSize(align = Alignment.TopStart),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+
+                if (newsListState.isNotEmpty()) {
+                    CardBanner(
+                        articleViewEntity = newsListState[0],
+                        navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+                }
+
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .background(MaterialTheme.colorScheme.outline), thickness = 1.dp
+                )
+
+                Column(
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    MoreArticle(
+                        navigateToArticleScreen = navigateToArticleScreen,
+                        navigateToSecondScreen = navigateToSecondScreen,
+                        items = newsListState,
+                    )
+                }
+            }
         }
     }
-}
 }
 
 @Composable
 fun SearchRow(
-    query: String, onQueryChange: (String) -> Unit, onSearchClick: () -> Unit
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -226,7 +235,8 @@ fun CardBanner(
         horizontalAlignment = Alignment.Start,
     ) {
         AsyncImage(
-            model = articleViewEntity.urlToImage ?: "https://media.wired.com/photos/680bc6b2b3938efbc5752612/191:100/w_1280,c_limit/chatgpt-shopping-gear-1355048636%20.jpg",
+            model = articleViewEntity.urlToImage
+                ?: "https://media.wired.com/photos/680bc6b2b3938efbc5752612/191:100/w_1280,c_limit/chatgpt-shopping-gear-1355048636%20.jpg",
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
@@ -348,6 +358,7 @@ fun ArticleItems(
         verticalAlignment = Alignment.CenterVertically
 
     ) {
+
         AsyncImage(
             model = (messageItem.urlToImage),
             contentDescription = null,
@@ -380,3 +391,14 @@ fun ArticleItems(
         }
     }
 }
+
+@Composable
+fun LoadingIndicator() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
