@@ -25,29 +25,28 @@ class DashboardScreenViewModel(
     private val _newsList = BehaviorSubject.create<List<ArticleViewEntity>>()
     val newsList: Observable<List<ArticleViewEntity>> = _newsList.hide()
 
-    private val _loading = BehaviorSubject.createDefault(false)
+    private val _loading = BehaviorSubject.createDefault(true)
     val loading: Observable<Boolean> = _loading.hide()
 
     private val _error = PublishSubject.create<Throwable>()
     val error: Observable<Throwable> = _error.hide()
 
+    private val _hasLoadedInitialData = BehaviorSubject.createDefault(false)
+
+
     //get list of news
     fun fetchNews() {
-        _loading.onNext(true)
+        if (_hasLoadedInitialData.value == true) return
+        _hasLoadedInitialData.onNext(true)
+
         val disposable = newsRepository.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ articles ->
-
                 Log.e("NewsFetch DashboardScreenViewModel", "Articles fetched: $articles")
-
                 _loading.onNext(false)
                 _newsList.onNext(articles)
-
             }, { throwable ->
-
-                Log.e("NewsFetch DashboardScreenViewModel", "Error: ", throwable)
-
                 _loading.onNext(false)
                 _error.onNext(throwable)
             })
@@ -55,8 +54,6 @@ class DashboardScreenViewModel(
     }
 
     fun searchNews(query: String) {
-        _loading.onNext(true)
-
         val disposable = newsRepository.searchNews(query)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

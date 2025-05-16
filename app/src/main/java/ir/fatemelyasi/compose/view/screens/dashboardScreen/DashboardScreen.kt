@@ -64,7 +64,7 @@ internal fun DashboardScreen(
     navigateToArticleScreen: () -> Unit,
 ) {
     val newsListState = remember { mutableStateListOf<ArticleViewEntity>() }
-    var isLoading by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
@@ -84,27 +84,29 @@ internal fun DashboardScreen(
         }.also(viewModel::addDisposable)
     }
     LaunchedEffect(Unit) {
-        viewModel.fetchNews()
+        if (newsListState.isEmpty()) {
+            viewModel.fetchNews()
+        }
     }
-    if (isLoading) {
+    if (isLoading && newsListState.isEmpty()) {
         LoadingIndicator()
     } else {
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface,
-    ) {
-        var query by remember {
-            mutableStateOf("")
-        }
-
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.Center,
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.surface,
         ) {
+            var query by remember {
+                mutableStateOf("")
+            }
+
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.Center,
+            ) {
 
                 Column {
                     Text(
@@ -235,8 +237,7 @@ fun CardBanner(
         horizontalAlignment = Alignment.Start,
     ) {
         AsyncImage(
-            model = articleViewEntity.urlToImage
-                ?: "https://media.wired.com/photos/680bc6b2b3938efbc5752612/191:100/w_1280,c_limit/chatgpt-shopping-gear-1355048636%20.jpg",
+            model = articleViewEntity.urlToImage,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
@@ -253,7 +254,7 @@ fun CardBanner(
                 )
                 .padding(vertical = 8.dp)
                 .wrapContentSize(align = Alignment.TopStart),
-            onClick = { },
+            onClick = {navigateToSecondScreen() },
             shape = (RoundedCornerShape(8.dp)),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
@@ -331,7 +332,7 @@ fun MoreArticle(
             )
         }
 
-        items.forEach { item ->
+        items.take(4).forEach { item ->
             ArticleItems(
                 navigateToSecondScreen = {
                     navigateToSecondScreen(item)
@@ -373,7 +374,7 @@ fun ArticleItems(
             verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = messageItem.title ?: "",
+                text = messageItem.title ,
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1

@@ -3,12 +3,13 @@ package ir.fatemelyasi.compose.view.screens.allArticleScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -35,14 +36,16 @@ fun AllArticlesScreen(
         viewModel.articles.subscribe {
             articles.clear()
             articles.addAll(it)
-        }.also { viewModel::addDisposable }
+        }.also(viewModel::addDisposable)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchArticles()
     }
 
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(20.dp)
             .background(MaterialTheme.colorScheme.surface)
     ) {
         Icon(
@@ -50,20 +53,26 @@ fun AllArticlesScreen(
             contentDescription = "back",
             modifier = Modifier
                 .padding(
-                    top = 40.dp
+                    top = 60.dp,
+                    start = 20.dp,
+                    bottom = 10.dp
                 )
                 .clickable {
                     popUpToFirstScreen()
                 })
-        Spacer(modifier = Modifier.height(10.dp))
 
-        articles.forEach { article ->
-            ArticleItems(
-                navigateToSecondScreen = { navigateToSecondScreen(article) },
-                messageItem = article
-            )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+            contentPadding = PaddingValues(bottom = 20.dp)
+        ) {
+            items(items = articles.toList()) { article ->
+                ArticleItems(
+                    navigateToSecondScreen = { navigateToSecondScreen(article) },
+                    messageItem = article
+                )
+            }
         }
-
     }
-
 }

@@ -14,7 +14,7 @@ class DatabaseModule {
     @Single
     fun provideDatabase(context: Context): NewsDatabase {
         return Room.databaseBuilder(
-            context.applicationContext, // Application Context
+            context.applicationContext,
             NewsDatabase::class.java,
             "news-db"
         ).build()
