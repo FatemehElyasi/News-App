@@ -12,6 +12,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import ir.fatemelyasi.compose.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
 import org.koin.android.annotation.KoinViewModel
+import java.util.concurrent.TimeUnit
 
 @KoinViewModel
 class DashboardScreenViewModel(
@@ -24,11 +25,14 @@ class DashboardScreenViewModel(
     private val _newsList = BehaviorSubject.create<List<ArticleViewEntity>>()
     val newsList: Observable<List<ArticleViewEntity>> = _newsList.hide()
 
-    private val _loading = BehaviorSubject.createDefault(true)
-    val loading: Observable<Boolean> = _loading.hide()
+    private val _query = BehaviorSubject.createDefault("")
+    val query: Observable<String> = _query
 
     private val _error = PublishSubject.create<Throwable>()
     val error: Observable<Throwable> = _error.hide()
+
+    private val _loading = BehaviorSubject.createDefault(true)
+    val loading: Observable<Boolean> = _loading.hide()
 
     private val _hasLoadedInitialData = BehaviorSubject.createDefault(false)
 
@@ -52,6 +56,31 @@ class DashboardScreenViewModel(
         addDisposable(disposable)
     }
 
+    fun updateQuery(newQuery: String) {
+        _query.onNext(newQuery)
+    }
+    fun searchNews() {
+        val disposable = _query
+            .debounce(300, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .switchMap { query ->
+
+                newsRepository.searchNews(query)
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe { _loading.onNext(true) }
+                    .onErrorReturn { throwable -> _error.onNext(throwable)
+                        emptyList()
+                    }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { articles ->
+                _loading.onNext(false)
+                _newsList.onNext(articles)
+            }
+
+        addDisposable(disposable)
+    }
+    /*
     fun searchNews(query: String) {
         val disposable = newsRepository.searchNews(query)
             .subscribeOn(Schedulers.io())
@@ -66,6 +95,8 @@ class DashboardScreenViewModel(
 
         addDisposable(disposable)
     }
+
+     */
 
     fun deleteArticle(article: ArticleViewEntity) {
         val disposable = Completable.fromAction {

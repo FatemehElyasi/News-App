@@ -1,6 +1,6 @@
-
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -63,12 +63,25 @@ internal fun DashboardScreen(
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    var query by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        viewModel.query.subscribe {
+            query = it
+        }.also(viewModel::addDisposable)
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.searchNews()
+    }
+
     LaunchedEffect(Unit) {
         viewModel.newsList.subscribe { list ->
             newsListState.clear()
             newsListState.addAll(list)
         }.also(viewModel::addDisposable)
     }
+
     LaunchedEffect(Unit) {
         viewModel.loading.subscribe {
             isLoading = it
@@ -92,9 +105,6 @@ internal fun DashboardScreen(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.surface,
         ) {
-            var query by remember {
-                mutableStateOf("")
-            }
 
             Column(
                 modifier = Modifier
@@ -103,52 +113,57 @@ internal fun DashboardScreen(
                     .padding(20.dp),
                 verticalArrangement = Arrangement.Center,
             ) {
+                AnimatedVisibility(visible = query.isBlank()) {
+                    Column {
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    top = 20.dp,
+                                )
+                                .wrapContentSize(align = Alignment.TopStart),
+                            text = "Hi John ,",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleMedium
 
-                Column {
+                        )
+                        Text(
+                            modifier = Modifier
+                                .padding(
+                                    top = 4.dp
+                                )
+                                .wrapContentSize(align = Alignment.TopStart),
+                            text = "Good Morning!",
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
+                }
+
+                SearchRow(
+                    query = query,
+                    onQueryChange = { viewModel.updateQuery(it) },
+                    onSearchClick = {})
+
+                AnimatedVisibility(visible = query.isBlank()) {
                     Text(
+                        text = "Today's Articles",
                         modifier = Modifier
                             .padding(
-                                top = 20.dp,
+                                bottom = 10.dp
                             )
                             .wrapContentSize(align = Alignment.TopStart),
-                        text = "Hi John ,",
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        style = MaterialTheme.typography.titleMedium
-
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(
-                                top = 4.dp
-                            )
-                            .wrapContentSize(align = Alignment.TopStart),
-                        text = "Good Morning!",
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.titleLarge,
                     )
                 }
 
-                SearchRow(query = query, onQueryChange = { query = it }, onSearchClick = {
-                    viewModel.searchNews(query)
-                })
-
-                Text(
-                    text = "Today's Articles",
-                    modifier = Modifier
-                        .padding(
-                            bottom = 10.dp
-                        )
-                        .wrapContentSize(align = Alignment.TopStart),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    style = MaterialTheme.typography.titleLarge,
-                )
-
                 if (newsListState.isNotEmpty()) {
-                    CardBanner(
-                        articleViewEntity = newsListState[0],
-                        navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+                    AnimatedVisibility(visible = query.isBlank()) {
+                        CardBanner(
+                            articleViewEntity = newsListState[0],
+                            navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+                    }
                 }
-
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(vertical = 8.dp)
