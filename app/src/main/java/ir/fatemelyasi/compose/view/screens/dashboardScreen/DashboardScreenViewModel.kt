@@ -1,12 +1,11 @@
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.internal.util.NotificationLite.disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -35,22 +34,22 @@ class DashboardScreenViewModel(
 
 
     //get list of news
-    fun fetchNews() {
+    fun fetchNewsItems(count: Int) {
         if (_hasLoadedInitialData.value == true) return
         _hasLoadedInitialData.onNext(true)
 
-        val disposable = newsRepository.getNews()
+        val disposable = newsRepository.getTopNewsFromDb(count)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ articles ->
-                Log.e("NewsFetch DashboardScreenViewModel", "Articles fetched: $articles")
-                _loading.onNext(false)
-                _newsList.onNext(articles)
-            }, { throwable ->
-                _loading.onNext(false)
-                _error.onNext(throwable)
-            })
-        disposables.add(disposable)
+            .subscribe(
+                { articles ->
+                    _loading.onNext(false)
+                    _newsList.onNext(articles)
+                }, { throwable ->
+                    _loading.onNext(false)
+                    _error.onNext(throwable)
+                })
+        addDisposable(disposable)
     }
 
     fun searchNews(query: String) {
@@ -65,7 +64,25 @@ class DashboardScreenViewModel(
                 _error.onNext(throwable)
             })
 
-        disposables.add(disposable)
+        addDisposable(disposable)
+    }
+
+    fun deleteArticle(article: ArticleViewEntity) {
+        val disposable = Completable.fromAction {
+            newsRepository.deleteNews(listOf(article))
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val updatedList = _newsList.value.orEmpty().toMutableList()
+                updatedList.remove(article)
+                _newsList.onNext(updatedList)
+
+            }, {
+                _error.onNext(it)
+            })
+
+        addDisposable(disposable)
     }
 
     fun addDisposable(disposable: Disposable) {

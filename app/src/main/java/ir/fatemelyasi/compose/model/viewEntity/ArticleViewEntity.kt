@@ -8,4 +8,5 @@ data class ArticleViewEntity(
     val publishedAt: String?,
     val urlToImage: String,
     val description: String?,
-)
+) {
+}

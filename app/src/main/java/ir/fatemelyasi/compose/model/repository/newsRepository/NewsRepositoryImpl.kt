@@ -67,7 +67,15 @@ class NewsRepositoryImpl(
                     .filter { it.urlToImage.isNotBlank() }
             }
     }
-
+    override fun getTopNewsFromDb(count: Int): Observable<List<ArticleViewEntity>> {
+        return newsLocalDataSource.getTopNews(count)
+            .subscribeOn(Schedulers.io())
+            .filter { it.isNotEmpty() }
+            .map { newsEntityList ->
+                newsEntityList.map { it.toView() }
+                    .filter { it.urlToImage.isNotBlank() }
+            }
+    }
 
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toEntity() }

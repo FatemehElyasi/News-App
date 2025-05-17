@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AllArticlesScreen(
     viewModel: AllArticleScreenViewModel = koinViewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
+    deleteArticle: (ArticleViewEntity) -> Unit,
     popUpToFirstScreen: () -> Unit,
 ) {
     val articles = remember { mutableStateListOf<ArticleViewEntity>() }
@@ -70,6 +69,7 @@ fun AllArticlesScreen(
             items(items = articles.toList()) { article ->
                 ArticleItems(
                     navigateToSecondScreen = { navigateToSecondScreen(article) },
+                    onLongClick = { deleteArticle(article) },
                     messageItem = article
                 )
             }

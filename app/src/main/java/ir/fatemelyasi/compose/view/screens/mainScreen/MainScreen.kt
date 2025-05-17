@@ -13,11 +13,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.compose.view.screens.articleDetailScreen.ArticleDetailScreen
+import ir.fatemelyasi.compose.view.screens.allArticleScreen.AllArticleScreenViewModel
 import ir.fatemelyasi.compose.view.screens.allArticleScreen.AllArticlesScreen
+import ir.fatemelyasi.compose.view.screens.articleDetailScreen.ArticleDetailScreen
 import ir.fatemelyasi.compose.view.screens.dashboardScreen.DashboardScreen
 import ir.fatemelyasi.compose.view.ui.theme.ComposeTheme
 import ir.fatemelyasi.compose.view.utils.MyScreens
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -46,9 +48,9 @@ fun Navigation() {
                 navigateToSecondScreen = { data ->
                     navController.navigate(
                         MyScreens.ArticleDetailScreen(
-                            title = data.title.orEmpty(),
+                            title = data.title,
                             date = data.publishedAt.orEmpty(),
-                            imageResId = data.urlToImage.orEmpty(),
+                            imageResId = data.urlToImage,
                             description = data.description.orEmpty()
                         )
                     )
@@ -77,20 +79,24 @@ fun Navigation() {
             )
         }
         composable<MyScreens.AllArticlesScreen> {
+            val viewModel: AllArticleScreenViewModel = koinViewModel()
+
             AllArticlesScreen(
                 navigateToSecondScreen = { article ->
                     navController.navigate(
                         MyScreens.ArticleDetailScreen(
-                            title = article.title.orEmpty(),
+                            title = article.title,
                             date = article.publishedAt.orEmpty(),
-                            imageResId = article.urlToImage.orEmpty(),
+                            imageResId = article.urlToImage,
                             description = article.description.orEmpty()
                         )
                     )
                 },
                 popUpToFirstScreen = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = viewModel,
+                deleteArticle = { article -> viewModel.deleteArticle(article) }
             )
         }
 

@@ -1,10 +1,11 @@
+
 package ir.fatemelyasi.compose.view.screens.dashboardScreen
 
-import android.R.attr.contentDescription
-import android.R.attr.maxLines
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -48,12 +48,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.internal.util.NotificationLite.disposable
 import ir.fatemelyasi.compose.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.compose.view.screens.articleDetailScreen.ArticleDetailScreenViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -85,7 +81,7 @@ internal fun DashboardScreen(
     }
     LaunchedEffect(Unit) {
         if (newsListState.isEmpty()) {
-            viewModel.fetchNews()
+            viewModel.fetchNewsItems(4)
         }
     }
     if (isLoading && newsListState.isEmpty()) {
@@ -166,6 +162,7 @@ internal fun DashboardScreen(
                         navigateToArticleScreen = navigateToArticleScreen,
                         navigateToSecondScreen = navigateToSecondScreen,
                         items = newsListState,
+                        onLongClick = { article -> viewModel.deleteArticle(article) }
                     )
                 }
             }
@@ -254,7 +251,7 @@ fun CardBanner(
                 )
                 .padding(vertical = 8.dp)
                 .wrapContentSize(align = Alignment.TopStart),
-            onClick = {navigateToSecondScreen() },
+            onClick = { navigateToSecondScreen() },
             shape = (RoundedCornerShape(8.dp)),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondary,
@@ -295,6 +292,7 @@ fun CardBanner(
 fun MoreArticle(
     navigateToArticleScreen: () -> Unit,
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
+    onLongClick: (ArticleViewEntity) -> Unit,
     items: List<ArticleViewEntity>,
 ) {
     Column(
@@ -334,27 +332,31 @@ fun MoreArticle(
 
         items.take(4).forEach { item ->
             ArticleItems(
-                navigateToSecondScreen = {
-                    navigateToSecondScreen(item)
-                }, messageItem = item
+                navigateToSecondScreen = { navigateToSecondScreen(item) },
+                messageItem = item,
+                onLongClick = { onLongClick(item) }
+
             )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArticleItems(
     navigateToSecondScreen: () -> Unit,
     messageItem: ArticleViewEntity,
+    onLongClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
-                navigateToSecondScreen()
-            },
+            .combinedClickable(
+                onClick = navigateToSecondScreen,
+                onLongClick = onLongClick
+            ),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
 
@@ -371,10 +373,11 @@ fun ArticleItems(
             contentScale = ContentScale.Crop
         )
         Column(
-            verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = messageItem.title ,
+                text = messageItem.title,
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1
