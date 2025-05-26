@@ -55,7 +55,6 @@ fun Navigation() {
                         )
                     )
                 },
-                //messageViewEntity = ArrayList(messageViewEntities),
                 navigateToArticleScreen = {
                     navController.navigate(MyScreens.AllArticlesScreen)
                 }

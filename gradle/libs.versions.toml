@@ -1,5 +1,4 @@
 [versions]
-adapterRxjava3 = "2.9.0"
 adapterRxjava3Version = "2.9.0"
 agp = "8.9.1"
 coilComposeVersion = "2.5.0"
@@ -27,7 +26,8 @@ kspPluginVersion = "2.1.0-1.0.29"
 
 roomCompilerVersion = "2.7.0"
 
-koinCompilerVersion = "2.0.0"
+okhttpInteceptorVersion = "4.12.0"
+runtimeRxJava3 = "1.8.1"
 
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "adapterRxjava3Version" }
@@ -52,7 +52,9 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
 koinAnnotation = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotation" }
-koin-compiler = { group = "androidx.koin", name = "koinCompiler", version.ref = "koinCompilerVersion" }
+
+okhttpInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpInteceptorVersion" }
+runtime-rxjava3 = { group = "androidx.compose.runtime", name = "runtime-rxjava3", version.ref = "runtimeRxJava3" }
 
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompilerVersion" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomCompilerVersion" }

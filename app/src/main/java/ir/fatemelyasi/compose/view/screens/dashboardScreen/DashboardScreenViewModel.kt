@@ -18,10 +18,12 @@ import java.util.concurrent.TimeUnit
 class DashboardScreenViewModel(
     private val newsRepository: NewsRepository,
 ) : ViewModel() {
+    companion object {
+        private const val DEFAULT_NEWS_ITEM_COUNT = 4
+    }
 
     private val disposables = CompositeDisposable()
 
-    //save value = BehaviorSubject / get value = Observable
     private val _newsList = BehaviorSubject.create<List<ArticleViewEntity>>()
     val newsList: Observable<List<ArticleViewEntity>> = _newsList.hide()
 
@@ -34,31 +36,30 @@ class DashboardScreenViewModel(
     private val _loading = BehaviorSubject.createDefault(true)
     val loading: Observable<Boolean> = _loading.hide()
 
-    private val _hasLoadedInitialData = BehaviorSubject.createDefault(false)
+    private var hasLoadedInitialData = false
 
+    fun fetchNewsItems() {
+        if (hasLoadedInitialData == true) return
 
-    //get list of news
-    fun fetchNewsItems(count: Int) {
-        if (_hasLoadedInitialData.value == true) return
-        _hasLoadedInitialData.onNext(true)
-
-        val disposable = newsRepository.getTopNewsFromDb(count)
+        val disposable = newsRepository.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { articles ->
-                    _loading.onNext(false)
-                    _newsList.onNext(articles)
-                }, { throwable ->
-                    _loading.onNext(false)
-                    _error.onNext(throwable)
-                })
-        addDisposable(disposable)
+            .subscribe({ articles ->
+                _loading.onNext(false)
+                _newsList.onNext(articles.take(DEFAULT_NEWS_ITEM_COUNT))
+                hasLoadedInitialData = true
+            }, { throwable ->
+                _loading.onNext(false)
+                _error.onNext(throwable)
+            })
+        
+        disposables.add(disposable)
     }
 
     fun updateQuery(newQuery: String) {
         _query.onNext(newQuery)
     }
+
     fun searchNews() {
         val disposable = _query
             .debounce(300, TimeUnit.MILLISECONDS)
@@ -68,7 +69,8 @@ class DashboardScreenViewModel(
                 newsRepository.searchNews(query)
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe { _loading.onNext(true) }
-                    .onErrorReturn { throwable -> _error.onNext(throwable)
+                    .onErrorReturn { throwable ->
+                        _error.onNext(throwable)
                         emptyList()
                     }
             }
@@ -78,25 +80,8 @@ class DashboardScreenViewModel(
                 _newsList.onNext(articles)
             }
 
-        addDisposable(disposable)
+        disposables.add(disposable)
     }
-    /*
-    fun searchNews(query: String) {
-        val disposable = newsRepository.searchNews(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ articles ->
-                _loading.onNext(false)
-                _newsList.onNext(articles)
-            }, { throwable ->
-                _loading.onNext(false)
-                _error.onNext(throwable)
-            })
-
-        addDisposable(disposable)
-    }
-
-     */
 
     fun deleteArticle(article: ArticleViewEntity) {
         val disposable = Completable.fromAction {
@@ -113,10 +98,6 @@ class DashboardScreenViewModel(
                 _error.onNext(it)
             })
 
-        addDisposable(disposable)
-    }
-
-    fun addDisposable(disposable: Disposable) {
         disposables.add(disposable)
     }
 
@@ -124,5 +105,4 @@ class DashboardScreenViewModel(
         super.onCleared()
         disposables.clear()
     }
-
 }

@@ -1,6 +1,8 @@
 package ir.fatemelyasi.compose.model.di
 
 import ir.fatemelyasi.compose.model.network.apiService.ApiService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 import retrofit2.Retrofit
@@ -16,9 +18,27 @@ class NetworkModule {
     }
 
     @Single
-    fun provideRetrofit(baseUrl: String): Retrofit {
+    fun provideOkHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
+        setLevel(
+            HttpLoggingInterceptor.Level.BODY
+        )
+    }
+
+    @Single
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ) = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        .build()
+
+    @Single
+    fun provideRetrofit(
+        baseUrl: String,
+        okHttpClient: OkHttpClient,
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()

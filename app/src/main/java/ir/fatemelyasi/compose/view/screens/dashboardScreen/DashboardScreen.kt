@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,44 +60,19 @@ internal fun DashboardScreen(
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
 ) {
-    val newsListState = remember { mutableStateListOf<ArticleViewEntity>() }
-    var isLoading by remember { mutableStateOf(true) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    var query by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit) {
-        viewModel.query.subscribe {
-            query = it
-        }.also(viewModel::addDisposable)
-    }
+    val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
+    val isLoading by viewModel.loading.subscribeAsState(initial = false)
+    val errorMessage by viewModel.error.subscribeAsState(initial = null)
+    val query by viewModel.query.subscribeAsState(initial = "")
 
     LaunchedEffect(Unit) {
         viewModel.searchNews()
     }
 
     LaunchedEffect(Unit) {
-        viewModel.newsList.subscribe { list ->
-            newsListState.clear()
-            newsListState.addAll(list)
-        }.also(viewModel::addDisposable)
+        viewModel.fetchNewsItems()
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.loading.subscribe {
-            isLoading = it
-        }.also(viewModel::addDisposable)
-    }
-    LaunchedEffect(Unit) {
-        viewModel.error.subscribe {
-            errorMessage = it.message
-        }.also(viewModel::addDisposable)
-    }
-    LaunchedEffect(Unit) {
-        if (newsListState.isEmpty()) {
-            viewModel.fetchNewsItems(4)
-        }
-    }
     if (isLoading && newsListState.isEmpty()) {
         LoadingIndicator()
     } else {

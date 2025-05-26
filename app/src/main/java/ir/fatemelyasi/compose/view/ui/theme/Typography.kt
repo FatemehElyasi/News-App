@@ -8,18 +8,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.compose.R
 
-/*
-internal var provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
- */
-
-//val MontserratFont = GoogleFont(name = "Montserrat")
-
-//val KarlaFont = GoogleFont(name = "Karla")
-
 internal val MontserratFontFamily = FontFamily(
     Font(
         resId = R.font.montserrat,

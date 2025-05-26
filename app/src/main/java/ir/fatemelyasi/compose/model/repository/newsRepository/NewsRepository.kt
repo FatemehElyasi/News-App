@@ -11,9 +11,10 @@ interface NewsRepository {
     fun getNewsFromServer(): Single<List<ArticleViewEntity>>
 
     fun getNewsFromDb(): Observable<List<ArticleViewEntity>>
-    fun getTopNewsFromDb(count: Int): Observable<List<ArticleViewEntity>>
-    fun saveNewsToDb(news: List<ArticleViewEntity>)
-    fun searchNews(query: String): Observable<List<ArticleViewEntity>>
-    fun deleteNews(news: List<ArticleViewEntity>)
 
+    fun saveNewsToDb(news: List<ArticleViewEntity>)
+
+    fun searchNews(query: String): Observable<List<ArticleViewEntity>>
+
+    fun deleteNews(news: List<ArticleViewEntity>)
 }

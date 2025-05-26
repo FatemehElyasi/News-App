@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.annotationProcessor
+import org.gradle.kotlin.dsl.api
 import org.gradle.kotlin.dsl.implementation
 
 plugins {
@@ -58,10 +59,12 @@ dependencies {
     //retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.okhttpInterceptor)
     //RXJava
     implementation(libs.rxjava)
     implementation(libs.adapter.rxjava3)
     implementation(libs.rxandroid)
+    implementation(libs.runtime.rxjava3)
     //coil
     implementation(libs.coil.compose)
     //Koin
@@ -70,7 +73,7 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koinAnnotation)
-    ksp("io.insert-koin:koin-ksp-compiler:2.0.0")
+    ksp(libs.koin.ksp.compiler)
 
     //Room
     implementation(libs.room.runtime)
