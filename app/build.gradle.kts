@@ -1,7 +1,3 @@
-import org.gradle.kotlin.dsl.annotationProcessor
-import org.gradle.kotlin.dsl.api
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -11,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "ir.fatemelyasi.compose"
+    namespace = "ir.fatemelyasi.news"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ir.fatemelyasi.compose"
+        applicationId = "ir.fatemelyasi.news"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -53,7 +49,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
+    //implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
     //retrofit
