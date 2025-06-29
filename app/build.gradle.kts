@@ -1,7 +1,3 @@
-import org.gradle.kotlin.dsl.annotationProcessor
-import org.gradle.kotlin.dsl.api
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -11,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "ir.fatemelyasi.compose"
+    namespace = "ir.fatemelyasi.news"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ir.fatemelyasi.compose"
+        applicationId = "ir.fatemelyasi.news"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
