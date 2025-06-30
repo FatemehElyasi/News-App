@@ -10,7 +10,6 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
-
 data class CustomColors(
     val primary: Color,
     val onPrimary: Color,
@@ -26,47 +25,11 @@ data class CustomColors(
     val onError: Color,
     val secondaryContainer: Color,
     val onSecondaryContainer: Color,
-    val tertiary: Color,
-    val onTertiary: Color,
-    val tertiaryContainer: Color,
     val onTertiaryContainer: Color,
     val errorContainer: Color,
     val onErrorContainer: Color,
-    val inverseSurface: Color,
-    val inverseOnSurface: Color,
-    val surfaceVariant: Color,
-    val onSurfaceVariant: Color,
     val outline: Color,
-    val inversePrimary: Color,
-)
-
-val DarkColorScheme = CustomColors(
-    primary = Blue80,
-    onPrimary = White,
-    primaryContainer = Blue30,
-    onPrimaryContainer = Blue90,
-    secondary = DarkBlue80,
-    onSecondary = DarkBlue20,
-    secondaryContainer = DarkBlue30,
-    onSecondaryContainer = DarkBlue90,
-    tertiary = Yellow80,
-    onTertiary = Yellow20,
-    tertiaryContainer = Yellow30,
-    onTertiaryContainer = Yellow90,
-    error = Red80,
-    onError = Red20,
-    errorContainer = Red30,
-    onErrorContainer = Red90,
-    background = Grey10,
-    onBackground = Grey90,
-    surface = Grey10,
-    onSurface = Grey80,
-    inverseSurface = Grey90,
-    inverseOnSurface = Grey20,
-    surfaceVariant = BlueGrey30,
-    onSurfaceVariant = BlueGrey80,
-    outline = BlueGrey60,
-    inversePrimary = BlueGrey60,
+    val onSurfaceVariant: Color
 )
 
 val LightColorScheme = CustomColors(
@@ -74,14 +37,10 @@ val LightColorScheme = CustomColors(
     onPrimary = Black,
     primaryContainer = Blue90,
     onPrimaryContainer = Blue10,
-    inversePrimary = Blue80,
     secondary = DarkBlue40,
     onSecondary = White,
     secondaryContainer = DarkBlue90,
     onSecondaryContainer = DarkBlue10,
-    tertiary = Yellow40,
-    onTertiary = White,
-    tertiaryContainer = Yellow90,
     onTertiaryContainer = Yellow10,
     error = Red40,
     onError = White,
@@ -91,18 +50,38 @@ val LightColorScheme = CustomColors(
     onBackground = Grey10,
     surface = Grey99,
     onSurface = Grey10,
-    inverseSurface = Grey20,
-    inverseOnSurface = Grey95,
-    surfaceVariant = BlueGrey90,
-    onSurfaceVariant = BlueGrey30,
     outline = BlueGrey50,
+    onSurfaceVariant = BlueGrey30,
+    )
+
+val DarkColorScheme = CustomColors(
+    primary = Blue80,
+    onPrimary = White,
+    primaryContainer = Grey10,
+    onPrimaryContainer = Blue90,
+    secondary = DarkBlue80,
+    onSecondary = DarkBlue20,
+    secondaryContainer = DarkBlue30,
+    onSecondaryContainer = DarkBlue90,
+    onTertiaryContainer = Yellow90,
+    error = Red80,
+    onError = Red20,
+    errorContainer = Red30,
+    onErrorContainer = Red90,
+    background = Grey10,
+    onBackground = Grey90,
+    surface = Grey10,
+    onSurface = Grey80,
+    outline = BlueGrey60,
+    onSurfaceVariant = BlueGrey80,
 )
 
+
 val LocalCustomColors = staticCompositionLocalOf<CustomColors> {
-    error("No CustomColors provided")
+    LightColorScheme
 }
 val LocalCustomTypography = staticCompositionLocalOf<AppTypography> {
-    error("No typography provided")
+    ComposeTypography
 }
 
 @Composable
@@ -125,3 +104,4 @@ fun ComposeTheme(
         }
     }
 }
+
