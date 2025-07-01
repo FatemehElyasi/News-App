@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">news</string>
+    <string name="offline_error_message">"You are offline…</string>
 </resources>
