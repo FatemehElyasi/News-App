@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "ir.fatemelyasi.compose"
+    namespace = "ir.fatemelyasi.news"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "ir.fatemelyasi.compose"
+        applicationId = "ir.fatemelyasi.news"
         minSdk = 24
         targetSdk = 35
         versionCode = 1

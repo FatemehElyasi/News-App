@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Compose"
+rootProject.name = "news"
 include(":app")
  
