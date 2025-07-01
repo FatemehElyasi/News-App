@@ -10,9 +10,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
+import ir.fatemelyasi.news.view.utils.SortOrder
 import org.koin.android.annotation.KoinViewModel
-import kotlin.collections.orEmpty
-import kotlin.collections.toMutableList
 
 @KoinViewModel
 class AllArticleScreenViewModel(
@@ -21,22 +20,51 @@ class AllArticleScreenViewModel(
 
     private val disposables = CompositeDisposable()
 
+    private var currentSortOrder: SortOrder? = null
+    private var currentArticles: List<ArticleViewEntity> = emptyList()
+
     private val _articles = BehaviorSubject.create<List<ArticleViewEntity>>()
-    val articles: Observable<List<ArticleViewEntity>> = _articles.hide()
+    val articles: Observable<List<ArticleViewEntity>> = _articles
+        .distinctUntilChanged()
+        .hide()
 
     private val _hasLoadedInitialData = BehaviorSubject.createDefault(false)
 
+    private val _query = BehaviorSubject.createDefault("")
+    val query: Observable<String> = _query
+
     fun fetchArticles() {
+        if (_hasLoadedInitialData.value == true) return
         _hasLoadedInitialData.onNext(true)
 
         val disposable = newsRepository.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { _articles.onNext(it) },
+                {
+                    currentArticles = it
+                    if (currentSortOrder != null) {
+                        sortArticles(currentSortOrder!!)
+                    } else {
+                        _articles.onNext(it)
+                    }
+                },
                 { it.printStackTrace() }
             )
         addDisposable(disposable)
+    }
+
+
+    fun sortArticles(order: SortOrder) {
+        currentSortOrder = order
+
+        val sorted = when (order) {
+            SortOrder.ASCENDING -> currentArticles.sortedBy { it.publishedAt?.take(10) }
+            SortOrder.DESCENDING -> currentArticles.sortedByDescending { it.publishedAt?.take(10) }
+        }
+        val distinctSorted = sorted.distinctBy { it.publishedAt?.take(10) }
+
+        _articles.onNext(distinctSorted)
     }
 
     fun deleteArticle(article: ArticleViewEntity) {
@@ -68,3 +96,4 @@ class AllArticleScreenViewModel(
     }
 
 }
+

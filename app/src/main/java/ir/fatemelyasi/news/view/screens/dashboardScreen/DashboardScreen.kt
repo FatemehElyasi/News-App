@@ -26,6 +26,8 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,7 +65,6 @@ internal fun DashboardScreen(
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
 
-
     LaunchedEffect(Unit) {
         viewModel.searchNews()
     }
@@ -81,7 +82,6 @@ internal fun DashboardScreen(
                 .fillMaxSize()
                 .background(colors.surface)
         ) {
-
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -91,7 +91,7 @@ internal fun DashboardScreen(
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
                     Column {
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 20.dp,
@@ -103,7 +103,7 @@ internal fun DashboardScreen(
                             )
 
                         )
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 4.dp
@@ -123,7 +123,7 @@ internal fun DashboardScreen(
                     onSearchClick = {})
 
                 AnimatedVisibility(visible = query.isBlank()) {
-                    BasicText(
+                    Text(
                         text = "Today's Articles",
                         modifier = Modifier
                             .padding(
@@ -283,13 +283,13 @@ fun CardBanner(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            BasicText(
+            Text(
                 text = articleViewEntity.title.toString(),
                 style = typography.displaySmall.copy(
                     colors.onPrimary,
                 ),
             )
-            BasicText(
+            Text(
                 text = articleViewEntity.publishedAt.toString(),
                 style = typography.titleSmall.copy(
                     colors.onSurfaceVariant,
@@ -322,7 +322,7 @@ fun MoreArticle(
                     bottom = 8.dp
                 )
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.wrapContentSize(align = Alignment.TopEnd),
                 text = " More Articles",
                 style = typography.titleLarge.copy(
@@ -333,7 +333,7 @@ fun MoreArticle(
                 modifier = Modifier.weight(1f)
             )
 
-            BasicText(
+            Text(
                 text = " See All",
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
@@ -397,7 +397,7 @@ fun ArticleItems(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            BasicText(
+            Text(
                 text = messageItem.title,
                 style = typography.titleMedium.copy(
                     colors.onPrimary,
@@ -405,7 +405,7 @@ fun ArticleItems(
                 maxLines = 1
             )
 
-            BasicText(
+            Text(
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),

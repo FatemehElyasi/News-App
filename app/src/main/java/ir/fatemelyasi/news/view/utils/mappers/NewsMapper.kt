@@ -8,7 +8,7 @@ fun NewsEntity.toViewEntity(): ArticleViewEntity = ArticleViewEntity(
     title = this.title,
     description = this.description,
     urlToImage = this.urlToImage ?: "",
-    publishedAt = this.publishedAt
+    publishedAt = this.publishedAt.take(10)
 )
 
 fun ArticleViewEntity.toViewEntity(): NewsEntity = NewsEntity(
@@ -16,5 +16,5 @@ fun ArticleViewEntity.toViewEntity(): NewsEntity = NewsEntity(
     title = this.title,
     description = this.description ?: "",
     urlToImage = this.urlToImage ,
-    publishedAt = this.publishedAt ?: ""
+    publishedAt = this.publishedAt!!.take(10)
 )
