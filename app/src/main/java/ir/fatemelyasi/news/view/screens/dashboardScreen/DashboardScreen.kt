@@ -1,12 +1,6 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +25,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,8 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -53,6 +48,7 @@ import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import org.koin.compose.viewmodel.koinViewModel
+import java.util.Collections.emptyList
 
 
 @Composable
@@ -68,7 +64,6 @@ internal fun DashboardScreen(
 
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
-
 
     LaunchedEffect(Unit) {
         viewModel.searchNews()
@@ -87,7 +82,6 @@ internal fun DashboardScreen(
                 .fillMaxSize()
                 .background(colors.surface)
         ) {
-
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -97,7 +91,7 @@ internal fun DashboardScreen(
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
                     Column {
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 20.dp,
@@ -109,7 +103,7 @@ internal fun DashboardScreen(
                             )
 
                         )
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 4.dp
@@ -129,7 +123,7 @@ internal fun DashboardScreen(
                     onSearchClick = {})
 
                 AnimatedVisibility(visible = query.isBlank()) {
-                    BasicText(
+                    Text(
                         text = "Today's Articles",
                         modifier = Modifier
                             .padding(
@@ -221,9 +215,6 @@ fun SearchRow(
                 .background(color = colors.secondary, shape = RoundedCornerShape(8.dp))
                 .clickable { onSearchClick() },
             contentAlignment = Alignment.Center
-            // contentPadding = PaddingValues(0.dp),
-            // containerColor = colors.secondary,
-            //contentColor = colors.onSecondary
         )
         {
             Image(
@@ -292,13 +283,13 @@ fun CardBanner(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            BasicText(
+            Text(
                 text = articleViewEntity.title.toString(),
                 style = typography.displaySmall.copy(
                     colors.onPrimary,
                 ),
             )
-            BasicText(
+            Text(
                 text = articleViewEntity.publishedAt.toString(),
                 style = typography.titleSmall.copy(
                     colors.onSurfaceVariant,
@@ -331,7 +322,7 @@ fun MoreArticle(
                     bottom = 8.dp
                 )
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.wrapContentSize(align = Alignment.TopEnd),
                 text = " More Articles",
                 style = typography.titleLarge.copy(
@@ -342,7 +333,7 @@ fun MoreArticle(
                 modifier = Modifier.weight(1f)
             )
 
-            BasicText(
+            Text(
                 text = " See All",
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
@@ -406,7 +397,7 @@ fun ArticleItems(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            BasicText(
+            Text(
                 text = messageItem.title,
                 style = typography.titleMedium.copy(
                     colors.onPrimary,
@@ -414,7 +405,7 @@ fun ArticleItems(
                 maxLines = 1
             )
 
-            BasicText(
+            Text(
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),
@@ -430,36 +421,11 @@ fun ArticleItems(
 
 @Composable
 fun LoadingIndicator() {
-    val colors = LocalCustomColors.current
-
-    val infiniteTransition = rememberInfiniteTransition(label = "rotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing)
-        ),
-        label = "rotationValue"
-    )
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Canvas(
-            modifier = Modifier
-                .size(40.dp)
-                .graphicsLayer {
-                    rotationZ = rotation
-                }) {
-            drawArc(
-                color = colors.primary,
-                startAngle = 0f,
-                sweepAngle = 270f,
-                useCenter = false,
-                style = Stroke(width = 4.dp.toPx())
-            )
-        }
+        CircularProgressIndicator()
     }
 }
 

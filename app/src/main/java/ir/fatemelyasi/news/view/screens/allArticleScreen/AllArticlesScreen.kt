@@ -37,6 +37,7 @@ import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.utils.SortOrder
 import org.koin.compose.viewmodel.koinViewModel
 
+
 @Composable
 fun AllArticlesScreen(
     viewModel: AllArticleScreenViewModel = koinViewModel(),

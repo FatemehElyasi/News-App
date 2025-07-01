@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -59,12 +60,13 @@ fun ArticleDetailScreen(
                 .padding(20.dp)
                 .background(colors.surface)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.back),
-                contentDescription = "back",
+            Icon(
                 modifier = Modifier
                     .padding(top = 40.dp, bottom = 20.dp)
-                    .clickable { popBackStack() }
+                    .clickable { popBackStack() },
+                painter = painterResource(id = R.drawable.back),
+                contentDescription = "Back",
+                tint = (colors.onPrimary)
             )
 
             AsyncImage(
