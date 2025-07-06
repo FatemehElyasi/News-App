@@ -74,10 +74,11 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koinAnnotation)
     ksp(libs.koin.ksp.compiler)
-
     //Room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
+    //splash screen
+    implementation(libs.androidx.core.splashscreen)
 
 }
