@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.offlineScreen
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +28,6 @@ import org.koin.compose.viewmodel.koinViewModel
 fun OfflineScreen(
     viewModel: DashboardScreenViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
     val colors = LocalCustomColors.current
 
     val loading by viewModel.loading.subscribeAsState(initial = false)
@@ -58,11 +55,7 @@ fun OfflineScreen(
 
         Button(
             onClick = {
-                if (viewModel.isInternetAvailable(context)) {
-                    viewModel.fetchNewsItems()
-                } else {
-                    Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show()
-                }
+                viewModel.fetchNewsItems()
             },
             enabled = !loading
         ) {
