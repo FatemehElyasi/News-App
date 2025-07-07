@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.mainScreen
 
+import AuthenticationScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,8 @@ import ir.fatemelyasi.news.view.screens.allArticleScreen.AllArticleScreenViewMod
 import ir.fatemelyasi.news.view.screens.allArticleScreen.AllArticlesScreen
 import ir.fatemelyasi.news.view.screens.articleDetailScreen.ArticleDetailScreen
 import ir.fatemelyasi.news.view.screens.dashboardScreen.DashboardScreen
+import ir.fatemelyasi.news.view.screens.logInScreen.LoginScreen
+import ir.fatemelyasi.news.view.screens.signUpScreen.SignUpScreen
 import ir.fatemelyasi.news.view.ui.theme.ComposeTheme
 import ir.fatemelyasi.news.view.utils.MyScreens
 import org.koin.compose.viewmodel.koinViewModel
@@ -41,8 +44,39 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = MyScreens.DashboardScreen
+        startDestination = MyScreens.AuthenticationScreen
     ) {
+        composable<MyScreens.AuthenticationScreen> {
+            AuthenticationScreen(
+                navigateToSignUpScreen = {
+                    navController.navigate(MyScreens.SignUpScreen)
+                },
+                navigateToLogInScreen = {
+                    navController.navigate(MyScreens.LogInInScreen)
+                }
+            )
+        }
+        composable<MyScreens.SignUpScreen> {
+            SignUpScreen(
+                navigateToLogInScreen = {
+                    navController.navigate(MyScreens.LogInInScreen)
+                },
+                navigateToDashboardScreen = {
+                    navController.navigate(MyScreens.DashboardScreen)
+                }
+            )
+        }
+        composable<MyScreens.LogInInScreen> {
+            LoginScreen(
+                navigateToSignUpScreen = {
+                    navController.navigate(MyScreens.SignUpScreen)
+                },
+                navigateToDashboardScreen = {
+                    navController.navigate(MyScreens.DashboardScreen)
+                }
+            )
+        }
+
         composable<MyScreens.DashboardScreen> {
             DashboardScreen(
                 navigateToSecondScreen = { data ->

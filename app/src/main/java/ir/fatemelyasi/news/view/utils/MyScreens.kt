@@ -4,6 +4,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class MyScreens() {
+
+    @Serializable
+    object AuthenticationScreen : MyScreens()
+
+    @Serializable
+    object SignUpScreen : MyScreens()
+
+    @Serializable
+    object LogInInScreen : MyScreens()
+
     @Serializable
     object DashboardScreen : MyScreens()
 
