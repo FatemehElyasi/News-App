@@ -78,9 +78,8 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
-    //splash screen
+    //splashScreen
     implementation(libs.androidx.core.splashscreen)
-
     //DataStore
     implementation(libs.androidx.datastore.preferences)
 }

@@ -104,10 +104,7 @@ fun AuthenticationScreen(
                         contentColor = colors.onSecondaryContainer
                     )
                 ) {
-                    Text(
-                        "Log in"
-
-                    )
+                    Text("Log in")
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -132,10 +129,6 @@ fun AuthenticationScreen(
 @Composable
 fun AthHeader() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(
-            painterResource(id = R.drawable.ic_launcher_foreground),
-            contentDescription = "app Icon"
-        )
         Text(
             text = "Welcome",
             fontSize = 28.sp,

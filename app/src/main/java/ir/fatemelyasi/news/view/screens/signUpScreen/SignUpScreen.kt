@@ -1,5 +1,7 @@
 package ir.fatemelyasi.news.view.screens.signUpScreen
 
+import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,15 +36,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.news.R
+import ir.fatemelyasi.news.view.components.TextField
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 
 
@@ -51,9 +53,7 @@ import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 fun SignUpScreen(
     navigateToLogInScreen: () -> Unit,
     navigateToDashboardScreen: () -> Unit,
-
-
-    ) {
+) {
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -100,6 +100,8 @@ fun SignUpScreen(
                 val password = remember { mutableStateOf("") }
                 val rePassword = remember { mutableStateOf("") }
 
+                val context = LocalContext.current
+
                 SignUpHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 SignUpFields(
@@ -113,12 +115,51 @@ fun SignUpScreen(
                     onNameChange = { name.value = it },
                     onRePasswordChange = { rePassword.value = it },
                 )
-                LoginFooter(
+                SignUpFooter(
+                    onSignUpClick = {
+                        if (name.value.isNotEmpty() &&
+                            email.value.isNotEmpty() &&
+                            password.value.isNotEmpty() &&
+                            rePassword.value.isNotEmpty()
+                        ) {
+                            if (password.value == rePassword.value) {
+
+                                if (password.value.length >= 8) {
+
+                                    if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                                        navigateToDashboardScreen()
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "please enter a valid email",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "password must be at least 8 characters",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "passwords are the same",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
+                        } else {
+                            Toast.makeText(context, "please fill all fields", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    },
                     onSignInClick = {
                         navigateToLogInScreen()
-                    },
-                    onSignUpClick = {
-                        navigateToDashboardScreen()
                     }
                 )
             }
@@ -201,8 +242,8 @@ fun SignUpFields(
 
         TextField(
             value = rePassword,
-            label = "Password",
-            placeholder = "Enter your password again",
+            label = "confirm Password",
+            placeholder = "Enter your password ",
             onValueChange = onRePasswordChange,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -213,8 +254,6 @@ fun SignUpFields(
                 Icon(Icons.Default.Lock, contentDescription = "RePassword")
             }
         )
-
-
         TextButton(onClick = onForgotPasswordClick, modifier = Modifier.align(Alignment.End)) {
             Text(text = "Forgot Password?")
         }
@@ -222,14 +261,14 @@ fun SignUpFields(
 }
 
 @Composable
-fun LoginFooter(
+fun SignUpFooter(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
 ) {
     val colors = LocalCustomColors.current
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Button(
-            onClick = onSignUpClick,
+            onClick = { onSignUpClick() },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colors.onSurface,
@@ -244,29 +283,3 @@ fun LoginFooter(
     }
 }
 
-@Composable
-fun TextField(
-    value: String,
-    label: String,
-    placeholder: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    onValueChange: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(text = label)
-        },
-        placeholder = {
-            Text(text = placeholder)
-        },
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon
-    )
-}
