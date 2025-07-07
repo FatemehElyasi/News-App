@@ -8,7 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,12 +25,25 @@ import ir.fatemelyasi.news.view.screens.logInScreen.LoginScreen
 import ir.fatemelyasi.news.view.screens.signUpScreen.SignUpScreen
 import ir.fatemelyasi.news.view.ui.theme.ComposeTheme
 import ir.fatemelyasi.news.view.utils.MyScreens
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
+val isLoading = mutableStateOf(true)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { isLoading.value }
+
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            delay(2300)
+            isLoading.value = false
+        }
+
         enableEdgeToEdge()
         setContent {
             ComposeTheme {
