@@ -25,7 +25,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -57,7 +60,6 @@ internal fun DashboardScreen(
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
     val isLoading by viewModel.loading.subscribeAsState(initial = false)
-    val errorMessage by viewModel.error.subscribeAsState(initial = null)
     val query by viewModel.query.subscribeAsState(initial = "")
 
     val colors = LocalCustomColors.current
@@ -71,6 +73,8 @@ internal fun DashboardScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchNewsItems()
     }
+
+
 
     if (isLoading && newsListState.isEmpty()) {
         LoadingIndicator()
@@ -90,33 +94,52 @@ internal fun DashboardScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
-                    Column {
-                        BasicText(
-                            modifier = Modifier
-                                .padding(
-                                    top = 20.dp,
-                                )
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Hi John ,",
-                            style = typography.titleMedium.copy(
-                                colors.onPrimary
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                top = 20.dp,
                             )
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            BasicText(
+                                modifier = Modifier
+                                    .wrapContentSize(align = Alignment.TopStart),
+                                text = "Hi John ,",
+                                style = typography.titleMedium.copy(
+                                    colors.onPrimary
+                                )
 
-                        )
-                        BasicText(
-                            modifier = Modifier
-                                .padding(
-                                    top = 4.dp
-                                )
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Good Morning!",
-                            style = typography.titleLarge.copy(
-                                colors.onPrimary
                             )
+                            BasicText(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 4.dp
+                                    )
+                                    .wrapContentSize(align = Alignment.TopStart),
+                                text = "Good Morning!",
+                                style = typography.titleLarge.copy(
+                                    colors.onPrimary
+                                )
+                            )
+                        }
+
+                        Icon(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable {
+                                    viewModel.lagout()
+                                    TODO()
+                                },
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Logo",
+                            tint = colors.onPrimary
                         )
+
                     }
                 }
-
                 SearchRow(
                     query = query,
                     onQueryChange = { viewModel.updateQuery(it) },

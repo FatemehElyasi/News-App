@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 sealed class MyScreens() {
 
     @Serializable
+    object SplashScreen : MyScreens()
+
+   @Serializable
     object AuthenticationScreen : MyScreens()
 
     @Serializable

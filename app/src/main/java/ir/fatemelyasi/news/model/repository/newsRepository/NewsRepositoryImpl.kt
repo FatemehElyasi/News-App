@@ -102,5 +102,9 @@ class NewsRepositoryImpl(
         return sharedPrefHelper.isLoggedIn()
     }
 
+    override fun logout() {
+        sharedPrefHelper.logout()
+    }
+
 }
 

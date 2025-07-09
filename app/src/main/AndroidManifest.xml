@@ -19,7 +19,7 @@
             android:name=".view.screens.mainScreen.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MyApp.Splash">
+            android:theme="@style/Theme.News">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

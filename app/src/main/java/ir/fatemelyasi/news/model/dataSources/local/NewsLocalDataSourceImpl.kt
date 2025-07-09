@@ -48,4 +48,9 @@ class NewsLocalDataSourceImpl(
     override fun isLoggedIn(): Boolean {
         return sharedPrefHelper.isLoggedIn()
     }
+
+    override fun logout() {
+        sharedPrefHelper.logout()
+    }
+
 }

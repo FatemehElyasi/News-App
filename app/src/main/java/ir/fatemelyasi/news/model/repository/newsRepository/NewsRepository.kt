@@ -22,4 +22,5 @@ interface NewsRepository {
     fun getEmail(): String?
     fun getPassword(): String?
     fun isLoggedIn(): Boolean
+    fun logout()
 }
