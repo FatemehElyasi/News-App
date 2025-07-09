@@ -15,4 +15,10 @@ interface NewsLocalDataSource {
 
     fun searchNews(query: String): Observable<List<NewsEntity>>
 
+    //SharedPref
+    fun saveEmail(email: String, password: String)
+    fun getEmail(): String?
+    fun getPassword(): String?
+    fun isLoggedIn(): Boolean
+
 }

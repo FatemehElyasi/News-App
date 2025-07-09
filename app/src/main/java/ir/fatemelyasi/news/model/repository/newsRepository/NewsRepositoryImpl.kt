@@ -15,7 +15,8 @@ import ir.fatemelyasi.news.view.utils.mappers.toViewEntity
 @org.koin.core.annotation.Single
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
-    private val newsLocalDataSource: NewsLocalDataSource
+    private val newsLocalDataSource: NewsLocalDataSource,
+    private val sharedPrefHelper: NewsLocalDataSource
 ) : NewsRepository {
 
     override fun getNews(): Observable<List<ArticleViewEntity>> {
@@ -57,7 +58,7 @@ class NewsRepositoryImpl(
         return newsLocalDataSource.getAllNews()
             .subscribeOn(Schedulers.io())
             .filter { it.isNotEmpty() }
-            .map { newsEntityList:List<NewsEntity> ->
+            .map { newsEntityList: List<NewsEntity> ->
                 Log.d("NewsRepository", "DB News Count: ${newsEntityList.size}")
                 newsEntityList.map {
                     Log.d("NewsRepository", "DB Article: ${it.title}")
@@ -84,6 +85,22 @@ class NewsRepositoryImpl(
         newsLocalDataSource.deleteNews(entities)
     }
 
+    //--------------SharedPref
+    override fun saveEmail(email: String, password: String) {
+        sharedPrefHelper.saveEmail(email, password)
+    }
+
+    override fun getEmail(): String? {
+        return sharedPrefHelper.getEmail()
+    }
+
+    override fun getPassword(): String? {
+        return sharedPrefHelper.getPassword()
+    }
+
+    override fun isLoggedIn(): Boolean {
+        return sharedPrefHelper.isLoggedIn()
+    }
 
 }
 

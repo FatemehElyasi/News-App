@@ -3,19 +3,21 @@ package ir.fatemelyasi.news.model.dataSources.local
 import io.reactivex.rxjava3.core.Observable
 import ir.fatemelyasi.news.model.local.NewsDao
 import ir.fatemelyasi.news.model.local.NewsEntity
+import ir.fatemelyasi.news.model.sharedPrefHelper.SharedPrefHelper
 import org.koin.core.annotation.Single
 
 @Single
 class NewsLocalDataSourceImpl(
-    private val newsDao: NewsDao
+    private val newsDao: NewsDao,
+    private val sharedPrefHelper: SharedPrefHelper
 ) : NewsLocalDataSource {
 
     override fun saveNewsToDb(newsEntityModel: List<NewsEntity>) {
-       newsDao.saveNewsToDb(newsEntityModel)
+        newsDao.saveNewsToDb(newsEntityModel)
     }
 
     override fun deleteNews(newsEntityModel: List<NewsEntity>) {
-       newsDao.deleteNews(newsEntityModel)
+        newsDao.deleteNews(newsEntityModel)
     }
 
     override fun getAllNews(): Observable<List<NewsEntity>> {
@@ -26,8 +28,24 @@ class NewsLocalDataSourceImpl(
         return newsDao.getTopNews(count)
     }
 
-
     override fun searchNews(query: String): Observable<List<NewsEntity>> {
-      return newsDao.searchNews(query)
+        return newsDao.searchNews(query)
+    }
+
+    //sharedPref
+    override fun saveEmail(email: String, password: String) {
+        sharedPrefHelper.saveEmail(email, password)
+    }
+
+    override fun getEmail(): String? {
+        return sharedPrefHelper.getEmail()
+    }
+
+    override fun getPassword(): String? {
+        return sharedPrefHelper.getPassword()
+    }
+
+    override fun isLoggedIn(): Boolean {
+        return sharedPrefHelper.isLoggedIn()
     }
 }

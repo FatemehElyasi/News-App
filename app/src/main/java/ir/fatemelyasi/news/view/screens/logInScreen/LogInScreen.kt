@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.logInScreen
 
-import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,8 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -46,18 +43,25 @@ import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.view.components.TextField
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
     navigateToDashboardScreen: () -> Unit,
     navigateToSignUpScreen: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+
+    // get value from ViewModel
+    val email by viewModel::email
+    val password by viewModel::password
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.simple_black),
-            contentDescription = "Login",
+            contentDescription = "Login Background",
             modifier = Modifier
                 .fillMaxSize()
                 .blur(8.dp),
@@ -93,18 +97,13 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                val email = remember { mutableStateOf("") }
-                val password = remember { mutableStateOf("") }
-
-                val context = LocalContext.current
-
                 LoginHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 LoginFields(
-                    email.value,
-                    password.value,
-                    onEmailChange = { email.value = it },
-                    onPasswordChange = { password.value = it },
+                    email = email,
+                    password = password,
+                    onEmailChange = { viewModel.onEmailChange(it) },
+                    onPasswordChange = { viewModel.onPasswordChange(it) },
                     onForgotPasswordClick = {
                         Toast.makeText(
                             context,
@@ -115,40 +114,25 @@ fun LoginScreen(
                 )
                 LoginFooter(
                     onSignInClick = {
-                        if (email.value.isNotEmpty() && password.value.isNotEmpty()) {
-                            if (password.value.length >= 8) {
-                                if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-                                    navigateToDashboardScreen()
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "please enter a valid email",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "password must be at least 8 characters",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        viewModel.onLoginClick(
+                            onSuccess = {
+                                navigateToDashboardScreen()
+                            },
+                            onError = {
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             }
-                        } else {
-                            Toast.makeText(context, "please fill all fields", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        )
+
                     },
 
                     onSignUpClick = {
                         navigateToSignUpScreen()
                     }
-
                 )
             }
         }
 
     }
-
 
 }
 

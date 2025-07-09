@@ -17,4 +17,9 @@ interface NewsRepository {
     fun searchNews(query: String): Observable<List<ArticleViewEntity>>
 
     fun deleteNews(news: List<ArticleViewEntity>)
+
+    fun saveEmail(email: String, password: String)
+    fun getEmail(): String?
+    fun getPassword(): String?
+    fun isLoggedIn(): Boolean
 }

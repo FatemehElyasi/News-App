@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.signUpScreen
 
-import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,8 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -47,14 +44,22 @@ import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.view.components.TextField
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun SignUpScreen(
+    viewModel: SignUpScreenViewModel = koinViewModel(),
     navigateToLogInScreen: () -> Unit,
     navigateToDashboardScreen: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+
+    val name by viewModel::name
+    val email by viewModel::email
+    val password by viewModel::password
+    val rePassword by viewModel::rePassword
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -95,68 +100,30 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                val email = remember { mutableStateOf("") }
-                val name = remember { mutableStateOf("") }
-                val password = remember { mutableStateOf("") }
-                val rePassword = remember { mutableStateOf("") }
-
-                val context = LocalContext.current
 
                 SignUpHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 SignUpFields(
-                    name = name.value,
-                    email = email.value,
-                    password = password.value,
-                    rePassword = rePassword.value,
-                    onEmailChange = { email.value = it },
-                    onPasswordChange = { password.value = it },
-                    onForgotPasswordClick = { navigateToDashboardScreen() },
-                    onNameChange = { name.value = it },
-                    onRePasswordChange = { rePassword.value = it },
+                    name = name,
+                    email = email,
+                    password = password,
+                    rePassword = rePassword,
+                    onEmailChange = { viewModel.onEmailChange(it) },
+                    onPasswordChange = { viewModel.onPasswordChange(it) },
+                    onForgotPasswordClick = { },
+                    onNameChange = { viewModel.onNameChange(it) },
+                    onRePasswordChange = { viewModel.onRePasswordChange(it) },
                 )
                 SignUpFooter(
                     onSignUpClick = {
-                        if (name.value.isNotEmpty() &&
-                            email.value.isNotEmpty() &&
-                            password.value.isNotEmpty() &&
-                            rePassword.value.isNotEmpty()
-                        ) {
-                            if (password.value == rePassword.value) {
-
-                                if (password.value.length >= 8) {
-
-                                    if (Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-                                        navigateToDashboardScreen()
-                                    } else {
-                                        Toast.makeText(
-                                            context,
-                                            "please enter a valid email",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "password must be at least 8 characters",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                }
-
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "passwords are the same",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        viewModel.onSignUpClick(
+                            onSuccess = {
+                                navigateToDashboardScreen()
+                            },
+                            onError = {
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                             }
-
-                        } else {
-                            Toast.makeText(context, "please fill all fields", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                        )
                     },
                     onSignInClick = {
                         navigateToLogInScreen()
@@ -164,7 +131,6 @@ fun SignUpScreen(
                 )
             }
         }
-
     }
 
 
