@@ -75,7 +75,11 @@ fun Navigation() {
                     navController.navigate(MyScreens.LogInInScreen)
                 },
                 navigateToDashboardScreen = {
-                    navController.navigate(MyScreens.DashboardScreen)
+                    navController.navigate(MyScreens.DashboardScreen){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
@@ -85,7 +89,11 @@ fun Navigation() {
                     navController.navigate(MyScreens.SignUpScreen)
                 },
                 navigateToDashboardScreen = {
-                    navController.navigate(MyScreens.DashboardScreen)
+                    navController.navigate(MyScreens.DashboardScreen){
+                        popUpTo(0){
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
