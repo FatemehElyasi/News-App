@@ -69,7 +69,7 @@ class SignUpScreenViewModel(
         }
 
         isLoading = true
-        newsRepository.saveEmail(email, password)
+        newsRepository.saveInfo(email, password, true)
         isLoading = false
         onSuccess()
     }

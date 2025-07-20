@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,39 +25,45 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel = koinViewModel(),
-    navigateToLogin: () -> Unit,
-    navigateToDashboard: () -> Unit
+    navigateToDashboard: () -> Unit,
+    navigateToAuthenticationScreen: () -> Unit
 ) {
-    val isUserLoggedIn = remember { mutableStateOf<Boolean?>(null) }
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.onSurface),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = ("News"),
-                style = typography.headlineLarge.copy(
-                    colors.onPrimary
-                )
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-
+    var shouldNavigate by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(2800)
-        isUserLoggedIn.value = viewModel.isUserLoggedIn()
-    }
 
-    when (isUserLoggedIn.value) {
-        null -> navigateToDashboard()
-        true -> navigateToDashboard()
-        false -> navigateToLogin()
+        delay(2800)
+        val isLoggedIn = viewModel.isUserLoggedIn()
+        val email = viewModel.getEmail()
+        val password = viewModel.getPassword()
+
+        if (isLoggedIn) {
+            navigateToDashboard()
+        } else if (!email.isNullOrBlank() && !password.isNullOrBlank()) {
+            navigateToAuthenticationScreen()
+        } else {
+            navigateToAuthenticationScreen()
+        }
+        shouldNavigate = true
+    }
+    if (!shouldNavigate) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.onSurface),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = ("News"),
+                    style = typography.headlineLarge.copy(
+                        colors.onPrimary
+                    )
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
     }
 }

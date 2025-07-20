@@ -33,8 +33,8 @@ class NewsLocalDataSourceImpl(
     }
 
     //sharedPref
-    override fun saveEmail(email: String, password: String) {
-        sharedPrefHelper.saveEmail(email, password)
+    override fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
+        return sharedPrefHelper.saveInfo(email, password, isLoggedIn)
     }
 
     override fun getEmail(): String? {
@@ -49,8 +49,7 @@ class NewsLocalDataSourceImpl(
         return sharedPrefHelper.isLoggedIn()
     }
 
-    override fun logout() {
-        sharedPrefHelper.logout()
+    override fun logOut() {
+        return sharedPrefHelper.logOut()
     }
-
 }

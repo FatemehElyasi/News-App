@@ -23,11 +23,11 @@ class LoginViewModel(
         private set
 
     fun onEmailChange(newEmail: String) {
-        email = newEmail
+        email = newEmail.lowercase()
     }
 
     fun onPasswordChange(newPassword: String) {
-        password = newPassword
+        password = newPassword.lowercase()
     }
 
     fun onLoginClick(onSuccess: () -> Unit, onError: (String) -> Unit) {
@@ -47,13 +47,13 @@ class LoginViewModel(
             return
         }
 
-        if (!newsRepository.isLoggedIn() || newsRepository.getEmail() != email || newsRepository.getPassword() != password) {
+        if (newsRepository.getEmail() != email || newsRepository.getPassword() != password) {
             onError("User not registered. Please sign up first.")
             return
         }
 
         isLoading = true
-        newsRepository.saveEmail(email, password)
+        newsRepository.saveInfo(email, password, true)
         isLoading = false
         onSuccess()
 

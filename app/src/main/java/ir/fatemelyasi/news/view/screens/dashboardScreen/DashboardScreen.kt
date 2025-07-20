@@ -32,6 +32,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,7 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
+import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
@@ -57,6 +60,7 @@ internal fun DashboardScreen(
     viewModel: DashboardScreenViewModel = koinViewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
+    navigateToAuthenticationScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
     val isLoading by viewModel.loading.subscribeAsState(initial = false)
@@ -65,6 +69,7 @@ internal fun DashboardScreen(
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
 
+    val isUserLoggedIn = remember { mutableStateOf<Boolean?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.searchNews()
@@ -74,7 +79,10 @@ internal fun DashboardScreen(
         viewModel.fetchNewsItems()
     }
 
-
+    LaunchedEffect(Unit) {
+        delay(2800)
+        isUserLoggedIn.value = viewModel.isUserLoggedIn()
+    }
 
     if (isLoading && newsListState.isEmpty()) {
         LoadingIndicator()
@@ -130,8 +138,8 @@ internal fun DashboardScreen(
                             modifier = Modifier
                                 .size(40.dp)
                                 .clickable {
-                                    viewModel.lagout()
-                                    TODO()
+                                    viewModel.loggedOut()
+                                    navigateToAuthenticationScreen()
                                 },
                             imageVector = Icons.Default.Settings,
                             contentDescription = "Logo",

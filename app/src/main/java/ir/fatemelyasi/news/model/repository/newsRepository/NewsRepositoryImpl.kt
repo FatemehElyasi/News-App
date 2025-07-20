@@ -86,8 +86,8 @@ class NewsRepositoryImpl(
     }
 
     //--------------SharedPref
-    override fun saveEmail(email: String, password: String) {
-        sharedPrefHelper.saveEmail(email, password)
+    override fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
+        sharedPrefHelper.saveInfo(email, password, isLoggedIn)
     }
 
     override fun getEmail(): String? {
@@ -102,8 +102,8 @@ class NewsRepositoryImpl(
         return sharedPrefHelper.isLoggedIn()
     }
 
-    override fun logout() {
-        sharedPrefHelper.logout()
+    override fun logOut() {
+        return sharedPrefHelper.logOut()
     }
 
 }

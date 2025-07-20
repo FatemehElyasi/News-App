@@ -1,28 +1,35 @@
 package ir.fatemelyasi.news.model.sharedPrefHelper
 
-import android.R.attr.password
 import android.content.Context
 
 class SharedPrefHelper(context: Context) {
 
-    private val prefs = context.getSharedPreferences("my_prefs", Context.MODE_PRIVATE)
-
-    fun saveEmail(email: String, password: String) {
-        prefs.edit().putString("email", email).putString("password", password).apply()
+    companion object {
+        private const val PREF_NAME = "my_prefs"
+        private const val KEY_EMAIL = "email"
+        private const val KEY_PASSWORD = "password"
+        private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
 
-    fun getEmail(): String? {
-        return prefs.getString("email", null)
+    private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+
+    fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
+        prefs.edit()
+            .putString(KEY_EMAIL, email)
+            .putString(KEY_PASSWORD, password)
+            .putBoolean(KEY_IS_LOGGED_IN, isLoggedIn)
+            .apply()
     }
 
-    fun getPassword(): String? {
-        return prefs.getString("password", null)
-    }
+    fun getEmail(): String? = prefs.getString(KEY_EMAIL, null)
 
-    fun isLoggedIn(): Boolean = getEmail() != null && getPassword() != null
+    fun getPassword(): String? = prefs.getString(KEY_PASSWORD, null)
 
-    //optional
-    fun logout() {
-        prefs.edit().clear().apply()
+    fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
+
+    fun logOut() {
+        prefs.edit()
+            .putBoolean(KEY_IS_LOGGED_IN, false)
+            .apply()
     }
 }
