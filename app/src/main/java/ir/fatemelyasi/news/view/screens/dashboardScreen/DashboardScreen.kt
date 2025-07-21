@@ -49,8 +49,10 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
+import ir.fatemelyasi.news.view.screens.offlineScreen.OfflineScreen
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
+import ir.fatemelyasi.news.view.utils.ErrorState
 import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
@@ -64,7 +66,8 @@ internal fun DashboardScreen(
     navigateToAuthenticationScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
-    val isLoading by viewModel.loading.subscribeAsState(initial = false)
+    val loadingState by viewModel.loading.subscribeAsState(initial = false)
+    val errorState by viewModel.error.subscribeAsState(initial = ErrorState.None)
     val query by viewModel.query.subscribeAsState(initial = "")
 
     val colors = LocalCustomColors.current
@@ -79,14 +82,15 @@ internal fun DashboardScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchNewsItems()
     }
-
     LaunchedEffect(Unit) {
         delay(2800)
         isUserLoggedIn.value = viewModel.isUserLoggedIn()
     }
 
-    if (isLoading && newsListState.isEmpty()) {
+    if (loadingState && newsListState.isEmpty()) {
         LoadingIndicator()
+    } else if (errorState is ErrorState.Error) {
+        OfflineScreen(viewModel)
     } else {
 
         Box(
@@ -112,96 +116,92 @@ internal fun DashboardScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                         Text(
-                            modifier = Modifier
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Hi John ,",
-                            style = typography.titleMedium.copy(
-                                colors.onPrimary
-                            )
-
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    top = 4.dp
+                            Text(
+                                modifier = Modifier.wrapContentSize(align = Alignment.TopStart),
+                                text = "Hi John ,",
+                                style = typography.titleMedium.copy(
+                                    colors.onPrimary
                                 )
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Good Morning!",
-                            style = typography.titleLarge.copy(
-                                colors.onPrimary
+
                             )
-                        )
+                            Text(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 4.dp
+                                    )
+                                    .wrapContentSize(align = Alignment.TopStart),
+                                text = "Good Morning!",
+                                style = typography.titleLarge.copy(
+                                    colors.onPrimary
+                                )
+                            )
+                        }
                     }
-                }
-                 Icon(
-                      modifier = Modifier
-                           .size(40.dp)
-                            .clickable {
-                               viewModel.loggedOut()
-                                navigateToAuthenticationScreen()
-                                },
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Logo",
-                            tint = colors.onPrimary
-                        )
-
-                    }
-                }
-                SearchRow(
-                    query = query,
-                    onQueryChange = { viewModel.updateQuery(it) },
-                    onSearchClick = {})
-
-                AnimatedVisibility(visible = query.isBlank()) {
-                    Text(
-                        text = "Today's Articles",
+                    Icon(
                         modifier = Modifier
-                            .padding(
-                                bottom = 10.dp
-                            )
-                            .wrapContentSize(align = Alignment.TopStart),
-                        style = typography.titleLarge.copy(
-                            colors.onPrimary
-                        )
+                            .size(40.dp)
+                            .clickable {
+                                viewModel.loggedOut()
+                                navigateToAuthenticationScreen()
+                            },
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Logo",
+                        tint = colors.onPrimary
                     )
-                }
 
-                if (newsListState.isNotEmpty()) {
-                    AnimatedVisibility(visible = query.isBlank()) {
-                        CardBanner(
-                            articleViewEntity = newsListState[0],
-                            navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
-                    }
                 }
-                Box(
+            }
+            SearchRow(
+                query = query,
+                onQueryChange = { viewModel.updateQuery(it) },
+                onSearchClick = {})
+
+            AnimatedVisibility(visible = query.isBlank()) {
+                Text(
+                    text = "Today's Articles",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(colors.outline)
-                        .padding(vertical = 8.dp)
-                )
-
-                Column(
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    MoreArticle(
-                        navigateToArticleScreen = navigateToArticleScreen,
-                        navigateToSecondScreen = navigateToSecondScreen,
-                        items = newsListState,
-                        onLongClick = { article -> viewModel.deleteArticle(article) }
+                        .padding(
+                            bottom = 10.dp
+                        )
+                        .wrapContentSize(align = Alignment.TopStart),
+                    style = typography.titleLarge.copy(
+                        colors.onPrimary
                     )
+                )
+            }
+
+            if (newsListState.isNotEmpty()) {
+                AnimatedVisibility(visible = query.isBlank()) {
+                    CardBanner(
+                        articleViewEntity = newsListState[0],
+                        navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
                 }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(colors.outline)
+                    .padding(vertical = 8.dp)
+            )
+
+            Column(
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                MoreArticle(
+                    navigateToArticleScreen = navigateToArticleScreen,
+                    navigateToSecondScreen = navigateToSecondScreen,
+                    items = newsListState,
+                    onLongClick = { article -> viewModel.deleteArticle(article) })
             }
         }
     }
 }
+}
 
 @Composable
 fun SearchRow(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    onSearchClick: () -> Unit
+    query: String, onQueryChange: (String) -> Unit, onSearchClick: () -> Unit
 ) {
     val colors = LocalCustomColors.current
 
@@ -224,30 +224,24 @@ fun SearchRow(
                 .border(1.dp, colors.outline, shape = RoundedCornerShape(10.dp))
                 .padding(horizontal = 16.dp, vertical = 18.dp),
             textStyle = TextStyle(
-                color = colors.onBackground,
-                fontSize = 16.sp
+                color = colors.onBackground, fontSize = 16.sp
             ),
             decorationBox = { innerTextField ->
                 if (query.isEmpty()) {
                     BasicText(
-                        text = "Search",
-                        style = TextStyle(
-                            colors.outline,
-                            fontSize = 16.sp
+                        text = "Search", style = TextStyle(
+                            colors.outline, fontSize = 16.sp
                         )
                     )
                 }
                 innerTextField()
-            }
-        )
+            })
         Box(
             modifier = Modifier
                 .size(55.dp)
                 .background(color = colors.secondary, shape = RoundedCornerShape(8.dp))
-                .clickable { onSearchClick() },
-            contentAlignment = Alignment.Center
-        )
-        {
+                .clickable { onSearchClick() }, contentAlignment = Alignment.Center
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.search),
                 contentDescription = "search",
@@ -258,8 +252,7 @@ fun SearchRow(
 
 @Composable
 fun CardBanner(
-    articleViewEntity: ArticleViewEntity,
-    navigateToSecondScreen: () -> Unit
+    articleViewEntity: ArticleViewEntity, navigateToSecondScreen: () -> Unit
 ) {
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
@@ -298,7 +291,7 @@ fun CardBanner(
             contentAlignment = Alignment.Center
 
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
                 text = "Design",
                 style = typography.titleSmall.copy(
@@ -321,8 +314,7 @@ fun CardBanner(
                 ),
             )
             Text(
-                text = articleViewEntity.publishedAt.toString(),
-                style = typography.titleSmall.copy(
+                text = articleViewEntity.publishedAt.toString(), style = typography.titleSmall.copy(
                     colors.onSurfaceVariant,
                 )
             )
@@ -389,9 +381,7 @@ fun MoreArticle(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArticleItems(
-    navigateToSecondScreen: () -> Unit,
-    messageItem: ArticleViewEntity,
-    onLongClick: () -> Unit
+    navigateToSecondScreen: () -> Unit, messageItem: ArticleViewEntity, onLongClick: () -> Unit
 ) {
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
@@ -402,8 +392,7 @@ fun ArticleItems(
             .padding(vertical = 4.dp)
             .clip(RoundedCornerShape(8.dp))
             .combinedClickable(
-                onClick = navigateToSecondScreen,
-                onLongClick = onLongClick
+                onClick = navigateToSecondScreen, onLongClick = onLongClick
             ),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -418,33 +407,25 @@ fun ArticleItems(
                 .height(60.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .border(
-                    width = 0.5.dp,
-                    color = colors.primary,
-                    shape = RectangleShape
+                    width = 0.5.dp, color = colors.primary, shape = RectangleShape
                 ),
             contentScale = ContentScale.Crop
         )
         Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start
+            verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = messageItem.title,
-                style = typography.titleMedium.copy(
+                text = messageItem.title, style = typography.titleMedium.copy(
                     colors.onPrimary,
-                ),
-                maxLines = 1
+                ), maxLines = 1
             )
 
             Text(
                 modifier = Modifier.padding(
                     all = 4.dp
-                ),
-                text = messageItem.publishedAt ?: "",
-                style = typography.titleSmall.copy(
+                ), text = messageItem.publishedAt ?: "", style = typography.titleSmall.copy(
                     colors.onSurfaceVariant,
-                ),
-                maxLines = 1
+                ), maxLines = 1
             )
         }
     }
@@ -453,8 +434,7 @@ fun ArticleItems(
 @Composable
 fun LoadingIndicator() {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()
     }

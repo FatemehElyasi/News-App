@@ -1,3 +1,8 @@
+import org.gradle.kotlin.dsl.annotationProcessor
+import org.gradle.kotlin.dsl.api
+import org.gradle.kotlin.dsl.implementation
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -75,6 +80,8 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
 
-    //DataStore
-    implementation(libs.androidx.datastore.preferences)
+    //lottie
+    implementation (libs.lottie)
+
+
 }

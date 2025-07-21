@@ -1,0 +1,24 @@
+1- packaging - PostMan - dependency
+2- dataClass ResponseModel
+3- apiManager == apiService retrofit
+4- Interface apiService Get
+--------------------------------------------------Database Local
+/1- create package
+/2- add room Dependency to gradle /app/build.gradle.kts  => 10 min
+/3- create Entity  => 20 min
+/4- Create Dao  => 1 hour
+/5- Create Database  => 10 min
+/5.1- Create LocalManager  => 10 min
+/6- LocalDataSource  =>  20min
+/7- LocalDataSourceImpl  => 30min
+/7.1- DataSourceManager  => 10min
+8- Repository  =>
+/9- RepositoryImpl  => 20 min
+11- RepositoryManager  =>
+
+نه دیگه اینسرت و دیلیت یه کاریه که انجام میشه تموم میشه
+اما get کردن دیتاشو باید observable بنویسی که لایو باشه
+--------------------------------------------------Database Local
+1 Annotation( view mode - repository)
+2 Add databaseModule / networkModule
+3
