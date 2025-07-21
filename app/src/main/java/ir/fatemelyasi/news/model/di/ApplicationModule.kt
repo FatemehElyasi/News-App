@@ -7,6 +7,7 @@ import org.koin.core.annotation.Module
     [
         DatabaseModule::class,
         NetworkModule::class,
+        LocalModule::class
     ]
 )
 @ComponentScan("ir.fatemelyasi.news")

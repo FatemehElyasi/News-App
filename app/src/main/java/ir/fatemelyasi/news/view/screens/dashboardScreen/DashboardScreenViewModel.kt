@@ -51,7 +51,7 @@ class DashboardScreenViewModel(
                 _loading.onNext(false)
                 _error.onNext(throwable)
             })
-        
+
         disposables.add(disposable)
     }
 
@@ -99,6 +99,10 @@ class DashboardScreenViewModel(
 
         disposables.add(disposable)
     }
+
+    fun loggedOut() = newsRepository.logOut()
+
+    fun isUserLoggedIn(): Boolean = newsRepository.isLoggedIn()
 
     override fun onCleared() {
         super.onCleared()

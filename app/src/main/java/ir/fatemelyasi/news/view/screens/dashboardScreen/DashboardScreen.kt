@@ -25,12 +25,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +51,7 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
+import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
@@ -56,14 +61,16 @@ internal fun DashboardScreen(
     viewModel: DashboardScreenViewModel = koinViewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
+    navigateToAuthenticationScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
     val isLoading by viewModel.loading.subscribeAsState(initial = false)
-    val errorMessage by viewModel.error.subscribeAsState(initial = null)
     val query by viewModel.query.subscribeAsState(initial = "")
 
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
+
+    val isUserLoggedIn = remember { mutableStateOf<Boolean?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.searchNews()
@@ -71,6 +78,11 @@ internal fun DashboardScreen(
 
     LaunchedEffect(Unit) {
         viewModel.fetchNewsItems()
+    }
+
+    LaunchedEffect(Unit) {
+        delay(2800)
+        isUserLoggedIn.value = viewModel.isUserLoggedIn()
     }
 
     if (isLoading && newsListState.isEmpty()) {
@@ -90,12 +102,18 @@ internal fun DashboardScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
-                    Column {
-                        Text(
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                top = 20.dp,
+                            )
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                         Text(
                             modifier = Modifier
-                                .padding(
-                                    top = 20.dp,
-                                )
                                 .wrapContentSize(align = Alignment.TopStart),
                             text = "Hi John ,",
                             style = typography.titleMedium.copy(
@@ -116,7 +134,20 @@ internal fun DashboardScreen(
                         )
                     }
                 }
+                 Icon(
+                      modifier = Modifier
+                           .size(40.dp)
+                            .clickable {
+                               viewModel.loggedOut()
+                                navigateToAuthenticationScreen()
+                                },
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Logo",
+                            tint = colors.onPrimary
+                        )
 
+                    }
+                }
                 SearchRow(
                     query = query,
                     onQueryChange = { viewModel.updateQuery(it) },
