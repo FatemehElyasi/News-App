@@ -78,7 +78,6 @@ internal fun DashboardScreen(
     LaunchedEffect(Unit) {
         viewModel.searchNews()
     }
-
     LaunchedEffect(Unit) {
         viewModel.fetchNewsItems()
     }
@@ -92,7 +91,6 @@ internal fun DashboardScreen(
     } else if (errorState is ErrorState.Error) {
         OfflineScreen(viewModel)
     } else {
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -103,7 +101,6 @@ internal fun DashboardScreen(
                     .verticalScroll(rememberScrollState())
                     .fillMaxSize()
                     .padding(20.dp),
-                verticalArrangement = Arrangement.Center,
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
                     Row(
@@ -136,67 +133,68 @@ internal fun DashboardScreen(
                                 )
                             )
                         }
-                    }
-                    Icon(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clickable {
-                                viewModel.loggedOut()
-                                navigateToAuthenticationScreen()
-                            },
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Logo",
-                        tint = colors.onPrimary
-                    )
-
-                }
-            }
-            SearchRow(
-                query = query,
-                onQueryChange = { viewModel.updateQuery(it) },
-                onSearchClick = {})
-
-            AnimatedVisibility(visible = query.isBlank()) {
-                Text(
-                    text = "Today's Articles",
-                    modifier = Modifier
-                        .padding(
-                            bottom = 10.dp
+                        Icon(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable {
+                                    viewModel.loggedOut()
+                                    navigateToAuthenticationScreen()
+                                },
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Logo",
+                            tint = colors.onPrimary
                         )
-                        .wrapContentSize(align = Alignment.TopStart),
-                    style = typography.titleLarge.copy(
-                        colors.onPrimary
-                    )
-                )
-            }
 
-            if (newsListState.isNotEmpty()) {
-                AnimatedVisibility(visible = query.isBlank()) {
-                    CardBanner(
-                        articleViewEntity = newsListState[0],
-                        navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+                    }
                 }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(colors.outline)
-                    .padding(vertical = 8.dp)
-            )
 
-            Column(
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                MoreArticle(
-                    navigateToArticleScreen = navigateToArticleScreen,
-                    navigateToSecondScreen = navigateToSecondScreen,
-                    items = newsListState,
-                    onLongClick = { article -> viewModel.deleteArticle(article) })
+                SearchRow(
+                    query = query,
+                    onQueryChange = { viewModel.updateQuery(it) },
+                    onSearchClick = {}
+                )
+
+                AnimatedVisibility(visible = query.isBlank()) {
+                    Text(
+                        text = "Today's Articles",
+                        modifier = Modifier
+                            .padding(
+                                bottom = 10.dp
+                            )
+                            .wrapContentSize(align = Alignment.TopStart),
+                        style = typography.titleLarge.copy(
+                            colors.onPrimary
+                        )
+                    )
+                }
+
+                if (newsListState.isNotEmpty()) {
+                    AnimatedVisibility(visible = query.isBlank()) {
+                        CardBanner(
+                            articleViewEntity = newsListState[0],
+                            navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+                    }
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .background(colors.outline)
+                        .padding(vertical = 8.dp)
+                )
+
+                Column(
+                    modifier = Modifier.padding(top = 8.dp)
+                ) {
+                    MoreArticle(
+                        navigateToArticleScreen = navigateToArticleScreen,
+                        navigateToSecondScreen = navigateToSecondScreen,
+                        items = newsListState,
+                        onLongClick = { article -> viewModel.deleteArticle(article) })
+                }
             }
         }
     }
-}
 }
 
 @Composable
