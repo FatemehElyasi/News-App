@@ -1,5 +1,8 @@
 package ir.fatemelyasi.news.view.screens.allArticleScreen
 
+import OfflineErrorComponent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,11 +36,15 @@ import androidx.compose.ui.zIndex
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.screens.dashboardScreen.ArticleItems
+import ir.fatemelyasi.news.view.screens.dashboardScreen.LoadingIndicator
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
+import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import ir.fatemelyasi.news.view.utils.SortOrder
 import org.koin.compose.viewmodel.koinViewModel
+import java.util.Collections
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllArticlesScreen(
     viewModel: AllArticleScreenViewModel = koinViewModel(),
@@ -46,41 +53,44 @@ fun AllArticlesScreen(
     popUpToFirstScreen: () -> Unit,
 ) {
     val colors = LocalCustomColors.current
-    val articles = remember { mutableStateListOf<ArticleViewEntity>() }
 
-    LaunchedEffect(Unit) {
-        viewModel.articles.subscribe {
-            articles.clear()
-            articles.addAll(it)
-        }.also(viewModel::addDisposable)
-    }
+    val articles by viewModel.articles.subscribeAsState(initial = Collections.emptyList())
+    val loadingState by viewModel.loading.subscribeAsState(initial = false)
+    val errorState by viewModel.error.subscribeAsState(initial = ErrorState.None)
 
     LaunchedEffect(Unit) {
         viewModel.fetchArticles()
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colors.surface)
-    ) {
-        NewsTopBar(
-            onSortAscClick = { viewModel.sortArticles(SortOrder.ASCENDING) },
-            onSortDescClick = { viewModel.sortArticles(SortOrder.DESCENDING) },
-            onBackClick = { popUpToFirstScreen() },
-        )
-        LazyColumn(
+    if (loadingState && articles.isEmpty()) {
+        LoadingIndicator()
+    } else if (errorState != ErrorState.None && articles.isEmpty()) {
+        OfflineErrorComponent(
+            isLoading = loadingState,
+            onRetry = { viewModel.fetchArticles() })
+    } else {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            contentPadding = PaddingValues(bottom = 20.dp)
+                .background(colors.surface)
         ) {
-            items(items = articles.toMutableList()) { article ->
-                ArticleItems(
-                    navigateToSecondScreen = { navigateToSecondScreen(article) },
-                    onLongClick = { deleteArticle(article) },
-                    messageItem = article
-                )
+            NewsTopBar(
+                onSortAscClick = { viewModel.sortArticles(SortOrder.ASCENDING) },
+                onSortDescClick = { viewModel.sortArticles(SortOrder.DESCENDING) },
+                onBackClick = { popUpToFirstScreen() },
+            )
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
+                contentPadding = PaddingValues(bottom = 20.dp)
+            ) {
+                items(items = articles.toMutableList()) { article ->
+                    ArticleItems(
+                        navigateToSecondScreen = { navigateToSecondScreen(article) },
+                        onLongClick = { deleteArticle(article) },
+                        messageItem = article
+                    )
+                }
             }
         }
     }
