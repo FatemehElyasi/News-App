@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.news.view.screens.offlineScreen.OfflineScreen
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import ir.fatemelyasi.news.view.utils.ErrorState
@@ -78,7 +78,10 @@ internal fun DashboardScreen(
     if (loadingState && newsListState.isEmpty()) {
         LoadingIndicator()
     } else if (errorState is ErrorState.Error) {
-        OfflineScreen(viewModel)
+        OfflineErrorComponent(
+            isLoading = loadingState,
+            onRetry = { viewModel.fetchNewsItems() }
+        )
     } else {
 
         Box(
