@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.news.view.utils.ErrorState
+import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import org.koin.android.annotation.KoinViewModel
 import java.util.concurrent.TimeUnit
 
