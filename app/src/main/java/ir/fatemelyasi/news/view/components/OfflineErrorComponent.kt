@@ -1,16 +1,15 @@
-package ir.fatemelyasi.news.view.screens.offlineScreen
+package ir.fatemelyasi.news.view.components
 
+import android.R.attr.text
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,32 +17,33 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ir.fatemelyasi.news.R
-import ir.fatemelyasi.news.view.screens.dashboardScreen.DashboardScreenViewModel
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.utils.OfflineErrorAnimation
-import org.koin.compose.viewmodel.koinViewModel
+import ir.fatemelyasi.news.R
+import java.nio.file.WatchEvent
 
 @Composable
-fun OfflineScreen(
-    viewModel: DashboardScreenViewModel = koinViewModel()
+fun OfflineErrorComponent(
+    isLoading: Boolean,
+    onRetry: () -> Unit
 ) {
     val colors = LocalCustomColors.current
 
-    val loading by viewModel.loading.subscribeAsState(initial = false)
-
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         OfflineErrorAnimation()
-        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(id = R.string.offline_error_message),
+            modifier = Modifier.padding(top = 16.dp),
+            text = stringResource(
+                id = R.string
+                    .offline_error_message
+            ),
             style = TextStyle(
                 color = colors.onPrimary,
                 fontSize = 22.sp,
@@ -51,13 +51,10 @@ fun OfflineScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
-
         Button(
-            onClick = {
-                viewModel.fetchNewsItems()
-            },
-            enabled = !loading
+            modifier = Modifier.padding(top = 40.dp),
+            onClick = onRetry,
+            enabled = !isLoading
         ) {
             Text("Retry Again")
         }
