@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -80,15 +81,10 @@ fun LoginScreen(
             modifier = Modifier
                 .padding(28.dp)
                 .alpha(0.7f)
-                .clip(
-                    CutCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
-                        bottomStart = 10.dp,
-                        bottomEnd = 10.dp
-                    )
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .background(MaterialTheme.colorScheme.background)
                 .wrapContentHeight()
         ) {
             Column(
@@ -131,9 +127,7 @@ fun LoginScreen(
                 )
             }
         }
-
     }
-
 }
 
 @Composable

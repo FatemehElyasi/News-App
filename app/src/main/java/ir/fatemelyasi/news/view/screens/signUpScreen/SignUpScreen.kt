@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -83,54 +84,49 @@ fun SignUpScreen(
             modifier = Modifier
                 .padding(28.dp)
                 .alpha(0.7f)
-                .clip(
-                    CutCornerShape(
-                        topStart = 10.dp,
-                        topEnd = 10.dp,
-                        bottomStart = 10.dp,
-                        bottomEnd = 10.dp
-                    )
+                .background(
+                    color = MaterialTheme.colorScheme.background,
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .background(MaterialTheme.colorScheme.background)
-                .wrapContentHeight()
+            .wrapContentHeight()
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(48.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+        Column(
+            modifier = Modifier
+                .padding(48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
-                SignUpHeader()
-                Spacer(modifier = Modifier.height(20.dp))
-                SignUpFields(
-                    name = name,
-                    email = email,
-                    password = password,
-                    rePassword = rePassword,
-                    onEmailChange = { viewModel.onEmailChange(it) },
-                    onPasswordChange = { viewModel.onPasswordChange(it) },
-                    onForgotPasswordClick = { },
-                    onNameChange = { viewModel.onNameChange(it) },
-                    onRePasswordChange = { viewModel.onRePasswordChange(it) },
-                )
-                SignUpFooter(
-                    onSignUpClick = {
-                        viewModel.onSignUpClick(
-                            onSuccess = {
-                                navigateToDashboardScreen()
-                            },
-                            onError = {
-                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    },
-                    onSignInClick = {
-                        navigateToLogInScreen()
-                    }
-                )
-            }
+            SignUpHeader()
+            Spacer(modifier = Modifier.height(20.dp))
+            SignUpFields(
+                name = name,
+                email = email,
+                password = password,
+                rePassword = rePassword,
+                onEmailChange = { viewModel.onEmailChange(it) },
+                onPasswordChange = { viewModel.onPasswordChange(it) },
+                onForgotPasswordClick = { },
+                onNameChange = { viewModel.onNameChange(it) },
+                onRePasswordChange = { viewModel.onRePasswordChange(it) },
+            )
+            SignUpFooter(
+                onSignUpClick = {
+                    viewModel.onSignUpClick(
+                        onSuccess = {
+                            navigateToDashboardScreen()
+                        },
+                        onError = {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                },
+                onSignInClick = {
+                    navigateToLogInScreen()
+                }
+            )
         }
+    }
     }
 
 
