@@ -52,7 +52,6 @@ class NewsRepositoryImpl(
             }
     }
 
-
     //--------------db
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
@@ -67,43 +66,36 @@ class NewsRepositoryImpl(
                     .filter { it.urlToImage.isNotBlank() }
             }
     }
-
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.saveNewsToDb(entities)
     }
-
     override fun searchNews(query: String): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.searchNews(query)
             .subscribeOn(Schedulers.io())
             .map { it.map { entity -> entity.toViewEntity() } }
             .observeOn(AndroidSchedulers.mainThread())
     }
-
     override fun deleteNews(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)
     }
 
     //--------------SharedPref
-    override fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
-        sharedPrefHelper.saveInfo(email, password, isLoggedIn)
+    override fun signUp(email: String, password: String, isLoggedIn: Boolean) {
+        sharedPrefHelper.saveUserAuthenticationInfo(email, password, isLoggedIn)
     }
-
     override fun getEmail(): String? {
         return sharedPrefHelper.getEmail()
     }
-
     override fun getPassword(): String? {
         return sharedPrefHelper.getPassword()
     }
-
     override fun isLoggedIn(): Boolean {
         return sharedPrefHelper.isLoggedIn()
     }
-
-    override fun logOut() {
-        return sharedPrefHelper.logOut()
+    override fun clearInformation() {
+        return sharedPrefHelper.clearInformation()
     }
 
 }

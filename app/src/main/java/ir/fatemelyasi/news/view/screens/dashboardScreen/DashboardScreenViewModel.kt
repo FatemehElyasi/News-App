@@ -100,7 +100,7 @@ class DashboardScreenViewModel(
         disposables.add(disposable)
     }
 
-    fun loggedOut() = newsRepository.logOut()
+    fun loggedOut() = newsRepository.clearInformation()
 
     fun isUserLoggedIn(): Boolean = newsRepository.isLoggedIn()
 

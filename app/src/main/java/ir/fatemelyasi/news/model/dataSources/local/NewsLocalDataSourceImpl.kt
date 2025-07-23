@@ -15,41 +15,32 @@ class NewsLocalDataSourceImpl(
     override fun saveNewsToDb(newsEntityModel: List<NewsEntity>) {
         newsDao.saveNewsToDb(newsEntityModel)
     }
-
     override fun deleteNews(newsEntityModel: List<NewsEntity>) {
         newsDao.deleteNews(newsEntityModel)
     }
-
     override fun getAllNews(): Observable<List<NewsEntity>> {
         return newsDao.getAllNews()
     }
-
     override fun getTopNews(count: Int): Observable<List<NewsEntity>> {
         return newsDao.getTopNews(count)
     }
-
     override fun searchNews(query: String): Observable<List<NewsEntity>> {
         return newsDao.searchNews(query)
     }
 
-    //sharedPref
-    override fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
+    override fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean) {
         return sharedPrefHelper.saveInfo(email, password, isLoggedIn)
     }
-
     override fun getEmail(): String? {
         return sharedPrefHelper.getEmail()
     }
-
     override fun getPassword(): String? {
         return sharedPrefHelper.getPassword()
     }
-
     override fun isLoggedIn(): Boolean {
         return sharedPrefHelper.isLoggedIn()
     }
-
-    override fun logOut() {
+    override fun clearInformation() {
         return sharedPrefHelper.logOut()
     }
 }
