@@ -29,7 +29,6 @@ class NewsRepositoryImpl(
                 .toObservable()
         )
     }
-
     //--------------server
     override fun getNewsFromServer(): Single<List<ArticleViewEntity>> {
         return newsRemoteDataSource.getNewsInformation()
@@ -51,7 +50,6 @@ class NewsRepositoryImpl(
                     }
             }
     }
-
     //--------------db
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
@@ -80,16 +78,12 @@ class NewsRepositoryImpl(
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)
     }
-
     //--------------SharedPref
     override fun signUp(email: String, password: String, isLoggedIn: Boolean) {
         sharedPrefHelper.saveUserAuthenticationInfo(email, password, isLoggedIn)
     }
-    override fun getEmail(): String? {
-        return sharedPrefHelper.getEmail()
-    }
-    override fun getPassword(): String? {
-        return sharedPrefHelper.getPassword()
+    override fun login(email: String, password: String): Boolean {
+        return sharedPrefHelper.logIn(email, password)
     }
     override fun isLoggedIn(): Boolean {
         return sharedPrefHelper.isLoggedIn()

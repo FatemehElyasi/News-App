@@ -12,8 +12,7 @@ interface NewsLocalDataSource {
     fun searchNews(query: String): Observable<List<NewsEntity>>
 
     fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean)
-    fun getEmail(): String?
-    fun getPassword(): String?
+    fun logIn(email: String, password: String): Boolean
     fun isLoggedIn(): Boolean
     fun clearInformation()
 

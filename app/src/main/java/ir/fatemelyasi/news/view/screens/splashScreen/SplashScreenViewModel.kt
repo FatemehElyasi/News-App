@@ -13,7 +13,4 @@ class SplashViewModel(
         return newsRepository.isLoggedIn()
     }
 
-    fun getEmail(): String? = newsRepository.getEmail()
-    fun getPassword(): String? = newsRepository.getPassword()
-
 }

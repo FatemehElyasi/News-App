@@ -5,7 +5,7 @@ import android.content.Context
 class SharedPrefHelper(context: Context) {
 
     companion object {
-        private const val PREF_NAME = "my_prefs"
+        private const val PREF_NAME = "authentication_preferences"
         private const val KEY_EMAIL = "email"
         private const val KEY_PASSWORD = "password"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
@@ -13,7 +13,7 @@ class SharedPrefHelper(context: Context) {
 
     private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-    fun saveInfo(email: String, password: String, isLoggedIn: Boolean) {
+    fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean) {
         prefs.edit()
             .putString(KEY_EMAIL, email)
             .putString(KEY_PASSWORD, password)
@@ -21,9 +21,11 @@ class SharedPrefHelper(context: Context) {
             .apply()
     }
 
-    fun getEmail(): String? = prefs.getString(KEY_EMAIL, null)
-
-    fun getPassword(): String? = prefs.getString(KEY_PASSWORD, null)
+    fun isUserValid(getEmail: String, getPassword: String): Boolean {
+        val savedEmail = prefs.getString(KEY_EMAIL, null)
+        val savedPassword = prefs.getString(KEY_PASSWORD, null)
+        return getEmail == savedEmail && getPassword == savedPassword
+    }
 
     fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
 

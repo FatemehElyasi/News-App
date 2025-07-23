@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
-import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 
 
@@ -33,16 +32,10 @@ fun SplashScreen(
     var shouldNavigate by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-
-        delay(2800)
         val isLoggedIn = viewModel.isUserLoggedIn()
-        val email = viewModel.getEmail()
-        val password = viewModel.getPassword()
 
         if (isLoggedIn) {
             navigateToDashboard()
-        } else if (!email.isNullOrBlank() && !password.isNullOrBlank()) {
-            navigateToAuthenticationScreen()
         } else {
             navigateToAuthenticationScreen()
         }

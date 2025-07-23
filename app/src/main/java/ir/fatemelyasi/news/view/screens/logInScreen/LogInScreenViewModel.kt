@@ -47,7 +47,7 @@ class LoginViewModel(
             return
         }
 
-        if (newsRepository.getEmail() != email || newsRepository.getPassword() != password) {
+        if (!newsRepository.login(email, password)) {
             onError("User not registered. Please sign up first.")
             return
         }
