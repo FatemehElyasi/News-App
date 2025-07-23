@@ -1,17 +1,14 @@
 package ir.fatemelyasi.news.model.sharedPrefHelper
 
-import android.content.Context
+import android.content.SharedPreferences
 
-class SharedPrefHelper(context: Context) {
+class SharedPrefHelper(private val prefs: SharedPreferences) {
 
     companion object {
-        private const val PREF_NAME = "authentication_preferences"
         private const val KEY_EMAIL = "email"
         private const val KEY_PASSWORD = "password"
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
-
-    private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
     fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean) {
         prefs.edit()
