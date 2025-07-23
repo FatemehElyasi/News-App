@@ -1,6 +1,6 @@
 package ir.fatemelyasi.news.view.screens.mainScreen
 
-import AuthenticationScreen
+import ir.fatemelyasi.news.view.screens.authenticationScreen.AuthenticationScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

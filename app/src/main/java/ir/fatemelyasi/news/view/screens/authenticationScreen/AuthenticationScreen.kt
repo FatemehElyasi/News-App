@@ -1,3 +1,5 @@
+package ir.fatemelyasi.news.view.screens.authenticationScreen
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,14 +82,14 @@ fun AuthenticationScreen(
                 Button(
                     onClick = { navigateToLogInScreen() },
                     modifier = Modifier
-                        .padding(top=26.dp)
+                        .padding(top = 26.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colors.onSurface,
                         contentColor = colors.onSecondaryContainer
                     )
                 ) {
-                    Text("Log in")
+                    Text(stringResource(id = R.string.log_in))
                 }
 
                 Button(
@@ -100,7 +103,7 @@ fun AuthenticationScreen(
                     )
 
                 ) {
-                    Text("Sign Up")
+                    Text(stringResource(id = R.string.sign_up))
                 }
             }
         }
@@ -113,12 +116,12 @@ fun AthHeader() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Welcome",
+            text = stringResource(id = R.string.welcome),
             fontSize = 28.sp,
             fontWeight = FontWeight.ExtraBold
         )
         Text(
-            text = "Login or SignUp to continue",
+            text = stringResource(id = R.string.sign_up_sign_in_to_continue),
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold
         )

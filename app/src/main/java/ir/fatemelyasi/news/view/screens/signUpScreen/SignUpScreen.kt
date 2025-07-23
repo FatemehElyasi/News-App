@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.signUpScreen
 
+import android.util.Log.i
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -32,10 +32,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,7 +65,7 @@ fun SignUpScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.simple_black),
-            contentDescription = "Login",
+            contentDescription = stringResource(id = R.string.log_in),
             modifier = Modifier
                 .fillMaxSize()
                 .blur(8.dp),
@@ -88,45 +88,45 @@ fun SignUpScreen(
                     color = MaterialTheme.colorScheme.background,
                     shape = RoundedCornerShape(16.dp)
                 )
-            .wrapContentHeight()
+                .wrapContentHeight()
         ) {
-        Column(
-            modifier = Modifier
-                .padding(48.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+            Column(
+                modifier = Modifier
+                    .padding(48.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            SignUpHeader()
-            Spacer(modifier = Modifier.height(20.dp))
-            SignUpFields(
-                name = name,
-                email = email,
-                password = password,
-                rePassword = rePassword,
-                onEmailChange = { viewModel.onEmailChange(it) },
-                onPasswordChange = { viewModel.onPasswordChange(it) },
-                onForgotPasswordClick = { },
-                onNameChange = { viewModel.onNameChange(it) },
-                onRePasswordChange = { viewModel.onRePasswordChange(it) },
-            )
-            SignUpFooter(
-                onSignUpClick = {
-                    viewModel.onSignUpClick(
-                        onSuccess = {
-                            navigateToDashboardScreen()
-                        },
-                        onError = {
-                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                },
-                onSignInClick = {
-                    navigateToLogInScreen()
-                }
-            )
+                SignUpHeader()
+                Spacer(modifier = Modifier.height(20.dp))
+                SignUpFields(
+                    name = name,
+                    email = email,
+                    password = password,
+                    rePassword = rePassword,
+                    onEmailChange = { viewModel.onEmailChange(it) },
+                    onPasswordChange = { viewModel.onPasswordChange(it) },
+                    onForgotPasswordClick = { },
+                    onNameChange = { viewModel.onNameChange(it) },
+                    onRePasswordChange = { viewModel.onRePasswordChange(it) },
+                )
+                SignUpFooter(
+                    onSignUpClick = {
+                        viewModel.onSignUpClick(
+                            onSuccess = {
+                                navigateToDashboardScreen()
+                            },
+                            onError = {
+                                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                            }
+                        )
+                    },
+                    onSignInClick = {
+                        navigateToLogInScreen()
+                    }
+                )
+            }
         }
-    }
     }
 
 
@@ -135,8 +135,15 @@ fun SignUpScreen(
 @Composable
 fun SignUpHeader() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Welcome ", fontSize = 36.sp, fontWeight = FontWeight.ExtraBold)
-        Text(text = "Sign Up to continue", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            text = stringResource(id = R.string.welcome),
+            fontSize = 36.sp,
+            fontWeight = FontWeight.ExtraBold
+        )
+        Text(
+            text = stringResource(id = R.string.sign_in_continue_in_to),
+            fontSize = 18.sp, fontWeight = FontWeight.SemiBold
+        )
     }
 }
 
@@ -155,11 +162,14 @@ fun SignUpFields(
     Column {
         OutlinedTextField(
             value = name,
-            label = "Name",
-            placeholder = "Enter your Full Name",
+            label = stringResource(id = R.string.name_label),
+            placeholder = stringResource(id = R.string.name_placeholder),
             onValueChange = onNameChange,
             leadingIcon = {
-                Icon(Icons.Default.AccountCircle, contentDescription = "Name")
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = stringResource(id = R.string.name_label)
+                )
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
@@ -171,11 +181,14 @@ fun SignUpFields(
 
         OutlinedTextField(
             value = email,
-            label = "Email",
-            placeholder = "Enter your email address",
+            label = stringResource(id = R.string.email_label),
+            placeholder = stringResource(id = R.string.email_placeholder),
             onValueChange = onEmailChange,
             leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = "Email")
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = stringResource(id = R.string.email_label)
+                )
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -187,8 +200,8 @@ fun SignUpFields(
 
         OutlinedTextField(
             value = password,
-            label = "Password",
-            placeholder = "Enter your password",
+            label = stringResource(id = R.string.password_label),
+            placeholder = stringResource(id = R.string.password_placeholder),
             onValueChange = onPasswordChange,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -196,7 +209,10 @@ fun SignUpFields(
                 imeAction = ImeAction.Go
             ),
             leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = "Password")
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = stringResource(id = R.string.password_label),
+                )
             }
         )
 
@@ -204,8 +220,8 @@ fun SignUpFields(
 
         OutlinedTextField(
             value = rePassword,
-            label = "confirm Password",
-            placeholder = "Enter your password ",
+            label = stringResource(id = R.string.re_password_label),
+            placeholder = stringResource(id = R.string.re_password_placeholder),
             onValueChange = onRePasswordChange,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -213,11 +229,14 @@ fun SignUpFields(
                 imeAction = ImeAction.Go
             ),
             leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = "RePassword")
+                Icon(
+                    imageVector = Icons.Default.Lock,
+                    contentDescription = stringResource(id = R.string.password_label)
+                )
             }
         )
         TextButton(onClick = onForgotPasswordClick, modifier = Modifier.align(Alignment.End)) {
-            Text(text = "Forgot Password?")
+            Text(text = stringResource(id = R.string.forgot_password))
         }
     }
 }
@@ -237,10 +256,10 @@ fun SignUpFooter(
                 contentColor = colors.onSecondaryContainer
             )
         ) {
-            Text(text = "Sign Up")
+            Text(text = stringResource(id = R.string.sign_up))
         }
         TextButton(onClick = onSignInClick) {
-            Text(text = "have an account, click here")
+            Text(text = stringResource(id = R.string.have_an_account))
         }
     }
 }
