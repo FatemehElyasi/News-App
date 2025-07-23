@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
-fun TextField(
+fun OutlinedTextField(
     value: String,
     label: String,
     placeholder: String,

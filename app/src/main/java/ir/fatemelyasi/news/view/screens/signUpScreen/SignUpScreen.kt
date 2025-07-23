@@ -42,7 +42,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ir.fatemelyasi.news.R
-import ir.fatemelyasi.news.view.components.TextField
+import ir.fatemelyasi.news.view.components.OutlinedTextField
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -157,7 +157,7 @@ fun SignUpFields(
     onForgotPasswordClick: () -> Unit
 ) {
     Column {
-        TextField(
+        OutlinedTextField(
             value = name,
             label = "Name",
             placeholder = "Enter your Full Name",
@@ -173,7 +173,7 @@ fun SignUpFields(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextField(
+        OutlinedTextField(
             value = email,
             label = "Email",
             placeholder = "Enter your email address",
@@ -189,7 +189,7 @@ fun SignUpFields(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextField(
+        OutlinedTextField(
             value = password,
             label = "Password",
             placeholder = "Enter your password",
@@ -206,7 +206,7 @@ fun SignUpFields(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextField(
+        OutlinedTextField(
             value = rePassword,
             label = "confirm Password",
             placeholder = "Enter your password ",
