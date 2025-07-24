@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -26,6 +27,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
+import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
@@ -56,13 +59,12 @@ internal fun DashboardScreen(
     navigateToArticleScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
-    val isLoading by viewModel.loading.subscribeAsState(initial = false)
-    val errorMessage by viewModel.error.subscribeAsState(initial = null)
+    val loadingState by viewModel.loading.subscribeAsState(initial = false)
+    val errorState by viewModel.error.subscribeAsState(initial = ErrorState.None)
     val query by viewModel.query.subscribeAsState(initial = "")
 
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
-
 
     LaunchedEffect(Unit) {
         viewModel.searchNews()
@@ -72,8 +74,13 @@ internal fun DashboardScreen(
         viewModel.fetchNewsItems()
     }
 
-    if (isLoading && newsListState.isEmpty()) {
+    if (loadingState && newsListState.isEmpty()) {
         LoadingIndicator()
+    } else if (errorState is ErrorState.Error) {
+        OfflineErrorComponent(
+            isLoading = loadingState,
+            onRetry = { viewModel.fetchNewsItems() }
+        )
     } else {
 
         Box(
@@ -91,7 +98,7 @@ internal fun DashboardScreen(
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
                     Column {
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 20.dp,
@@ -113,7 +120,9 @@ internal fun DashboardScreen(
                             style = typography.titleLarge.copy(
                                 colors.onPrimary
                             )
+
                         )
+
                     }
                 }
 
@@ -123,7 +132,7 @@ internal fun DashboardScreen(
                     onSearchClick = {})
 
                 AnimatedVisibility(visible = query.isBlank()) {
-                    BasicText(
+                    Text(
                         text = "Today's Articles",
                         modifier = Modifier
                             .padding(
@@ -267,7 +276,7 @@ fun CardBanner(
             contentAlignment = Alignment.Center
 
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
                 text = "Design",
                 style = typography.titleSmall.copy(
@@ -283,13 +292,13 @@ fun CardBanner(
             verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.Start,
         ) {
-            BasicText(
+            Text(
                 text = articleViewEntity.title.toString(),
                 style = typography.displaySmall.copy(
                     colors.onPrimary,
                 ),
             )
-            BasicText(
+            Text(
                 text = articleViewEntity.publishedAt.toString(),
                 style = typography.titleSmall.copy(
                     colors.onSurfaceVariant,
@@ -322,7 +331,7 @@ fun MoreArticle(
                     bottom = 8.dp
                 )
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.wrapContentSize(align = Alignment.TopEnd),
                 text = " More Articles",
                 style = typography.titleLarge.copy(
@@ -333,7 +342,7 @@ fun MoreArticle(
                 modifier = Modifier.weight(1f)
             )
 
-            BasicText(
+            Text(
                 text = " See All",
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
@@ -397,7 +406,7 @@ fun ArticleItems(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            BasicText(
+            Text(
                 text = messageItem.title,
                 style = typography.titleMedium.copy(
                     colors.onPrimary,
@@ -405,7 +414,7 @@ fun ArticleItems(
                 maxLines = 1
             )
 
-            BasicText(
+            Text(
                 modifier = Modifier.padding(
                     all = 4.dp
                 ),

@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.annotationProcessor
-import org.gradle.kotlin.dsl.api
 import org.gradle.kotlin.dsl.implementation
 
 plugins {
@@ -79,5 +77,9 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
+
+    //lottie
+    implementation (libs.lottie)
+
 
 }

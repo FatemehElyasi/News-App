@@ -23,6 +23,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
