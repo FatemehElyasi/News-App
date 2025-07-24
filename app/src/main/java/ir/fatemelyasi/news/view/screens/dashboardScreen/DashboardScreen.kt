@@ -32,8 +32,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rxjava3.subscribeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +48,6 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
-import kotlinx.coroutines.delay
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
@@ -69,8 +66,6 @@ internal fun DashboardScreen(
     val colors = LocalCustomColors.current
     val typography = LocalCustomTypography.current
 
-    val isUserLoggedIn = remember { mutableStateOf<Boolean?>(null) }
-
     LaunchedEffect(Unit) {
         viewModel.searchNews()
     }
@@ -80,8 +75,7 @@ internal fun DashboardScreen(
     }
 
     LaunchedEffect(Unit) {
-        delay(2800)
-        isUserLoggedIn.value = viewModel.isUserLoggedIn()
+        viewModel.checkUserLoggedIn()
     }
 
     if (isLoading && newsListState.isEmpty()) {

@@ -1,5 +1,8 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -34,6 +37,17 @@ class DashboardScreenViewModel(
 
     private val _loading = BehaviorSubject.createDefault(true)
     val loading: Observable<Boolean> = _loading.hide()
+
+    private val _isUserLoggedInSubject = BehaviorSubject.createDefault(false)
+    var isUserLoggedIn by mutableStateOf(false)
+        private set
+
+    init {
+        _isUserLoggedInSubject.subscribe { loggedIn ->
+                isUserLoggedIn = loggedIn
+            }
+            .let { disposable -> disposables.add(disposable) }
+    }
 
     private var hasLoadedInitialData = false
 
@@ -102,7 +116,10 @@ class DashboardScreenViewModel(
 
     fun loggedOut() = newsRepository.clearInformation()
 
-    fun isUserLoggedIn(): Boolean = newsRepository.isLoggedIn()
+    fun checkUserLoggedIn() {
+        val isLoggedIn = newsRepository.isLoggedIn()
+        _isUserLoggedInSubject.onNext(isLoggedIn)
+    }
 
     override fun onCleared() {
         super.onCleared()
