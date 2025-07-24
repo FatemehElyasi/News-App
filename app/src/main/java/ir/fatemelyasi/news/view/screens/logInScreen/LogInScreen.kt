@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.logInScreen
 
+import android.R.attr.text
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -155,8 +156,8 @@ fun LoginFields(
     Column {
         OutlinedTextField(
             value = email,
-            label = R.string.email_label.toString(),
-            placeholder = R.string.email_placeholder.toString(),
+            label = stringResource(id = R.string.email_label),
+            placeholder = stringResource(id = R.string.email_placeholder),
             onValueChange = onEmailChange,
             leadingIcon = {
                 Icon(

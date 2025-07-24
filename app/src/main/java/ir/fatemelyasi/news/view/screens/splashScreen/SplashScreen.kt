@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,9 +33,10 @@ fun SplashScreen(
     var shouldNavigate by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        val isLoggedIn = viewModel.isUserLoggedIn()
-
-        if (isLoggedIn) {
+        viewModel.checkUserLoggedIn()
+    }
+    LaunchedEffect(Unit) {
+        if (viewModel.isUserLoggedIn == true) {
             navigateToDashboard()
         } else {
             navigateToAuthenticationScreen()

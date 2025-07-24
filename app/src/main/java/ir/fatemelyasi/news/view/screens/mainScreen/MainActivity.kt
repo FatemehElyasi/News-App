@@ -52,7 +52,11 @@ fun Navigation() {
         composable<MyScreens.SplashScreen> {
             SplashScreen(
                 navigateToDashboard = {
-                    navController.navigate(MyScreens.DashboardScreen)
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
                 },
                 navigateToAuthenticationScreen = {
                     navController.navigate(MyScreens.AuthenticationScreen)
@@ -75,8 +79,8 @@ fun Navigation() {
                     navController.navigate(MyScreens.LogInInScreen)
                 },
                 navigateToDashboardScreen = {
-                    navController.navigate(MyScreens.DashboardScreen){
-                        popUpTo(0){
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                     }
@@ -89,8 +93,8 @@ fun Navigation() {
                     navController.navigate(MyScreens.SignUpScreen)
                 },
                 navigateToDashboardScreen = {
-                    navController.navigate(MyScreens.DashboardScreen){
-                        popUpTo(0){
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                     }
@@ -115,7 +119,7 @@ fun Navigation() {
                 },
                 navigateToAuthenticationScreen = {
                     navController.navigate(MyScreens.AuthenticationScreen) {
-                        popUpTo(MyScreens.SplashScreen::class) {
+                        popUpTo(0) {
                             inclusive = true
                         }
 

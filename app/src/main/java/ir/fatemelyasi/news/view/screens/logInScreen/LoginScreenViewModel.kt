@@ -32,25 +32,25 @@ class LoginViewModel(
     }
 
 
-    fun onLoginClick(onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun onLoginClick(onSuccess: () -> Unit, onError: (Int) -> Unit) {
 
         if (email.isBlank() || password.isBlank()) {
-            onError(R.string.error_empty_fields.toString())
+            onError(R.string.error_empty_fields)
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            onError(R.string.error_invalid_email.toString())
+            onError(R.string.error_invalid_email)
             return
         }
 
         if (password.length < 8) {
-            onError(R.string.error_invalid_password.toString())
+            onError(R.string.error_invalid_password)
             return
         }
 
         if (!newsRepository.login(email, password)) {
-            onError(R.string.error_user_not_registered.toString())
+            onError(R.string.error_user_not_registered)
             return
         }
 

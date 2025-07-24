@@ -5,7 +5,6 @@ coilComposeVersion = "2.5.0"
 converterGsonVersion = "2.9.0"
 
 datastorePreferences = "1.1.7"
-coreSplashscreen = "1.0.1"
 koinAndroid = "4.0.4"
 koinAnnotation = "2.0.0"
 koinCompose = "4.0.4"
@@ -34,7 +33,6 @@ runtimeRxJava3 = "1.8.1"
 [libraries]
 adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "adapterRxjava3Version" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
