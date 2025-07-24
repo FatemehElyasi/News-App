@@ -1,5 +1,5 @@
-import android.os.Build
-import androidx.annotation.RequiresApi
+package ir.fatemelyasi.news.view.components
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +15,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.utils.OfflineErrorAnimation
-import ir.fatemelyasi.news.R
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OfflineErrorComponent(
     isLoading: Boolean,

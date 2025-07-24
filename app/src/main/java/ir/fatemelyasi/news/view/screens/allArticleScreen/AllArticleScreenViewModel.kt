@@ -12,7 +12,6 @@ import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import ir.fatemelyasi.news.R
-import ir.fatemelyasi.news.view.utils.SortOrder
 import org.koin.android.annotation.KoinViewModel
 import kotlin.collections.orEmpty
 import kotlin.collections.toMutableList
@@ -24,7 +23,6 @@ class AllArticleScreenViewModel(
 
     private val disposables = CompositeDisposable()
 
-    private var currentSortOrder: SortOrder? = null
     private var currentArticles: List<ArticleViewEntity> = emptyList()
 
     private val _articles = BehaviorSubject.create<List<ArticleViewEntity>>()
@@ -60,7 +58,6 @@ class AllArticleScreenViewModel(
                 { result ->
                     currentArticles = result
                     _hasLoadedInitialData.onNext(true)
-                    currentSortOrder?.let { sortArticles(it) } ?: _articles.onNext(result)
                 },
                 { throwable ->
                     _error.onNext(ErrorState.Message(R.string.unknown_error))
@@ -69,18 +66,6 @@ class AllArticleScreenViewModel(
         addDisposable(disposable)
     }
 
-
-    fun sortArticles(order: SortOrder) {
-        currentSortOrder = order
-
-        val sorted = when (order) {
-            SortOrder.ASCENDING -> currentArticles.sortedBy { it.publishedAt?.take(10) }
-            SortOrder.DESCENDING -> currentArticles.sortedByDescending { it.publishedAt?.take(10) }
-        }
-        val distinctSorted = sorted.distinctBy { it.publishedAt?.take(10) }
-
-        _articles.onNext(distinctSorted)
-    }
 
     fun deleteArticle(article: ArticleViewEntity) {
         val disposable = Completable.fromAction {

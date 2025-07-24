@@ -1,8 +1,6 @@
 package ir.fatemelyasi.news.view.screens.allArticleScreen
 
-import OfflineErrorComponent
-import android.os.Build
-import androidx.annotation.RequiresApi
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +29,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllArticlesScreen(
     viewModel: AllArticleScreenViewModel = koinViewModel(),

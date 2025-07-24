@@ -1,6 +1,6 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
-import OfflineErrorComponent
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -45,12 +45,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
-import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
-import kotlinx.coroutines.delay
-import ir.fatemelyasi.news.view.utils.ErrorState
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
