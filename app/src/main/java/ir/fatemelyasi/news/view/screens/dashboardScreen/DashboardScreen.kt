@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -28,6 +29,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +49,7 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
+import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
 
@@ -58,8 +61,8 @@ internal fun DashboardScreen(
     navigateToArticleScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
-    val isLoading by viewModel.loading.subscribeAsState(initial = false)
-    val errorMessage by viewModel.error.subscribeAsState(initial = null)
+    val loadingState by viewModel.loading.subscribeAsState(initial = false)
+    val errorState by viewModel.error.subscribeAsState(initial = ErrorState.None)
     val query by viewModel.query.subscribeAsState(initial = "")
 
     val colors = LocalCustomColors.current
@@ -73,8 +76,13 @@ internal fun DashboardScreen(
         viewModel.fetchNewsItems()
     }
 
-    if (isLoading && newsListState.isEmpty()) {
+    if (loadingState && newsListState.isEmpty()) {
         LoadingIndicator()
+    } else if (errorState is ErrorState.Error) {
+        OfflineErrorComponent(
+            isLoading = loadingState,
+            onRetry = { viewModel.fetchNewsItems() }
+        )
     } else {
 
         Box(
@@ -113,7 +121,9 @@ internal fun DashboardScreen(
                             style = typography.titleLarge.copy(
                                 colors.onPrimary
                             )
+
                         )
+
                     }
                 }
 
@@ -267,7 +277,7 @@ fun CardBanner(
             contentAlignment = Alignment.Center
 
         ) {
-            BasicText(
+            Text(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
                 text = "Design",
                 style = typography.titleSmall.copy(

@@ -8,6 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.utils.SortOrder
@@ -33,13 +34,27 @@ class AllArticleScreenViewModel(
     private val _query = BehaviorSubject.createDefault("")
     val query: Observable<String> = _query
 
+    private val _error = BehaviorSubject.createDefault<ErrorState>(ErrorState.None)
+    val error: Observable<ErrorState> = _error.hide()
+
+    private val _loading = BehaviorSubject.createDefault(true)
+    val loading: Observable<Boolean> = _loading.hide()
+
+
     fun fetchArticles() {
         if (_hasLoadedInitialData.value == true) return
         _hasLoadedInitialData.onNext(true)
+        if (_hasLoadedInitialData.value == true && _articles.value.orEmpty().isNotEmpty()) return
+
+        _loading.onNext(true)
+        _error.onNext(ErrorState.None)
 
         val disposable = newsRepository.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doFinally {
+                _loading.onNext(false)
+            }
             .subscribe(
                 {
                     currentArticles = it
@@ -48,8 +63,11 @@ class AllArticleScreenViewModel(
                     } else {
                         _articles.onNext(it)
                     }
+                    _hasLoadedInitialData.onNext(true)
                 },
-                { it.printStackTrace() }
+                { throwable ->
+                    _error.onNext(ErrorState.Message(R.string.unknown_error))
+                }
             )
         addDisposable(disposable)
     }
@@ -66,6 +84,7 @@ class AllArticleScreenViewModel(
 
         _articles.onNext(distinctSorted)
     }
+
 
     fun deleteArticle(article: ArticleViewEntity) {
         val disposable = Completable.fromAction {
