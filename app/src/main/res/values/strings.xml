@@ -25,6 +25,13 @@
     <string name="sign_up">Sign Up</string>
     <string name="sign_up_sign_in_to_continue"> "Login or SignUp to continue"</string>
 
+    <string name="error_empty_fields">Please fill in all fields.</string>
+    <string name="error_invalid_email">Invalid email.</string>
+    <string name="error_invalid_password">Password must be at least 8 characters.</string>
+    <string name="error_user_not_registered">User not registered. Please sign up first.</string>
+    <string name="error_user_already_registered">User already registered. Please log in.</string>
+
+
 
 
 </resources>

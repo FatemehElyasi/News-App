@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import org.koin.android.annotation.KoinViewModel
 
@@ -30,25 +31,26 @@ class LoginViewModel(
         password = newPassword.lowercase()
     }
 
+
     fun onLoginClick(onSuccess: () -> Unit, onError: (String) -> Unit) {
 
         if (email.isBlank() || password.isBlank()) {
-            onError("Please fill in all fields.")
+            onError(R.string.error_empty_fields.toString())
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            onError("Invalid email.")
+            onError(R.string.error_invalid_email.toString())
             return
         }
 
         if (password.length < 8) {
-            onError("Password must be at least 8 characters.")
+            onError(R.string.error_invalid_password.toString())
             return
         }
 
         if (!newsRepository.login(email, password)) {
-            onError("User not registered. Please sign up first.")
+            onError(R.string.error_user_not_registered.toString())
             return
         }
 
@@ -56,7 +58,6 @@ class LoginViewModel(
         newsRepository.signUp(email, password, true)
         isLoading = false
         onSuccess()
-
     }
 }
 
