@@ -36,17 +36,13 @@ class NewsRepositoryImpl(
             .map { response ->
                 Log.d("API_RESPONSE", "Raw response: $response")
                 Log.d("API_RESPONSE", "Articles count: ${response.articles?.size}")
+
                 response.articles.orEmpty()
                     .filterNotNull()
                     .filter { !it.urlToImage.isNullOrBlank() && !it.title.isNullOrBlank() }
                     .map { article ->
                         Log.d("ARTICLE_ITEM", "Mapped Article: ${article.title}")
-                        ArticleViewEntity(
-                            title = article.title!!,
-                            publishedAt = article.publishedAt,
-                            urlToImage = article.urlToImage!!,
-                            description = article.description
-                        )
+                        article.toViewEntity()
                     }
             }
     }
@@ -57,7 +53,7 @@ class NewsRepositoryImpl(
         return newsLocalDataSource.getAllNews()
             .subscribeOn(Schedulers.io())
             .filter { it.isNotEmpty() }
-            .map { newsEntityList:List<NewsEntity> ->
+            .map { newsEntityList: List<NewsEntity> ->
                 Log.d("NewsRepository", "DB News Count: ${newsEntityList.size}")
                 newsEntityList.map {
                     Log.d("NewsRepository", "DB Article: ${it.title}")

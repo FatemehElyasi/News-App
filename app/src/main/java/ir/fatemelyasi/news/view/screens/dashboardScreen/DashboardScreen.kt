@@ -27,6 +27,8 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -88,7 +90,6 @@ internal fun DashboardScreen(
                 .fillMaxSize()
                 .background(colors.surface)
         ) {
-
             Column(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
@@ -110,7 +111,7 @@ internal fun DashboardScreen(
                             )
 
                         )
-                        BasicText(
+                        Text(
                             modifier = Modifier
                                 .padding(
                                     top = 4.dp

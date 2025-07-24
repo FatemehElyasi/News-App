@@ -77,7 +77,6 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
-
     //lottie
     implementation (libs.lottie)
 

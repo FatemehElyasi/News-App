@@ -74,7 +74,7 @@ val DarkColorScheme = CustomColors(
     onSurface = Grey80,
     outline = BlueGrey60,
     onSurfaceVariant = BlueGrey80,
-)
+    )
 
 
 val LocalCustomColors = staticCompositionLocalOf<CustomColors> {

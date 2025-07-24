@@ -8,13 +8,12 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
+import ir.fatemelyasi.news.view.utils.SortOrder
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
-import ir.fatemelyasi.news.R
 import org.koin.android.annotation.KoinViewModel
-import kotlin.collections.orEmpty
-import kotlin.collections.toMutableList
 
 @KoinViewModel
 class AllArticleScreenViewModel(
@@ -23,6 +22,7 @@ class AllArticleScreenViewModel(
 
     private val disposables = CompositeDisposable()
 
+    private var currentSortOrder: SortOrder? = null
     private var currentArticles: List<ArticleViewEntity> = emptyList()
 
     private val _articles = BehaviorSubject.create<List<ArticleViewEntity>>()
@@ -43,6 +43,8 @@ class AllArticleScreenViewModel(
 
 
     fun fetchArticles() {
+        if (_hasLoadedInitialData.value == true) return
+        _hasLoadedInitialData.onNext(true)
         if (_hasLoadedInitialData.value == true && _articles.value.orEmpty().isNotEmpty()) return
 
         _loading.onNext(true)
@@ -55,8 +57,13 @@ class AllArticleScreenViewModel(
                 _loading.onNext(false)
             }
             .subscribe(
-                { result ->
-                    currentArticles = result
+                {
+                    currentArticles = it
+                    if (currentSortOrder != null) {
+                        sortArticles(currentSortOrder!!)
+                    } else {
+                        _articles.onNext(it)
+                    }
                     _hasLoadedInitialData.onNext(true)
                 },
                 { throwable ->
@@ -64,6 +71,19 @@ class AllArticleScreenViewModel(
                 }
             )
         addDisposable(disposable)
+    }
+
+
+    fun sortArticles(order: SortOrder) {
+        currentSortOrder = order
+
+        val sorted = when (order) {
+            SortOrder.ASCENDING -> currentArticles.sortedBy { it.publishedAt }
+            SortOrder.DESCENDING -> currentArticles.sortedByDescending { it.publishedAt }
+        }
+        val distinctSorted = sorted.distinctBy { it.publishedAt }
+
+        _articles.onNext(distinctSorted)
     }
 
 
@@ -96,3 +116,4 @@ class AllArticleScreenViewModel(
     }
 
 }
+
