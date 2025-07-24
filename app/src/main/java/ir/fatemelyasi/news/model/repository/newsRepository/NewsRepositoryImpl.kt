@@ -1,6 +1,8 @@
 package ir.fatemelyasi.news.model.repository.newsRepository
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -18,6 +20,7 @@ class NewsRepositoryImpl(
     private val newsLocalDataSource: NewsLocalDataSource
 ) : NewsRepository {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNews(): Observable<List<ArticleViewEntity>> {
         return Observable.merge(
             getNewsFromDb()
@@ -30,34 +33,32 @@ class NewsRepositoryImpl(
     }
 
     //--------------server
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNewsFromServer(): Single<List<ArticleViewEntity>> {
         return newsRemoteDataSource.getNewsInformation()
             .subscribeOn(Schedulers.io())
             .map { response ->
                 Log.d("API_RESPONSE", "Raw response: $response")
                 Log.d("API_RESPONSE", "Articles count: ${response.articles?.size}")
+
                 response.articles.orEmpty()
                     .filterNotNull()
                     .filter { !it.urlToImage.isNullOrBlank() && !it.title.isNullOrBlank() }
                     .map { article ->
                         Log.d("ARTICLE_ITEM", "Mapped Article: ${article.title}")
-                        ArticleViewEntity(
-                            title = article.title!!,
-                            publishedAt = article.publishedAt,
-                            urlToImage = article.urlToImage!!,
-                            description = article.description
-                        )
+                        article.toViewEntity()
                     }
             }
     }
 
 
     //--------------db
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
             .subscribeOn(Schedulers.io())
             .filter { it.isNotEmpty() }
-            .map { newsEntityList:List<NewsEntity> ->
+            .map { newsEntityList: List<NewsEntity> ->
                 Log.d("NewsRepository", "DB News Count: ${newsEntityList.size}")
                 newsEntityList.map {
                     Log.d("NewsRepository", "DB Article: ${it.title}")
@@ -67,11 +68,13 @@ class NewsRepositoryImpl(
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.saveNewsToDb(entities)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun searchNews(query: String): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.searchNews(query)
             .subscribeOn(Schedulers.io())
@@ -79,6 +82,7 @@ class NewsRepositoryImpl(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun deleteNews(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)
