@@ -59,10 +59,10 @@ class AllArticleScreenViewModel(
         currentSortOrder = order
 
         val sorted = when (order) {
-            SortOrder.ASCENDING -> currentArticles.sortedBy { it.publishedAt?.take(10) }
-            SortOrder.DESCENDING -> currentArticles.sortedByDescending { it.publishedAt?.take(10) }
+            SortOrder.ASCENDING -> currentArticles.sortedBy { it.publishedAt }
+            SortOrder.DESCENDING -> currentArticles.sortedByDescending { it.publishedAt }
         }
-        val distinctSorted = sorted.distinctBy { it.publishedAt?.take(10) }
+        val distinctSorted = sorted.distinctBy { it.publishedAt }
 
         _articles.onNext(distinctSorted)
     }
