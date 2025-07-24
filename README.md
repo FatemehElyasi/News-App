@@ -10,7 +10,7 @@ The News App is a modern Android application built with Kotlin that allows users
 - Offline caching for saved articles
 - Splash Screen
 - User authentication (SignUp / LogIn)
-- Sort news by newest / latest 
+- Sort news by newset / oldest
 
 # Technologies & Libraries Used
 
