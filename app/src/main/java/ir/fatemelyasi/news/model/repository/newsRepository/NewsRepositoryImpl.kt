@@ -1,8 +1,6 @@
 package ir.fatemelyasi.news.model.repository.newsRepository
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -20,7 +18,6 @@ class NewsRepositoryImpl(
     private val newsLocalDataSource: NewsLocalDataSource
 ) : NewsRepository {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNews(): Observable<List<ArticleViewEntity>> {
         return Observable.merge(
             getNewsFromDb()
@@ -33,7 +30,6 @@ class NewsRepositoryImpl(
     }
 
     //--------------server
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNewsFromServer(): Single<List<ArticleViewEntity>> {
         return newsRemoteDataSource.getNewsInformation()
             .subscribeOn(Schedulers.io())
@@ -53,7 +49,6 @@ class NewsRepositoryImpl(
 
 
     //--------------db
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
             .subscribeOn(Schedulers.io())
@@ -68,13 +63,11 @@ class NewsRepositoryImpl(
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.saveNewsToDb(entities)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun searchNews(query: String): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.searchNews(query)
             .subscribeOn(Schedulers.io())
@@ -82,7 +75,6 @@ class NewsRepositoryImpl(
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun deleteNews(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)

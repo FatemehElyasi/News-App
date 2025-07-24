@@ -1,16 +1,19 @@
 package ir.fatemelyasi.news.view.utils
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun String?.toFormattedDate(): String {
     return try {
         if (this.isNullOrBlank()) return ""
-        val zonedDateTime = ZonedDateTime.parse(this)
-        zonedDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val date = inputFormat.parse(this)
+        outputFormat.format(date ?: return "")
     } catch (e: Exception) {
         ""
     }
