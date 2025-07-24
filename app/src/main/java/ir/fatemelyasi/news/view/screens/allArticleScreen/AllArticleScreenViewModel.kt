@@ -12,6 +12,7 @@ import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.utils.SortOrder
+import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
