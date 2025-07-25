@@ -30,8 +30,7 @@
     <string name="error_invalid_password">Password must be at least 8 characters.</string>
     <string name="error_user_not_registered">User not registered. Please sign up first.</string>
     <string name="error_user_already_registered">User already registered. Please log in.</string>
-
-
+    <string name="error_match_passwords">Passwords do not match.</string>
 
 
 </resources>

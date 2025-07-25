@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import org.koin.android.annotation.KoinViewModel
 
@@ -47,24 +48,24 @@ class SignUpScreenViewModel(
     }
 
     @SuppressLint("CheckResult")
-    fun onSignUpClick(onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun onSignUpClick(onSuccess: () -> Unit, onError: (Int) -> Unit) {
         if (email.isBlank() || password.isBlank()) {
-            onError("Please fill in all fields.")
+            onError(R.string.error_empty_fields)
             return
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            onError("Invalid email format")
+            onError(R.string.error_invalid_email)
             return
         }
 
         if (password.length < 8) {
-            onError("Password must be 8+ chars")
+            onError(R.string.error_invalid_password)
             return
         }
 
         if (password != rePassword) {
-            onError("Passwords do not match")
+            onError(R.string.error_match_passwords)
             return
         }
 
