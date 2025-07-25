@@ -17,7 +17,7 @@
     <string name="name_placeholder">Enter your Full Name</string>
     <string name="email_label">Email</string>
     <string name="email_placeholder">Enter your email </string>
-    <string name="password_label">RePassword</string>
+    <string name="password_label">Password</string>
     <string name="password_placeholder">Enter your Password </string>
     <string name="re_password_label">confirm Password</string>
     <string name="re_password_placeholder">Enter your password</string>
