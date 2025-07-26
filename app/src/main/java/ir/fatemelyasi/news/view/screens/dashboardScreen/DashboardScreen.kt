@@ -28,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +55,6 @@ import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
 import org.koin.compose.viewmodel.koinViewModel
 import java.util.Collections.emptyList
-
 
 @Composable
 internal fun DashboardScreen(
@@ -83,121 +83,102 @@ internal fun DashboardScreen(
         viewModel.checkUserLoggedIn()
     }
 
-    if (loadingState && newsListState.isEmpty()) {
-        LoadingIndicator()
-    } else if (errorState is ErrorState.Error) {
-        OfflineErrorComponent(
-            isLoading = loadingState,
-            onRetry = { viewModel.fetchNewsItems() }
-        )
-    } else {
+    when {
+        loadingState && newsListState.isEmpty() -> {
+            LoadingIndicator()
+        }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.surface)
-        ) {
-            Column(
+        errorState is ErrorState.Error -> {
+            OfflineErrorComponent(
+                isLoading = loadingState,
+                onRetry = { viewModel.fetchNewsItems() }
+            )
+        }
+
+        else -> {
+            Box(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
-                    .padding(20.dp),
-                verticalArrangement = Arrangement.Center,
+                    .background(colors.surface)
             ) {
-                AnimatedVisibility(visible = query.isBlank()) {
-                    Row(
-                        modifier = Modifier
-                            .padding(
-                                top = 20.dp,
-                            )
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column {
-                            Text(
-                                modifier = Modifier
-                                    .wrapContentSize(align = Alignment.TopStart),
-                                text = stringResource(R.string.hi_name),
-                                style = typography.titleMedium.copy(
-                                    colors.onPrimary
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxSize()
+                        .padding(20.dp)
+                ) {
+                    AnimatedVisibility(visible = query.isBlank()) {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 20.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(
+                                    text = stringResource(R.string.hi_name),
+                                    style = typography.titleMedium.copy(colors.onPrimary)
                                 )
+                                Text(
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    text = stringResource(R.string.good_morning),
+                                    style = typography.titleLarge.copy(colors.onPrimary)
+                                )
+                            }
 
-                            )
-                           Text(
+                            Icon(
                                 modifier = Modifier
-                                    .padding(
-                                        top = 4.dp
-                                    )
-                                    .wrapContentSize(align = Alignment.TopStart),
-                                text = stringResource(R.string.good_morning),
-                                style = typography.titleLarge.copy(
-                                    colors.onPrimary
-                                )
+                                    .size(40.dp)
+                                    .clickable {
+                                        viewModel.loggedOut()
+                                        navigateToAuthenticationScreen()
+                                    },
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = stringResource(R.string.news),
+                                tint = colors.onPrimary
                             )
                         }
+                    }
 
-                        Icon(
+                    SearchRow(
+                        query = query,
+                        onQueryChange = { viewModel.updateQuery(it) },
+                        onSearchClick = {}
+                    )
+
+                    if (query.isBlank()) {
+                        Text(
+                            text = stringResource(R.string.today_articles),
                             modifier = Modifier
-                                .size(40.dp)
-                                .clickable {
-                                    viewModel.loggedOut()
-                                    navigateToAuthenticationScreen()
-                                },
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = stringResource(id = R.string.news),
-                            tint = colors.onPrimary
+                                .padding(bottom = 10.dp)
+                                .wrapContentSize(align = Alignment.TopStart),
+                            style = typography.titleLarge.copy(colors.onPrimary)
                         )
+
+                        if (newsListState.isNotEmpty()) {
+                            CardBanner(
+                                articleViewEntity = newsListState[0],
+                                navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) }
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        thickness = 1.dp,
+                        color = colors.outline
+                    )
+                    MoreArticle(
+                        navigateToArticleScreen = navigateToArticleScreen,
+                        navigateToSecondScreen = navigateToSecondScreen,
+                        items = newsListState,
+                        onLongClick = { article -> viewModel.deleteArticle(article) }
+                    )
                 }
             }
         }
-        SearchRow(
-            query = query,
-            onQueryChange = { viewModel.updateQuery(it) },
-            onSearchClick = {})
-
-        AnimatedVisibility(visible = query.isBlank()) {
-            Text(
-                text = stringResource(R.string.today_articles),
-                modifier = Modifier
-                    .padding(
-                        bottom = 10.dp
-                    )
-                    .wrapContentSize(align = Alignment.TopStart),
-                style = typography.titleLarge.copy(
-                    colors.onPrimary
-                )
-            )
-        }
-
-        if (newsListState.isNotEmpty()) {
-            AnimatedVisibility(visible = query.isBlank()) {
-                CardBanner(
-                    articleViewEntity = newsListState[0],
-                    navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
-            }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(colors.outline)
-                .padding(vertical = 8.dp)
-        )
-
-        Column(
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            MoreArticle(
-                navigateToArticleScreen = navigateToArticleScreen,
-                navigateToSecondScreen = navigateToSecondScreen,
-                items = newsListState,
-                onLongClick = { article -> viewModel.deleteArticle(article) }
-            )
-        }
     }
-}
-}
 }
 
 @Composable
