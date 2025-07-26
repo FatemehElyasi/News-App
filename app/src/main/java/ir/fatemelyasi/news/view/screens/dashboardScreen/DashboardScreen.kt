@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
-import android.R.attr.text
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

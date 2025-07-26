@@ -22,7 +22,6 @@ class DashboardScreenViewModel(
     companion object {
         private const val DEFAULT_NEWS_ITEM_COUNT = 4
     }
-
     private val disposables = CompositeDisposable()
 
     private val _newsList = BehaviorSubject.create<List<ArticleViewEntity>>()
@@ -36,8 +35,6 @@ class DashboardScreenViewModel(
 
     private val _loading = BehaviorSubject.createDefault(true)
     val loading: Observable<Boolean> = _loading.hide()
-
-    private val _isUserLoggedInSubject = BehaviorSubject.createDefault(false)
 
     private var hasLoadedInitialData = false
 
@@ -106,10 +103,8 @@ class DashboardScreenViewModel(
 
     fun loggedOut() = authRepository.clearInformation()
 
-    fun checkUserLoggedIn() {
-        val isLoggedIn = authRepository.isLoggedIn()
-        _isUserLoggedInSubject.onNext(isLoggedIn)
-    }
+    fun checkUserLoggedIn() = authRepository.isLoggedIn()
+
 
     override fun onCleared() {
         super.onCleared()
