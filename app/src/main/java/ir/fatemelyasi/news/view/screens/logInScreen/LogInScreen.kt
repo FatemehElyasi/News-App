@@ -1,16 +1,13 @@
 package ir.fatemelyasi.news.view.screens.logInScreen
 
-import android.R.attr.text
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -94,8 +91,8 @@ fun LoginScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 LoginHeader()
-                Spacer(modifier = Modifier.height(20.dp))
                 LoginFields(
+                    modifier = Modifier.padding(top = 20.dp),
                     email = email,
                     password = password,
                     onEmailChange = { viewModel.onEmailChange(it) },
@@ -148,6 +145,7 @@ fun LoginHeader() {
 
 @Composable
 fun LoginFields(
+    modifier: Modifier,
     email: String, password: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
@@ -172,10 +170,10 @@ fun LoginFields(
             )
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedTextField(
-            modifier = Modifier,
+            modifier = Modifier
+                .padding(top = 10.dp),
             value = password,
             label = stringResource(id = R.string.password_label),
             placeholder = stringResource(id = R.string.password_placeholder),

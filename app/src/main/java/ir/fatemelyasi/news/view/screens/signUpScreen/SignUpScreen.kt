@@ -6,10 +6,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -97,8 +95,9 @@ fun SignUpScreen(
             ) {
 
                 SignUpHeader()
-                Spacer(modifier = Modifier.height(20.dp))
                 SignUpFields(
+                    modifier = Modifier
+                        .padding(top = 20.dp),
                     name = name,
                     email = email,
                     password = password,
@@ -148,6 +147,7 @@ fun SignUpHeader() {
 
 @Composable
 fun SignUpFields(
+    modifier: Modifier,
     name: String,
     email: String,
     password: String,
