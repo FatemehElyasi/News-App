@@ -1,7 +1,9 @@
 package ir.fatemelyasi.news.model.dataSources.local.authLocalDataSource
 
 import ir.fatemelyasi.news.model.sharedPrefHelper.SharedPrefHelper
+import org.koin.core.annotation.Single
 
+@Single
 class AuthLocalDataSourceImpl(
     private val sharedPrefHelper: SharedPrefHelper
 ) : AuthLocalDataSource {
