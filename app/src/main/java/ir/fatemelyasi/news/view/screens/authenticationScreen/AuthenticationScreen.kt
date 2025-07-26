@@ -45,7 +45,7 @@ fun AuthenticationScreen(
     ) {
         Image(
             painter = painterResource(id = R.drawable.simple_black),
-            contentDescription = "Login",
+            contentDescription = stringResource(R.string.log_in),
             modifier = Modifier
                 .fillMaxSize()
                 .blur(10.dp),

@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -136,7 +137,7 @@ internal fun DashboardScreen(
                                     navigateToAuthenticationScreen()
                                 },
                             imageVector = Icons.Default.Settings,
-                            contentDescription = "Logo",
+                            contentDescription = stringResource(id = R.string.news),
                             tint = colors.onPrimary
                         )
 

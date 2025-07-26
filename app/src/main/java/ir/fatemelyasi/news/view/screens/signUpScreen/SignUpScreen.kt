@@ -141,7 +141,7 @@ fun SignUpHeader() {
             fontWeight = FontWeight.ExtraBold
         )
         Text(
-            text = stringResource(id = R.string.sign_in_continue_in_to),
+            text = stringResource(id = R.string.sign_up_to_continue),
             fontSize = 18.sp, fontWeight = FontWeight.SemiBold
         )
     }

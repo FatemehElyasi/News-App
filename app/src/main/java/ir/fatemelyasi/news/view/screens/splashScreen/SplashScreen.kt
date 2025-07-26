@@ -16,11 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import org.koin.compose.viewmodel.koinViewModel
-
+import ir.fatemelyasi.news.R
 
 @Composable
 fun SplashScreen(
@@ -52,7 +53,7 @@ fun SplashScreen(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = ("News"),
+                    text = stringResource(id= R.string.news),
                     style = typography.headlineLarge.copy(
                         colors.onPrimary
                     )
