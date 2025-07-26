@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.signUpScreen
 
-import android.util.Log.i
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -161,6 +160,7 @@ fun SignUpFields(
 ) {
     Column {
         OutlinedTextField(
+            modifier = Modifier,
             value = name,
             label = stringResource(id = R.string.name_label),
             placeholder = stringResource(id = R.string.name_placeholder),
@@ -177,9 +177,9 @@ fun SignUpFields(
             )
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 10.dp),
             value = email,
             label = stringResource(id = R.string.email_label),
             placeholder = stringResource(id = R.string.email_placeholder),
@@ -196,9 +196,9 @@ fun SignUpFields(
             )
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 10.dp),
             value = password,
             label = stringResource(id = R.string.password_label),
             placeholder = stringResource(id = R.string.password_placeholder),
@@ -216,9 +216,9 @@ fun SignUpFields(
             }
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
-
         OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 10.dp),
             value = rePassword,
             label = stringResource(id = R.string.re_password_label),
             placeholder = stringResource(id = R.string.re_password_placeholder),

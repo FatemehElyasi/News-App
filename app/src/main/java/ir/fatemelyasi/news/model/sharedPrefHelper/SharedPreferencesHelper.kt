@@ -15,7 +15,7 @@ class SharedPrefHelper(private val prefs: SharedPreferences) {
             .putString(KEY_EMAIL, email)
             .putString(KEY_PASSWORD, password)
             .putBoolean(KEY_IS_LOGGED_IN, isLoggedIn)
-            .apply()
+            .commit()
     }
 
     fun isUserValid(getEmail: String, getPassword: String): Boolean {
@@ -26,9 +26,9 @@ class SharedPrefHelper(private val prefs: SharedPreferences) {
 
     fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
 
-    fun logOut() {0
+    fun logout() {
         prefs.edit()
             .putBoolean(KEY_IS_LOGGED_IN, false)
-            .apply()
+            .commit()
     }
 }

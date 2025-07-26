@@ -6,12 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import ir.fatemelyasi.news.R
-import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
+import ir.fatemelyasi.news.model.repository.authRepository.AuthRepository
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class LoginViewModel(
-    private val newsRepository: NewsRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     var email by mutableStateOf("")
@@ -49,13 +49,13 @@ class LoginViewModel(
             return
         }
 
-        if (!newsRepository.login(email, password)) {
+        if (!authRepository.login(email, password)) {
             onError(R.string.error_user_not_registered)
             return
         }
 
         isLoading = true
-        newsRepository.signUp(email, password, true)
+        authRepository.signUp(email, password, true)
         isLoading = false
         onSuccess()
     }

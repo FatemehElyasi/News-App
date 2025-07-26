@@ -33,7 +33,12 @@
     <string name="logo">logo</string>
     <string name="news">News</string>
 
-
-
+    <string name="hi_name">hi john</string>
+    <string name="good_morning">Good Morning!</string>
+    <string name="detail">Details</string>
+    <string name="today_articles">Today Articles</string>
+    <string name="search">Search</string>
+    <string name="more_articles">More Articles</string>
+    <string name="see_all">See All</string>
 
 </resources>

@@ -16,7 +16,6 @@ import ir.fatemelyasi.news.view.utils.mappers.toViewEntity
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
     private val newsLocalDataSource: NewsLocalDataSource,
-    private val sharedPrefHelper: NewsLocalDataSource
 ) : NewsRepository {
 
     override fun getNews(): Observable<List<ArticleViewEntity>> {
@@ -78,19 +77,7 @@ class NewsRepositoryImpl(
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)
     }
-    //--------------SharedPref
-    override fun signUp(email: String, password: String, isLoggedIn: Boolean) {
-        sharedPrefHelper.saveUserAuthenticationInfo(email, password, isLoggedIn)
-    }
-    override fun login(email: String, password: String): Boolean {
-        return sharedPrefHelper.logIn(email, password)
-    }
-    override fun isLoggedIn(): Boolean {
-        return sharedPrefHelper.isLoggedIn()
-    }
-    override fun clearInformation() {
-        return sharedPrefHelper.clearInformation()
-    }
+
 
 }
 

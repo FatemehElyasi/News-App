@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
+import android.R.attr.text
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -80,6 +81,7 @@ internal fun DashboardScreen(
         viewModel.checkUserLoggedIn()
     }
 
+
     if (isLoading && newsListState.isEmpty()) {
         LoadingIndicator()
     } else {
@@ -108,10 +110,10 @@ internal fun DashboardScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                           Text(
+                            Text(
                                 modifier = Modifier
                                     .wrapContentSize(align = Alignment.TopStart),
-                                text ="name",
+                                text = stringResource(R.string.hi_name),
                                 style = typography.titleMedium.copy(
                                     colors.onPrimary
                                 )
@@ -123,7 +125,7 @@ internal fun DashboardScreen(
                                         top = 4.dp
                                     )
                                     .wrapContentSize(align = Alignment.TopStart),
-                                text = "Good Morning!",
+                                text = stringResource(R.string.good_morning),
                                 style = typography.titleLarge.copy(
                                     colors.onPrimary
                                 )
@@ -151,7 +153,7 @@ internal fun DashboardScreen(
 
                 AnimatedVisibility(visible = query.isBlank()) {
                     BasicText(
-                        text = "Today's Articles",
+                        text = stringResource(R.string.today_articles),
                         modifier = Modifier
                             .padding(
                                 bottom = 10.dp
@@ -226,7 +228,7 @@ fun SearchRow(
             decorationBox = { innerTextField ->
                 if (query.isEmpty()) {
                     BasicText(
-                        text = "Search",
+                        text =stringResource(R.string.search),
                         style = TextStyle(
                             colors.outline,
                             fontSize = 16.sp
@@ -246,7 +248,7 @@ fun SearchRow(
         {
             Image(
                 painter = painterResource(id = R.drawable.search),
-                contentDescription = "search",
+                contentDescription =stringResource(R.string.search),
             )
         }
     }
@@ -296,7 +298,7 @@ fun CardBanner(
         ) {
             BasicText(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
-                text = "Design",
+                text = stringResource(R.string.detail),
                 style = typography.titleSmall.copy(
                     colors.onSecondary,
                     fontWeight = FontWeight.Bold,
@@ -351,7 +353,7 @@ fun MoreArticle(
         ) {
             BasicText(
                 modifier = Modifier.wrapContentSize(align = Alignment.TopEnd),
-                text = " More Articles",
+                text = stringResource(R.string.more_articles),
                 style = typography.titleLarge.copy(
                     colors.onPrimary,
                 )
@@ -361,7 +363,7 @@ fun MoreArticle(
             )
 
             BasicText(
-                text = " See All",
+                text = stringResource(R.string.see_all),
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
                     .clickable { navigateToArticleScreen() },

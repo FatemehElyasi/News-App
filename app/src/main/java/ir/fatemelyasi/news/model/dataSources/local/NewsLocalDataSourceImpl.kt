@@ -45,6 +45,7 @@ class NewsLocalDataSourceImpl(
     }
 
     override fun clearInformation() {
-        return sharedPrefHelper.logOut()
+        return sharedPrefHelper.logout()
     }
+
 }
