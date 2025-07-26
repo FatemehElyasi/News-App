@@ -2,7 +2,7 @@ package ir.fatemelyasi.news.model.dataSources.local.authLocalDataSource
 
 import ir.fatemelyasi.news.model.sharedPrefHelper.SharedPrefHelper
 
-class AuthLocalDataSourceImp(
+class AuthLocalDataSourceImpl(
     private val sharedPrefHelper: SharedPrefHelper
 ) : AuthLocalDataSource {
     override fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean) {
