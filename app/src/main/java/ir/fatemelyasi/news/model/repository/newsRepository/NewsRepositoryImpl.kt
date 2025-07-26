@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ir.fatemelyasi.news.model.dataSources.local.NewsLocalDataSource
+import ir.fatemelyasi.news.model.dataSources.local.newsLocalDataSource.NewsLocalDataSource
 import ir.fatemelyasi.news.model.dataSources.remote.NewsRemoteDataSource
 import ir.fatemelyasi.news.model.local.NewsEntity
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
@@ -15,7 +15,7 @@ import ir.fatemelyasi.news.view.utils.mappers.toViewEntity
 @org.koin.core.annotation.Single
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
-    private val newsLocalDataSource: NewsLocalDataSource
+    private val newsLocalDataSource: NewsLocalDataSource,
 ) : NewsRepository {
 
     override fun getNews(): Observable<List<ArticleViewEntity>> {
@@ -28,7 +28,6 @@ class NewsRepositoryImpl(
                 .toObservable()
         )
     }
-
     //--------------server
     override fun getNewsFromServer(): Single<List<ArticleViewEntity>> {
         return newsRemoteDataSource.getNewsInformation()
@@ -46,8 +45,6 @@ class NewsRepositoryImpl(
                     }
             }
     }
-
-
     //--------------db
     override fun getNewsFromDb(): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.getAllNews()
@@ -62,19 +59,16 @@ class NewsRepositoryImpl(
                     .filter { it.urlToImage.isNotBlank() }
             }
     }
-
     override fun saveNewsToDb(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.saveNewsToDb(entities)
     }
-
     override fun searchNews(query: String): Observable<List<ArticleViewEntity>> {
         return newsLocalDataSource.searchNews(query)
             .subscribeOn(Schedulers.io())
             .map { it.map { entity -> entity.toViewEntity() } }
             .observeOn(AndroidSchedulers.mainThread())
     }
-
     override fun deleteNews(news: List<ArticleViewEntity>) {
         val entities = news.map { it.toViewEntity() }
         newsLocalDataSource.deleteNews(entities)

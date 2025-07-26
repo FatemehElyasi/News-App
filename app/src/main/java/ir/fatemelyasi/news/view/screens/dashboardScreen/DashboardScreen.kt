@@ -1,6 +1,5 @@
 package ir.fatemelyasi.news.view.screens.dashboardScreen
 
-import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -26,9 +25,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import ir.fatemelyasi.news.R
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
+import ir.fatemelyasi.news.view.components.OfflineErrorComponent
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomColors
 import ir.fatemelyasi.news.view.ui.theme.LocalCustomTypography
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
@@ -59,6 +61,7 @@ internal fun DashboardScreen(
     viewModel: DashboardScreenViewModel = koinViewModel(),
     navigateToSecondScreen: (ArticleViewEntity) -> Unit,
     navigateToArticleScreen: () -> Unit,
+    navigateToAuthenticationScreen: () -> Unit,
 ) {
     val newsListState by viewModel.newsList.subscribeAsState(initial = emptyList())
     val loadingState by viewModel.loading.subscribeAsState(initial = false)
@@ -74,6 +77,10 @@ internal fun DashboardScreen(
 
     LaunchedEffect(Unit) {
         viewModel.fetchNewsItems()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.checkUserLoggedIn()
     }
 
     if (loadingState && newsListState.isEmpty()) {
@@ -98,82 +105,99 @@ internal fun DashboardScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 AnimatedVisibility(visible = query.isBlank()) {
-                    Column {
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    top = 20.dp,
-                                )
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Hi John ,",
-                            style = typography.titleMedium.copy(
-                                colors.onPrimary
-                            )
-
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    top = 4.dp
-                                )
-                                .wrapContentSize(align = Alignment.TopStart),
-                            text = "Good Morning!",
-                            style = typography.titleLarge.copy(
-                                colors.onPrimary
-                            )
-
-                        )
-
-                    }
-                }
-
-                SearchRow(
-                    query = query,
-                    onQueryChange = { viewModel.updateQuery(it) },
-                    onSearchClick = {})
-
-                AnimatedVisibility(visible = query.isBlank()) {
-                    Text(
-                        text = "Today's Articles",
+                    Row(
                         modifier = Modifier
                             .padding(
-                                bottom = 10.dp
+                                top = 20.dp,
                             )
-                            .wrapContentSize(align = Alignment.TopStart),
-                        style = typography.titleLarge.copy(
-                            colors.onPrimary
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text(
+                                modifier = Modifier
+                                    .wrapContentSize(align = Alignment.TopStart),
+                                text = stringResource(R.string.hi_name),
+                                style = typography.titleMedium.copy(
+                                    colors.onPrimary
+                                )
+
+                            )
+                           Text(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 4.dp
+                                    )
+                                    .wrapContentSize(align = Alignment.TopStart),
+                                text = stringResource(R.string.good_morning),
+                                style = typography.titleLarge.copy(
+                                    colors.onPrimary
+                                )
+                            )
+                        }
+
+                        Icon(
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable {
+                                    viewModel.loggedOut()
+                                    navigateToAuthenticationScreen()
+                                },
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(id = R.string.news),
+                            tint = colors.onPrimary
                         )
-                    )
-                }
-
-                if (newsListState.isNotEmpty()) {
-                    AnimatedVisibility(visible = query.isBlank()) {
-                        CardBanner(
-                            articleViewEntity = newsListState[0],
-                            navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(colors.outline)
-                        .padding(vertical = 8.dp)
-                )
-
-                Column(
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
-                    MoreArticle(
-                        navigateToArticleScreen = navigateToArticleScreen,
-                        navigateToSecondScreen = navigateToSecondScreen,
-                        items = newsListState,
-                        onLongClick = { article -> viewModel.deleteArticle(article) }
-                    )
                 }
             }
         }
+        SearchRow(
+            query = query,
+            onQueryChange = { viewModel.updateQuery(it) },
+            onSearchClick = {})
+
+        AnimatedVisibility(visible = query.isBlank()) {
+            Text(
+                text = stringResource(R.string.today_articles),
+                modifier = Modifier
+                    .padding(
+                        bottom = 10.dp
+                    )
+                    .wrapContentSize(align = Alignment.TopStart),
+                style = typography.titleLarge.copy(
+                    colors.onPrimary
+                )
+            )
+        }
+
+        if (newsListState.isNotEmpty()) {
+            AnimatedVisibility(visible = query.isBlank()) {
+                CardBanner(
+                    articleViewEntity = newsListState[0],
+                    navigateToSecondScreen = { navigateToSecondScreen(newsListState[0]) })
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(colors.outline)
+                .padding(vertical = 8.dp)
+        )
+
+        Column(
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            MoreArticle(
+                navigateToArticleScreen = navigateToArticleScreen,
+                navigateToSecondScreen = navigateToSecondScreen,
+                items = newsListState,
+                onLongClick = { article -> viewModel.deleteArticle(article) }
+            )
+        }
     }
+}
+}
 }
 
 @Composable
@@ -209,7 +233,7 @@ fun SearchRow(
             decorationBox = { innerTextField ->
                 if (query.isEmpty()) {
                     BasicText(
-                        text = "Search",
+                        text = stringResource(R.string.search),
                         style = TextStyle(
                             colors.outline,
                             fontSize = 16.sp
@@ -229,7 +253,7 @@ fun SearchRow(
         {
             Image(
                 painter = painterResource(id = R.drawable.search),
-                contentDescription = "search",
+                contentDescription = stringResource(R.string.search),
             )
         }
     }
@@ -279,7 +303,7 @@ fun CardBanner(
         ) {
             Text(
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 10.dp),
-                text = "Design",
+                text = stringResource(R.string.detail),
                 style = typography.titleSmall.copy(
                     colors.onSecondary,
                     fontWeight = FontWeight.Bold,
@@ -334,7 +358,7 @@ fun MoreArticle(
         ) {
             Text(
                 modifier = Modifier.wrapContentSize(align = Alignment.TopEnd),
-                text = " More Articles",
+                text = stringResource(R.string.more_articles),
                 style = typography.titleLarge.copy(
                     colors.onPrimary,
                 )
@@ -344,7 +368,7 @@ fun MoreArticle(
             )
 
             Text(
-                text = " See All",
+                text = stringResource(R.string.see_all),
                 modifier = Modifier
                     .wrapContentSize(align = Alignment.TopEnd)
                     .clickable { navigateToArticleScreen() },

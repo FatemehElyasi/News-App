@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
+import ir.fatemelyasi.news.model.repository.authRepository.AuthRepository
 import ir.fatemelyasi.news.model.repository.newsRepository.NewsRepository
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity
 import ir.fatemelyasi.news.view.utils.stateHandling.ErrorState
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit
 @KoinViewModel
 class DashboardScreenViewModel(
     private val newsRepository: NewsRepository,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     companion object {
         private const val DEFAULT_NEWS_ITEM_COUNT = 4
@@ -102,6 +104,12 @@ class DashboardScreenViewModel(
 
         disposables.add(disposable)
     }
+
+    fun loggedOut() = authRepository.clearInformation()
+
+    fun checkUserLoggedIn() = authRepository.isLoggedIn()
+
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()

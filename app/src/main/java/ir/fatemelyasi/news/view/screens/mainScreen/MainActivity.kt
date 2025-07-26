@@ -1,5 +1,6 @@
 package ir.fatemelyasi.news.view.screens.mainScreen
 
+import ir.fatemelyasi.news.view.screens.authenticationScreen.AuthenticationScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,9 @@ import ir.fatemelyasi.news.view.screens.allArticleScreen.AllArticleScreenViewMod
 import ir.fatemelyasi.news.view.screens.allArticleScreen.AllArticlesScreen
 import ir.fatemelyasi.news.view.screens.articleDetailScreen.ArticleDetailScreen
 import ir.fatemelyasi.news.view.screens.dashboardScreen.DashboardScreen
+import ir.fatemelyasi.news.view.screens.logInScreen.LoginScreen
+import ir.fatemelyasi.news.view.screens.signUpScreen.SignUpScreen
+import ir.fatemelyasi.news.view.screens.splashScreen.SplashScreen
 import ir.fatemelyasi.news.view.ui.theme.ComposeTheme
 import ir.fatemelyasi.news.view.utils.MyScreens
 import org.koin.compose.viewmodel.koinViewModel
@@ -26,6 +30,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             ComposeTheme {
@@ -42,8 +47,65 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = MyScreens.DashboardScreen
+        startDestination = MyScreens.SplashScreen::class
     ) {
+        composable<MyScreens.SplashScreen> {
+            SplashScreen(
+                navigateToDashboard = {
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                },
+                navigateToAuthenticationScreen = {
+                    navController.navigate(MyScreens.AuthenticationScreen){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+        composable<MyScreens.AuthenticationScreen> {
+            AuthenticationScreen(
+                navigateToSignUpScreen = {
+                    navController.navigate(MyScreens.SignUpScreen)
+                },
+                navigateToLogInScreen = {
+                    navController.navigate(MyScreens.LogInInScreen)
+                }
+            )
+        }
+        composable<MyScreens.SignUpScreen> {
+            SignUpScreen(
+                navigateToLogInScreen = {
+                    navController.navigate(MyScreens.LogInInScreen)
+                },
+                navigateToDashboardScreen = {
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+        composable<MyScreens.LogInInScreen> {
+            LoginScreen(
+                navigateToSignUpScreen = {
+                    navController.navigate(MyScreens.SignUpScreen)
+                },
+                navigateToDashboardScreen = {
+                    navController.navigate(MyScreens.DashboardScreen) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
         composable<MyScreens.DashboardScreen> {
             DashboardScreen(
                 navigateToSecondScreen = { data ->
@@ -58,6 +120,14 @@ fun Navigation() {
                 },
                 navigateToArticleScreen = {
                     navController.navigate(MyScreens.AllArticlesScreen)
+                },
+                navigateToAuthenticationScreen = {
+                    navController.navigate(MyScreens.AuthenticationScreen) {
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+
+                    }
                 }
             )
         }

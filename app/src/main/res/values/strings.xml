@@ -1,5 +1,46 @@
 <resources>
     <string name="app_name">news</string>
+
+    <string name="login_background">login background</string>
+    <string name="clicked">clicked</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="sign_in_continue_in_to">LogIn to continue</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="have_an_account">have an account click here?</string>
+    <string name="log_in">LogIn</string>
+    <string name="welcome">Welcome</string>
+    <string name="sign_up_to_continue">SignUp to continue</string>
+
+    <string name="name_label">Name</string>
+    <string name="name_placeholder">Enter your Full Name</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">Enter your email </string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">Enter your Password </string>
+    <string name="re_password_label">confirm Password</string>
+    <string name="re_password_placeholder">Enter your password</string>
+
+    <string name="sign_up">SignUp</string>
+    <string name="sign_up_sign_in_to_continue">LogIn or SignUp to continue</string>
+
+    <string name="error_empty_fields">Please fill in all fields.</string>
+    <string name="error_invalid_email">Invalid email.</string>
+    <string name="error_invalid_password">Password must be at least 8 characters.</string>
+    <string name="error_user_not_registered">User not registered. Please sign up first.</string>
+    <string name="error_user_already_registered">User already registered. Please log in.</string>
+    <string name="error_match_passwords">Passwords do not match.</string>
+
+    <string name="logo">logo</string>
+    <string name="news">News</string>
+
+    <string name="hi_name">hi john</string>
+    <string name="good_morning">Good Morning!</string>
+    <string name="detail">Details</string>
+    <string name="today_articles">Today Articles</string>
+    <string name="search">Search</string>
+    <string name="more_articles">More Articles</string>
+    <string name="see_all">See All</string>
+
     <string name="offline_error_message">you have no connection</string>
     <string name="unknown_error">unknown error</string>
 </resources>
