@@ -4,13 +4,12 @@
     <string name="login_background">login background</string>
     <string name="clicked">clicked</string>
     <string name="welcome_back">Welcome Back</string>
-    <string name="sign_in_continue_in_to">Sign in to continue</string>
+    <string name="sign_in_continue_in_to">LogIn to continue</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="sign_in">SignIn</string>
     <string name="have_an_account">have an account click here?</string>
     <string name="log_in">LogIn</string>
     <string name="welcome">Welcome</string>
-    <string name="sign_up_to_continue">Sign Up to continue</string>
+    <string name="sign_up_to_continue">SignUp to continue</string>
 
     <string name="name_label">Name</string>
     <string name="name_placeholder">Enter your Full Name</string>
@@ -21,8 +20,8 @@
     <string name="re_password_label">confirm Password</string>
     <string name="re_password_placeholder">Enter your password</string>
 
-    <string name="sign_up">Sign Up</string>
-    <string name="sign_up_sign_in_to_continue">Login or SignUp to continue</string>
+    <string name="sign_up">SignUp</string>
+    <string name="sign_up_sign_in_to_continue">LogIn or SignUp to continue</string>
 
     <string name="error_empty_fields">Please fill in all fields.</string>
     <string name="error_invalid_email">Invalid email.</string>

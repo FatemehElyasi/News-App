@@ -79,6 +79,4 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.rxjava3)
 
-    //DataStore
-    implementation(libs.androidx.datastore.preferences)
 }

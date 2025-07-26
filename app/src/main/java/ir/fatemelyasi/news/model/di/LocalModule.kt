@@ -8,10 +8,13 @@ import org.koin.core.annotation.Single
 
 @Module
 class LocalModule {
+    companion object {
+        private const val KEY_PREF_NAME: String = "authentication_preferences"
+    }
 
     @Single
     fun provideSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences("authentication_preferences", Context.MODE_PRIVATE)
+        return context.getSharedPreferences(KEY_PREF_NAME, Context.MODE_PRIVATE)
     }
 
     @Single

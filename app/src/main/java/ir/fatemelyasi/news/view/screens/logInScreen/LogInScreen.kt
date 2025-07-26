@@ -216,7 +216,7 @@ fun LoginFooter(
             )
         ) {
             Text(
-                text = stringResource(id = R.string.sign_in)
+                text = stringResource(id = R.string.log_in)
             )
         }
         TextButton(onClick = onSignUpClick) {

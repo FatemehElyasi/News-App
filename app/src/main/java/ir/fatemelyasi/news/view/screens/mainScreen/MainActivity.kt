@@ -59,7 +59,11 @@ fun Navigation() {
                     }
                 },
                 navigateToAuthenticationScreen = {
-                    navController.navigate(MyScreens.AuthenticationScreen)
+                    navController.navigate(MyScreens.AuthenticationScreen){
+                        popUpTo(0) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

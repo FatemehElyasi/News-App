@@ -26,7 +26,7 @@ class SharedPrefHelper(private val prefs: SharedPreferences) {
 
     fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
 
-    fun logOut() {
+    fun logOut() {0
         prefs.edit()
             .putBoolean(KEY_IS_LOGGED_IN, false)
             .apply()

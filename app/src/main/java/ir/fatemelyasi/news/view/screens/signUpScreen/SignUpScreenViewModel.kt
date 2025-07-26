@@ -32,11 +32,11 @@ class SignUpScreenViewModel(
 
 
     fun onNameChange(value: String) {
-        name = value
+        name = value.lowercase()
     }
 
     fun onEmailChange(value: String) {
-        email = value
+        email = value.lowercase()
     }
 
     fun onPasswordChange(value: String) {

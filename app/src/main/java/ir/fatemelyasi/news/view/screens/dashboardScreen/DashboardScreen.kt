@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -107,10 +108,10 @@ internal fun DashboardScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            BasicText(
+                           Text(
                                 modifier = Modifier
                                     .wrapContentSize(align = Alignment.TopStart),
-                                text = "Hi John ,",
+                                text ="name",
                                 style = typography.titleMedium.copy(
                                     colors.onPrimary
                                 )
