@@ -155,6 +155,7 @@ fun LoginFields(
 ) {
     Column {
         OutlinedTextField(
+            modifier = Modifier,
             value = email,
             label = stringResource(id = R.string.email_label),
             placeholder = stringResource(id = R.string.email_placeholder),
@@ -174,6 +175,7 @@ fun LoginFields(
         Spacer(modifier = Modifier.height(10.dp))
 
         OutlinedTextField(
+            modifier = Modifier,
             value = password,
             label = stringResource(id = R.string.password_label),
             placeholder = stringResource(id = R.string.password_placeholder),
