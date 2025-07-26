@@ -1,26 +1,26 @@
 package ir.fatemelyasi.news.model.repository.authRepository
 
-import ir.fatemelyasi.news.model.dataSources.local.NewsLocalDataSource
+import ir.fatemelyasi.news.model.dataSources.local.authLocalDataSource.AuthLocalDataSource
 
 @org.koin.core.annotation.Single
 class AuthRepositoryImp(
-    private val newsLocalDataSource: NewsLocalDataSource,
+    private val authLocalDataSource: AuthLocalDataSource,
 ) : AuthRepository {
 
     override fun signUp(email: String, password: String, isLoggedIn: Boolean) {
-        newsLocalDataSource.saveUserAuthenticationInfo(email, password, isLoggedIn)
+        authLocalDataSource.saveUserAuthenticationInfo(email, password, isLoggedIn)
     }
 
     override fun login(email: String, password: String): Boolean {
-        return newsLocalDataSource.logIn(email, password)
+        return authLocalDataSource.logIn(email, password)
     }
 
     override fun isLoggedIn(): Boolean {
-        return newsLocalDataSource.isLoggedIn()
+        return authLocalDataSource.isLoggedIn()
     }
 
     override fun clearInformation() {
-        return newsLocalDataSource.clearInformation()
+        return authLocalDataSource.clearInformation()
     }
 
 }

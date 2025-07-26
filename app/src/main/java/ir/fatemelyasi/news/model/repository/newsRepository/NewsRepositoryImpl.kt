@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import ir.fatemelyasi.news.model.dataSources.local.NewsLocalDataSource
+import ir.fatemelyasi.news.model.dataSources.local.newsLocalDataSource.NewsLocalDataSource
 import ir.fatemelyasi.news.model.dataSources.remote.NewsRemoteDataSource
 import ir.fatemelyasi.news.model.local.NewsEntity
 import ir.fatemelyasi.news.model.viewEntity.ArticleViewEntity

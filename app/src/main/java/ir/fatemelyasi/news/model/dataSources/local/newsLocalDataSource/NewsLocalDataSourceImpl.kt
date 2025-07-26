@@ -1,4 +1,4 @@
-package ir.fatemelyasi.news.model.dataSources.local
+package ir.fatemelyasi.news.model.dataSources.local.newsLocalDataSource
 
 import io.reactivex.rxjava3.core.Observable
 import ir.fatemelyasi.news.model.local.NewsDao
@@ -9,7 +9,6 @@ import org.koin.core.annotation.Single
 @Single
 class NewsLocalDataSourceImpl(
     private val newsDao: NewsDao,
-    private val sharedPrefHelper: SharedPrefHelper
 ) : NewsLocalDataSource {
 
     override fun saveNewsToDb(newsEntityModel: List<NewsEntity>) {
@@ -30,22 +29,6 @@ class NewsLocalDataSourceImpl(
 
     override fun searchNews(query: String): Observable<List<NewsEntity>> {
         return newsDao.searchNews(query)
-    }
-
-    override fun saveUserAuthenticationInfo(email: String, password: String, isLoggedIn: Boolean) {
-        return sharedPrefHelper.saveUserAuthenticationInfo(email, password, isLoggedIn)
-    }
-
-    override fun logIn(email: String, password: String): Boolean {
-        return sharedPrefHelper.isUserValid(email, password)
-    }
-
-    override fun isLoggedIn(): Boolean {
-        return sharedPrefHelper.isLoggedIn()
-    }
-
-    override fun clearInformation() {
-        return sharedPrefHelper.logout()
     }
 
 }
