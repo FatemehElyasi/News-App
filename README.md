@@ -1,4 +1,4 @@
-![Screenshot_20250726-213859_news](https://github.com/user-attachments/assets/f52a9d88-3284-4907-beb3-c29e589d1d81)![Screenshot_20250726-213859_news](https://github.com/user-attachments/assets/0eed4e1f-d0b1-40f5-8923-541c888963ab)![Screenshot_20250726-213859_news](https://github.com/user-attachments/assets/b7079653-c5af-40d4-8f4a-5fad40ebcf28)# News App
+# News App
 News App is a Persian news application built with ***Kotlin*** using ***MVVM*** architecture and ***Koin*** for dependency injection. It fetches real news from a REST API and displays them in a clean, user-friendly UI.
 
 # What exactly ***News app*** is?
