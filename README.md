@@ -1,5 +1,5 @@
 # News App
-News App is a Persian news application built with ***Kotlin*** using ***MVVM*** architecture and ***Koin*** for dependency injection. It fetches real news from a REST API and displays them in a clean, user-friendly UI.
+News App is built with ***Kotlin*** using ***MVVM*** architecture and ***Koin*** for dependency injection. It fetches real news from a REST API and displays them in a clean, user-friendly UI.
 
 # What exactly ***News app*** is?
 The News App is a modern Android application built with Kotlin that allows users to browse the latest news from various categories in a clean, fast, and user-friendly interface. It fetches real-time news using public APIs and presents them in an organized and readable format. The goal is to keep users informed about current events locally and globally, all in one place.  
